@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Blankd</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f2ee; --bg2:#ede9e3; --surface:#ffffff;
+  --border:#ddd9d3; --border2:#cbc6bf;
+  --text:#1a1714; --text2:#6b6560; --text3:#9e9890;
+  --accent:#2d5be3; --accent-bg:#eef2fd; --accent-border:#b8c8f8;
+  --green:#1a9c5b; --green-bg:#e8f7f0; --green-border:#9adfc0;
+  --orange:#d4700a; --orange-bg:#fef3e6; --orange-border:#f5c07a;
+  --red:#c53030; --red-bg:#feecec; --red-border:#f5a8a8;
+  --gold:#c8860a; --gold-bg:#fef8e7;
+  --purple:#7c3aed; --purple-bg:#f5f0ff; --purple-border:#c4b5fd;
+  --r:10px; --r-sm:6px;
+  --sh:0 2px 12px rgba(0,0,0,0.07),0 1px 3px rgba(0,0,0,0.05);
+  --sh-lg:0 8px 32px rgba(0,0,0,0.10),0 2px 8px rgba(0,0,0,0.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;min-height:100dvh;display:flex;flex-direction:column;align-items:center;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.screen{width:100%;max-width:500px;padding:0 16px;display:none}
+.screen.active{display:flex;flex-direction:column;min-height:100dvh}
+
+/* ══ INTRO ══ */
+#introScreen{align-items:center;justify-content:center;padding:36px 24px;gap:0}
+.intro-bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;opacity:.5;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.intro-content{position:relative;z-index:1;text-align:center;width:100%}
+.logo-wrap{margin-bottom:10px;opacity:0;animation:logoReveal .7s cubic-bezier(.16,1,.3,1) .2s forwards}
+@keyframes logoReveal{from{opacity:0;transform:translateY(20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.logo-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 16px 6px 10px;background:var(--text);border-radius:30px;margin-bottom:20px}
+.logo-dot{width:10px;height:10px;background:var(--accent);border-radius:50%;animation:dotPulse 2s ease infinite}
+@keyframes dotPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.7}}
+.logo-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:white;letter-spacing:.08em;text-transform:uppercase}
+.intro-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.8rem,12vw,4.2rem);line-height:.95;letter-spacing:-.03em;color:var(--text);margin-bottom:16px}
+.intro-title .highlight{color:var(--accent);font-style:italic;font-family:'Instrument Serif',serif;font-size:1.1em}
+.intro-sub{font-size:1rem;color:var(--text2);margin-bottom:32px;line-height:1.5;opacity:0;animation:fadeUp .5s ease .6s forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.intro-buttons{display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px;margin:0 auto;opacity:0;animation:fadeUp .5s ease .8s forwards}
+.btn-primary{padding:16px 32px;background:var(--text);color:white;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s;letter-spacing:.02em;box-shadow:var(--sh)}
+.btn-primary:hover{background:#2a2520;transform:translateY(-1px);box-shadow:var(--sh-lg)}
+.btn-primary:active{transform:translateY(0)}
+.btn-secondary{padding:15px 32px;background:transparent;color:var(--text);border:1.5px solid var(--border2);border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:600;font-size:1rem;cursor:pointer;transition:all .15s;letter-spacing:.02em}
+.btn-secondary:hover{border-color:var(--text);background:var(--bg2)}
+
+/* Achievements CTA — same weight as other buttons */
+.btn-achievements-cta{padding:15px 32px;background:var(--gold-bg);color:var(--gold);border:1.5px solid #f0d080;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all .15s;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-achievements-cta:hover{background:#fef0c8;border-color:#e0b860;transform:translateY(-1px);box-shadow:var(--sh)}
+.btn-ach-badge{font-family:'Syne',sans-serif;font-weight:800;font-size:.72rem;background:var(--gold);color:white;padding:2px 7px;border-radius:20px;letter-spacing:.04em;min-width:20px;text-align:center}
+.career-save-notice{font-size:.72rem;color:var(--text3);margin-top:10px;opacity:0;animation:fadeUp .5s ease 1s forwards}
+
+/* ══ CAREER PRE-SCREEN ══ */
+#careerPreScreen{padding:24px 16px 40px}
+.pre-topbar{display:flex;align-items:center;gap:12px;margin-bottom:32px;padding-top:16px}
+.pre-back{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);cursor:pointer;font-size:1.1rem;transition:all .15s;color:var(--text2)}
+.pre-back:hover{background:var(--bg2);color:var(--text)}
+.pre-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:.8rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase}
+.pre-hero{margin-bottom:28px}
+.pre-level-tag{display:inline-block;padding:3px 12px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:20px;font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.pre-title{font-family:'Syne',sans-serif;font-weight:800;font-size:2.2rem;letter-spacing:-.03em;margin-bottom:6px}
+.pre-sub{font-size:.88rem;color:var(--text2)}
+.pre-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:14px;box-shadow:var(--sh)}
+.pre-card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.7rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+.pre-stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.pre-stat{text-align:center}
+.pre-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;color:var(--text);letter-spacing:-.02em;margin-bottom:2px}
+.pre-stat-lbl{font-size:.65rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase}
+.pre-diff-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.pre-diff-label{font-size:.82rem;color:var(--text2)}
+.pre-diff-badge{padding:3px 10px;border-radius:20px;font-family:'Syne',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.06em}
+.pre-diff-badge.easy{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.pre-diff-badge.medium{background:var(--orange-bg);color:var(--orange);border:1px solid var(--orange-border)}
+.pre-diff-badge.hard{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.pre-progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:6px}
+.pre-progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s cubic-bezier(.16,1,.3,1)}
+.pre-require-note{font-size:.75rem;color:var(--text3);margin-top:8px}
+.pre-recent-row{display:flex;gap:6px;align-items:center}
+.pre-recent-dot{width:10px;height:10px;border-radius:50%;background:var(--border)}
+.pre-recent-dot.correct{background:var(--green)}
+.pre-recent-dot.almost{background:var(--orange)}
+.pre-recent-dot.wrong,.pre-recent-dot.timeout{background:var(--red)}
+.pre-start-btn{width:100%;padding:16px;background:var(--accent);color:white;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all .15s;box-shadow:var(--sh);letter-spacing:.02em;margin-top:8px}
+.pre-start-btn:hover{background:#2450cf;transform:translateY(-1px);box-shadow:var(--sh-lg)}
+
+/* ══ GAME SCREEN ══ */
+#gameScreen{padding:0}
+.game-topbar{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px 10px;display:flex;align-items:center;gap:12px;width:100%;max-width:500px}
+.topbar-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:.8rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;flex-shrink:0}
+.topbar-progress{flex:1;display:flex;flex-direction:column;gap:5px}
+.progress-row{display:flex;justify-content:space-between;align-items:center}
+.progress-label{font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;color:var(--text2);letter-spacing:.05em}
+.score-label{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--accent)}
+.progress-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s cubic-bezier(.16,1,.3,1)}
+.topbar-streak{flex-shrink:0;display:flex;align-items:center;gap:4px;padding:4px 10px;background:var(--gold-bg);border:1px solid #f0d080;border-radius:20px;font-family:'Syne',sans-serif;font-weight:700;font-size:.7rem;color:var(--gold);transition:opacity .3s}
+.topbar-streak.hidden{opacity:0;pointer-events:none}
+.btn-menu{flex-shrink:0;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);cursor:pointer;color:var(--text2);font-size:1rem;transition:all .15s;line-height:1}
+.btn-menu:hover{background:var(--bg2);border-color:var(--border2);color:var(--text)}
+.game-body{padding:16px 16px 32px;display:flex;flex-direction:column;gap:14px;flex:1;width:100%}
+.round-dots-row{display:flex;gap:5px;justify-content:center}
+.rdot{width:7px;height:7px;border-radius:50%;background:var(--border2);transition:all .3s}
+.rdot.active{background:var(--accent);transform:scale(1.3)}
+.rdot.correct{background:var(--green)}
+.rdot.almost{background:var(--orange)}
+.rdot.wrong{background:var(--red)}
+.rdot.timeout{background:var(--text3)}
+.type-chip-row{display:flex;align-items:center;gap:8px}
+.type-chip{padding:3px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;font-size:.68rem;font-weight:600;color:var(--text2);letter-spacing:.08em;text-transform:uppercase}
+.timer-inline{display:flex;align-items:center;gap:7px;flex:1}
+.timer-bar-track{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.timer-bar-fill{height:100%;border-radius:2px;background:var(--green);transform-origin:left;transition:background .5s}
+.timer-num{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--text2);width:18px;text-align:right;transition:color .3s}
+.timer-num.warn{color:var(--orange)}
+.timer-num.danger{color:var(--red)}
+.career-banner{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:var(--r-sm);padding:10px 14px;align-items:center;justify-content:space-between;display:none}
+.career-banner.visible{display:flex}
+.career-banner-lbl{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--accent)}
+.career-banner-req{font-size:.72rem;color:var(--text2)}
+.content-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
+.img-wrap{display:none}
+.text-content-wrap{padding:28px 22px 24px;min-height:120px;display:flex;align-items:center}
+.text-quote{font-family:'Instrument Serif',serif;font-size:1.3rem;line-height:1.65;color:var(--text);font-style:italic}
+.blank-line{display:inline-block;width:90px;height:2px;background:var(--accent);vertical-align:middle;margin:0 4px;border-radius:1px;position:relative;top:-3px}
+.reveal-strip{display:flex;align-items:center;gap:4px;padding:10px 16px 12px;border-top:1px solid var(--border);flex-wrap:wrap;min-height:48px}
+.rev-char{min-width:26px;height:32px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);border-radius:5px;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:var(--text3);background:var(--bg2);transition:all .25s;padding:0 4px}
+.rev-char.revealed{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg);animation:popIn .2s ease}
+.rev-char.space{border-color:transparent;background:transparent;min-width:10px}
+@keyframes popIn{0%{transform:scale(.75)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+.hint-box{padding:10px 14px;background:var(--gold-bg);border:1px solid #f0d080;border-radius:var(--r-sm);font-size:.84rem;color:var(--gold);display:none;animation:fadeUp .2s ease}
+.hint-box.visible{display:block}
+.times-up-bar{padding:10px 14px;background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--r-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;color:var(--red);letter-spacing:.05em;display:none;text-align:center;animation:fadeUp .2s ease}
+.times-up-bar.visible{display:block}
+.feedback-card{padding:12px 16px;border-radius:var(--r);font-size:.9rem;font-weight:500;display:none;animation:feedReveal .25s cubic-bezier(.16,1,.3,1);line-height:1.4}
+@keyframes feedReveal{from{opacity:0;transform:scale(.97) translateY(4px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.feedback-card.visible{display:block}
+.feedback-card.correct{background:var(--green-bg);border:1px solid var(--green-border);color:var(--green)}
+.feedback-card.almost{background:var(--orange-bg);border:1px solid var(--orange-border);color:var(--orange)}
+.feedback-card.wrong{background:var(--red-bg);border:1px solid var(--red-border);color:var(--red)}
+.feedback-pts{font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;margin-top:3px;opacity:.8}
+.input-row{display:flex;gap:10px}
+.guess-input{flex:1;padding:15px 18px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:600;font-size:1.05rem;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;box-shadow:var(--sh);-webkit-appearance:none}
+.guess-input::placeholder{color:var(--text3);font-weight:400}
+.guess-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.guess-input.shake{animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.btn-go{padding:15px 22px;background:var(--accent);color:white;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .15s;box-shadow:var(--sh);white-space:nowrap;letter-spacing:.03em}
+.btn-go:hover{background:#2450cf;transform:translateY(-1px);box-shadow:var(--sh-lg)}
+.btn-go:active{transform:translateY(0)}
+.btn-go:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.helper-row{display:flex;gap:8px}
+.btn-helper{flex:1;padding:11px 10px;background:var(--surface);color:var(--text2);border:1px solid var(--border);border-radius:var(--r-sm);font-family:'Instrument Sans',sans-serif;font-size:.8rem;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:var(--sh)}
+.btn-helper:hover:not(:disabled){border-color:var(--border2);background:var(--bg2);color:var(--text)}
+.btn-helper:disabled{opacity:.35;cursor:not-allowed}
+.btn-helper .penalty{font-size:.68rem;color:var(--red);opacity:.7}
+.btn-next{width:100%;padding:15px;background:var(--text);color:white;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;letter-spacing:.03em;transition:all .15s;display:none;box-shadow:var(--sh);animation:fadeUp .3s ease}
+.btn-next.visible{display:block}
+.btn-next:hover{background:#2a2520;transform:translateY(-1px);box-shadow:var(--sh-lg)}
+
+/* ══ END SCREEN ══ */
+#endScreen{align-items:center;justify-content:flex-start;padding:40px 24px 60px;gap:0}
+.end-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:.75rem;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:32px}
+.end-title{font-family:'Syne',sans-serif;font-weight:800;font-size:2.4rem;letter-spacing:-.03em;margin-bottom:6px}
+.end-mode-tag{font-size:.8rem;color:var(--text3);margin-bottom:36px}
+.end-score-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;width:100%;text-align:center;box-shadow:var(--sh);margin-bottom:16px}
+.end-score-num{font-family:'Syne',sans-serif;font-weight:800;font-size:3.5rem;color:var(--accent);letter-spacing:-.04em;line-height:1;margin-bottom:4px}
+.end-score-lbl{font-size:.72rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase}
+.end-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;width:100%;margin-bottom:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px 10px;text-align:center;box-shadow:var(--sh)}
+.stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;color:var(--text);margin-bottom:3px;letter-spacing:-.02em}
+.stat-lbl{font-size:.65rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase}
+.end-dots-row{display:flex;gap:5px;justify-content:center;width:100%;margin-bottom:16px}
+.rank-tag{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;border-radius:30px;font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.06em;background:var(--bg2);border:1px solid var(--border);color:var(--text2);margin-bottom:16px}
+.career-result{width:100%;padding:18px;border-radius:var(--r);margin-bottom:20px;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;text-align:center;letter-spacing:.02em}
+.career-result.passed{background:var(--green-bg);border:1px solid var(--green-border);color:var(--green)}
+.career-result.failed{background:var(--red-bg);border:1px solid var(--red-border);color:var(--red)}
+.end-actions{display:flex;flex-direction:column;gap:10px;width:100%}
+.end-new-achievements{width:100%;margin-bottom:16px;display:flex;flex-direction:column;gap:8px}
+.end-ach-pill{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--gold-bg);border:1px solid #f0d080;border-radius:var(--r);animation:fadeUp .4s ease;cursor:pointer;transition:background .15s}
+.end-ach-pill:hover{background:#fef0c8}
+.end-ach-pill-icon{font-size:1.3rem;flex-shrink:0}
+.end-ach-pill-text{flex:1}
+.end-ach-pill-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:var(--gold)}
+.end-ach-pill-desc{font-size:.72rem;color:var(--text2)}
+.end-ach-pill-share{font-size:.7rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);opacity:.8;flex-shrink:0}
+
+/* ══ ACHIEVEMENTS SCREEN ══ */
+#achievementsScreen{padding:24px 16px 60px}
+.ach-topbar{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:16px}
+.ach-back{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);cursor:pointer;font-size:1.1rem;transition:all .15s;color:var(--text2);flex-shrink:0}
+.ach-back:hover{background:var(--bg2);color:var(--text)}
+.ach-screen-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;letter-spacing:-.02em}
+.ach-subtitle{font-size:.8rem;color:var(--text3);margin-bottom:18px}
+.ach-summary{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:20px}
+.ach-summary-count{font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;color:var(--accent);letter-spacing:-.02em}
+.ach-summary-text{font-size:.82rem;color:var(--text2)}
+.ach-summary-bar-wrap{flex:1}
+.ach-summary-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:6px}
+.ach-summary-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+.ach-filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.ach-filter-btn{padding:5px 12px;border-radius:20px;font-family:'Syne',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.06em;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);transition:all .15s}
+.ach-filter-btn.active{background:var(--text);color:white;border-color:var(--text)}
+.ach-section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.7rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;margin-top:20px}
+.ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ach-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 14px;box-shadow:var(--sh);transition:all .15s;position:relative;overflow:hidden}
+.ach-card.unlocked{border-color:#f0d080;background:#fffdf5;cursor:pointer}
+.ach-card.unlocked:hover{box-shadow:var(--sh-lg);transform:translateY(-1px)}
+.ach-card.locked{opacity:.5}
+.ach-card.rare{border-color:var(--purple-border) !important;background:var(--purple-bg) !important}
+.ach-card.rare.locked{opacity:.45}
+.ach-card-icon{font-size:1.6rem;margin-bottom:8px}
+.ach-card.locked .ach-card-icon{filter:grayscale(1);opacity:.4}
+.ach-card-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;color:var(--text);margin-bottom:3px}
+.ach-card.locked .ach-card-name{color:var(--text3)}
+.ach-card-desc{font-size:.72rem;color:var(--text2);line-height:1.35}
+.ach-card.locked .ach-card-desc{color:var(--text3)}
+.ach-card-badge{position:absolute;top:10px;right:10px;font-size:.58rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--gold);background:var(--gold-bg);border:1px solid #f0d080;border-radius:10px;padding:2px 7px;letter-spacing:.06em}
+.ach-card.rare .ach-card-badge{color:var(--purple);background:var(--purple-bg);border-color:var(--purple-border)}
+
+/* ══ SHARE OVERLAY ══ */
+.share-overlay{position:fixed;inset:0;z-index:600;background:rgba(26,23,20,.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:24px}
+.share-overlay.visible{display:flex}
+.share-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--sh-lg);padding:24px;width:100%;max-width:340px;animation:panelIn .22s cubic-bezier(.16,1,.3,1)}
+@keyframes panelIn{from{opacity:0;transform:scale(.93) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.share-panel-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:4px}
+.share-panel-sub{font-size:.78rem;color:var(--text3);margin-bottom:18px}
+.share-canvas-wrap{background:var(--bg2);border-radius:var(--r);overflow:hidden;margin-bottom:18px}
+.share-canvas-wrap canvas{display:block;width:100%;height:auto;border-radius:var(--r)}
+.share-actions{display:flex;flex-direction:column;gap:10px}
+.btn-download{width:100%;padding:13px;background:var(--text);color:white;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .15s}
+.btn-download:hover{background:#2a2520}
+.btn-close-share{width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:var(--r);font-family:'Instrument Sans',sans-serif;font-size:.88rem;color:var(--text2);cursor:pointer;transition:all .15s}
+.btn-close-share:hover{background:var(--bg2)}
+
+/* ══ PAUSE OVERLAY ══ */
+.pause-overlay{position:fixed;inset:0;z-index:500;background:rgba(245,242,238,.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:24px}
+.pause-overlay.visible{display:flex}
+.pause-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--sh-lg);padding:28px 24px 24px;width:100%;max-width:320px;animation:panelIn .2s cubic-bezier(.16,1,.3,1)}
+.pause-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;letter-spacing:-.02em;margin-bottom:4px}
+.pause-sub{font-size:.8rem;color:var(--text3);margin-bottom:24px}
+.pause-actions{display:flex;flex-direction:column;gap:10px}
+.btn-pause-resume{width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .15s;letter-spacing:.02em}
+.btn-pause-resume:hover{background:#2450cf;transform:translateY(-1px)}
+.btn-pause-action{width:100%;padding:13px;background:transparent;color:var(--text2);border:1px solid var(--border);border-radius:var(--r);font-family:'Instrument Sans',sans-serif;font-weight:500;font-size:.88rem;cursor:pointer;transition:all .15s}
+.btn-pause-action:hover{background:var(--bg2);border-color:var(--border2);color:var(--text)}
+.btn-pause-action.danger:hover{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+
+/* ══ FLASH / POP ══ */
+.flash-overlay{position:fixed;inset:0;pointer-events:none;z-index:200;opacity:0}
+.flash-overlay.correct-flash{background:var(--green-bg);animation:flash .4s ease}
+.flash-overlay.wrong-flash{background:var(--red-bg);animation:flash .4s ease}
+@keyframes flash{0%{opacity:0}25%{opacity:.6}100%{opacity:0}}
+.score-pop-wrap{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:100}
+.score-pop{position:absolute;font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;pointer-events:none;animation:scoreFly .8s cubic-bezier(.16,1,.3,1) forwards}
+.score-pop.pos{color:var(--green)}
+.score-pop.neg{color:var(--red)}
+@keyframes scoreFly{0%{opacity:0;transform:translateY(0) scale(.6)}25%{opacity:1;transform:translateY(-30px) scale(1.1)}80%{opacity:1;transform:translateY(-80px) scale(1)}100%{opacity:0;transform:translateY(-110px) scale(.9)}}
+.ach-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);z-index:700;background:var(--text);color:white;padding:12px 20px;border-radius:40px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh-lg);transition:transform .4s cubic-bezier(.16,1,.3,1);white-space:nowrap;max-width:90vw}
+.ach-toast.show{transform:translateX(-50%) translateY(0)}
+.ach-toast-icon{font-size:1.2rem}
+.ach-toast-text{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.02em}
+.ach-toast-sub{font-size:.7rem;opacity:.65}
+</style>
+</head>
+<body>
+
+<div class="flash-overlay" id="flashOverlay"></div>
+<div class="score-pop-wrap" id="scorePopWrap"></div>
+<div class="ach-toast" id="achToast">
+  <div class="ach-toast-icon" id="achToastIcon">🏅</div>
+  <div><div class="ach-toast-text" id="achToastName">Achievement!</div><div class="ach-toast-sub" id="achToastDesc"></div></div>
+</div>
+
+<!-- PAUSE -->
+<div class="pause-overlay" id="pauseOverlay">
+  <div class="pause-panel">
+    <div class="pause-title">Paused</div>
+    <div class="pause-sub" id="pauseSub">Round 1 of 10 · 0 pts</div>
+    <div class="pause-actions">
+      <button class="btn-pause-resume" onclick="resumeGame()">▶ Resume</button>
+      <button class="btn-pause-action" onclick="restartFromPause()">↺ Restart game</button>
+      <button class="btn-pause-action danger" onclick="quitToMenu()">✕ Quit to main menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE -->
+<div class="share-overlay" id="shareOverlay">
+  <div class="share-panel">
+    <div class="share-panel-title" id="sharePanelTitle">Achievement Unlocked</div>
+    <div class="share-panel-sub">Download your achievement card</div>
+    <div class="share-canvas-wrap"><canvas id="shareCanvas" width="600" height="340"></canvas></div>
+    <div class="share-actions">
+      <button class="btn-download" onclick="downloadShareCard()">⬇ Download Card</button>
+      <button class="btn-close-share" onclick="closeShare()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ INTRO ══ -->
+<div class="screen active" id="introScreen">
+  <div class="intro-bg-grid"></div>
+  <div class="intro-content">
+    <div class="logo-wrap">
+      <div class="logo-pill"><div class="logo-dot"></div><span class="logo-name">Blankd</span></div>
+    </div>
+    <div class="intro-title">Fill the<br><span class="highlight">blank.</span></div>
+    <p class="intro-sub">Fill in the Blanks.<br>How well do you know your phrases?</p>
+    <div class="intro-buttons">
+      <button class="btn-primary" onclick="startGame('quick')">⚡ Quick Game</button>
+      <button class="btn-secondary" onclick="openCareerPre()">🏆 Career Mode</button>
+      <button class="btn-achievements-cta" onclick="showAchievements()">🏅 Achievements <span class="btn-ach-badge" id="introAchBadge" style="display:none">0</span></button>
+    </div>
+    <div class="career-save-notice">Career progress is saved automatically</div>
+  </div>
+</div>
+
+<!-- ══ CAREER PRE ══ -->
+<div class="screen" id="careerPreScreen">
+  <div class="pre-topbar">
+    <button class="pre-back" onclick="showScreen('introScreen')">←</button>
+    <div class="pre-brand">Blankd · Career</div>
+  </div>
+  <div class="pre-hero">
+    <div class="pre-level-tag" id="preLevelTag">Level 1</div>
+    <div class="pre-title" id="preTitle">Ready to play?</div>
+    <div class="pre-sub" id="preSub">Complete 8 of 10 correct to advance.</div>
+  </div>
+  <div class="pre-card">
+    <div class="pre-card-title">Your Stats</div>
+    <div class="pre-stats-grid">
+      <div class="pre-stat"><div class="pre-stat-val" id="preStatLevel">1</div><div class="pre-stat-lbl">Level</div></div>
+      <div class="pre-stat"><div class="pre-stat-val" id="preStatBest">—</div><div class="pre-stat-lbl">Best Score</div></div>
+      <div class="pre-stat"><div class="pre-stat-val" id="preStatStreak">—</div><div class="pre-stat-lbl">Best Streak</div></div>
+    </div>
+  </div>
+  <div class="pre-card">
+    <div class="pre-card-title">This Level</div>
+    <div class="pre-diff-row">
+      <span class="pre-diff-label">Difficulty</span>
+      <span class="pre-diff-badge" id="preDiffBadge">Easy</span>
+    </div>
+    <div class="pre-progress-bar"><div class="pre-progress-fill" id="preProgressFill" style="width:0%"></div></div>
+    <div class="pre-require-note" id="preRequireNote">Need 8 / 10 correct to advance</div>
+  </div>
+  <div class="pre-card" id="preLastCard">
+    <div class="pre-card-title">Last Attempt</div>
+    <div class="pre-recent-row" id="preRecentDots"></div>
+    <div style="font-size:.78rem;color:var(--text2);margin-top:8px" id="preLastScore">—</div>
+  </div>
+  <button class="pre-start-btn" onclick="startGame('career')">Start Level <span id="preStartLevelNum">1</span> →</button>
+</div>
+
+<!-- ══ GAME ══ -->
+<div class="screen" id="gameScreen">
+  <div class="game-topbar">
+    <div class="topbar-brand">Blankd</div>
+    <div class="topbar-progress">
+      <div class="progress-row">
+        <span class="progress-label" id="progressLabel">Round 1 / 10</span>
+        <span class="score-label" id="scoreLabel">0 pts</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="topbar-streak hidden" id="streakBadge">🔥 <span id="streakTxt">2×</span></div>
+    <button class="btn-menu" onclick="openMenu()" title="Menu">☰</button>
+  </div>
+  <div class="game-body">
+    <div class="round-dots-row" id="roundDots"></div>
+    <div class="career-banner" id="careerBanner">
+      <span class="career-banner-lbl" id="careerLevelLabel">Level 1</span>
+      <span class="career-banner-req" id="careerReq">Need 8/10 to advance</span>
+    </div>
+    <div class="type-chip-row">
+      <div class="type-chip" id="typeChip">quote</div>
+      <div class="timer-inline">
+        <div class="timer-bar-track"><div class="timer-bar-fill" id="timerFill" style="width:100%"></div></div>
+        <div class="timer-num" id="timerNum">15</div>
+      </div>
+    </div>
+    <div class="content-card">
+      <div class="img-wrap" id="imgWrap"></div>
+      <div class="text-content-wrap" id="textWrap">
+        <div class="text-quote" id="textQuote"></div>
+      </div>
+      <div class="reveal-strip" id="revealStrip"></div>
+    </div>
+    <div class="hint-box" id="hintBox"></div>
+    <div class="times-up-bar" id="timesUpBar">⏱ Time's up! — Answer: <span id="timeoutAnswer"></span></div>
+    <div class="feedback-card" id="feedbackCard">
+      <div id="feedbackMsg"></div>
+      <div class="feedback-pts" id="feedbackPts"></div>
+    </div>
+    <div class="input-row">
+      <input type="text" class="guess-input" id="guessInput" placeholder="Type your answer…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="50">
+      <button class="btn-go" id="btnGo">Go →</button>
+    </div>
+    <div class="helper-row">
+      <button class="btn-helper" id="btnHint">💡 Hint <span class="penalty">−30</span></button>
+      <button class="btn-helper" id="btnReveal">🔤 Reveal <span class="penalty">−20</span></button>
+    </div>
+    <button class="btn-next" id="btnNext">Next round →</button>
+  </div>
+</div>
+
+<!-- ══ END ══ -->
+<div class="screen" id="endScreen">
+  <div class="end-logo">Blankd</div>
+  <div class="end-title" id="endTitle">Well done!</div>
+  <div class="end-mode-tag" id="endModeTag">Quick Game</div>
+  <div class="end-score-block">
+    <div class="end-score-num" id="finalScore">0</div>
+    <div class="end-score-lbl">Total Points</div>
+  </div>
+  <div class="end-stats">
+    <div class="stat-card"><div class="stat-val" id="stCorrect">0</div><div class="stat-lbl">Correct</div></div>
+    <div class="stat-card"><div class="stat-val" id="stAlmost">0</div><div class="stat-lbl">Almost</div></div>
+    <div class="stat-card"><div class="stat-val" id="stBest">0</div><div class="stat-lbl">Best Streak</div></div>
+  </div>
+  <div class="end-dots-row" id="endDots"></div>
+  <div class="rank-tag" id="rankTag">🏅 Beginner</div>
+  <div class="career-result" id="careerResult" style="display:none"></div>
+  <div class="end-new-achievements" id="endNewAchievements"></div>
+  <div class="end-actions">
+    <button class="btn-primary" id="btnEndPrimary" onclick="handleEndPrimary()">Play Again</button>
+    <button class="btn-secondary" onclick="goHome()">Back to Home</button>
+  </div>
+</div>
+
+<!-- ══ ACHIEVEMENTS ══ -->
+<div class="screen" id="achievementsScreen">
+  <div class="ach-topbar">
+    <button class="ach-back" onclick="showScreen('introScreen')">←</button>
+    <div><div class="ach-screen-title">Achievements</div></div>
+  </div>
+  <div class="ach-subtitle" id="achSubtitle">0 unlocked</div>
+  <div class="ach-summary">
+    <div class="ach-summary-count" id="achSummaryCount">0</div>
+    <div class="ach-summary-bar-wrap">
+      <div class="ach-summary-text" id="achSummaryText">Keep playing to unlock more</div>
+      <div class="ach-summary-bar"><div class="ach-summary-bar-fill" id="achSummaryFill" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="ach-filter-row" id="achFilterRow"></div>
+  <div id="achListWrap"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+//  QUESTION BANK  —  350 fill-in-the-blank phrases
+//  difficulty: 1=easy  2=medium  3=hard
+// ═══════════════════════════════════════════════════════════════════════
+const QB = [
+// ─── EASY (difficulty 1) ────────────────────────────────────────────
+{c:"May the __________ be with you.",a:"force",h:"Movie · Star Wars",d:1},
+{c:"To infinity and __________!",a:"beyond",h:"Movie · Toy Story",d:1},
+{c:"I'll be __________.",a:"back",h:"Movie · The Terminator",d:1},
+{c:"Just do __________.",a:"it",h:"Brand · Nike",d:1},
+{c:"I'm lovin' __________.",a:"it",h:"Brand · McDonald's",d:1},
+{c:"Think __________.",a:"different",h:"Brand · Apple",d:1},
+{c:"There's no place like __________.",a:"home",h:"Movie · Wizard of Oz",d:1},
+{c:"I am your __________.",a:"father",h:"Movie · Star Wars",d:1},
+{c:"Why so __________?",a:"serious",h:"Movie · The Dark Knight",d:1},
+{c:"Just keep __________.",a:"swimming",h:"Movie · Finding Nemo",d:1},
+{c:"Hakuna __________.",a:"matata",h:"Movie · The Lion King",d:1},
+{c:"Winter is __________.",a:"coming",h:"TV · Game of Thrones",d:1},
+{c:"Is this the real life? Is this just __________?",a:"fantasy",h:"Song · Queen",d:1},
+{c:"Rolling in the __________.",a:"deep",h:"Song · Adele",d:1},
+{c:"We will, we will __________ you.",a:"rock",h:"Song · Queen",d:1},
+{c:"I will always love __________.",a:"you",h:"Song · Whitney Houston",d:1},
+{c:"The early bird catches the __________.",a:"worm",h:"Proverb",d:1},
+{c:"Actions speak louder than __________.",a:"words",h:"Proverb",d:1},
+{c:"All that glitters is not __________.",a:"gold",h:"Shakespeare",d:1},
+{c:"Have it your __________.",a:"way",h:"Brand · Burger King",d:1},
+{c:"Because you're worth __________.",a:"it",h:"Brand · L'Oréal",d:1},
+{c:"Red Bull gives you __________.",a:"wings",h:"Brand slogan",d:1},
+{c:"Finger lickin' __________.",a:"good",h:"Brand · KFC",d:1},
+{c:"Impossible is __________.",a:"nothing",h:"Brand · Adidas",d:1},
+{c:"Hello, is it __________ you're looking for?",a:"me",h:"Song · Lionel Richie",d:1},
+{c:"Don't stop me now — I'm having such a good __________.",a:"time",h:"Song · Queen",d:1},
+{c:"Hello from the other __________.",a:"side",h:"Song · Adele",d:1},
+{c:"Every cloud has a __________ lining.",a:"silver",h:"Proverb",d:1},
+{c:"The pen is mightier than the __________.",a:"sword",h:"Saying",d:1},
+{c:"Back to the __________.",a:"future",h:"Movie title",d:1},
+{c:"The sound of __________.",a:"music",h:"Musical / Movie",d:1},
+{c:"Game of __________.",a:"thrones",h:"TV series",d:1},
+{c:"Breaking __________.",a:"bad",h:"TV series",d:1},
+{c:"Stranger __________.",a:"things",h:"TV · Netflix",d:1},
+{c:"Beauty and the __________.",a:"beast",h:"Movie / Fairy tale",d:1},
+{c:"Shake it off, shake it __________.",a:"off",h:"Song · Taylor Swift",d:1},
+{c:"Stairway to __________.",a:"heaven",h:"Song · Led Zeppelin",d:1},
+{c:"Hotel __________.",a:"california",h:"Song · Eagles",d:1},
+{c:"Born to __________.",a:"run",h:"Song · Springsteen",d:1},
+{c:"You can't judge a book by its __________.",a:"cover",h:"Proverb",d:1},
+{c:"The king of __________.",a:"pop",h:"Michael Jackson's title",d:1},
+{c:"Run, Forrest, __________!",a:"run",h:"Movie · Forrest Gump",d:1},
+{c:"E.T. phone __________.",a:"home",h:"Movie · Spielberg",d:1},
+{c:"I see dead __________.",a:"people",h:"Movie · The Sixth Sense",d:1},
+{c:"Mission: __________.",a:"impossible",h:"Movie franchise",d:1},
+{c:"Here comes the __________.",a:"sun",h:"Song · The Beatles",d:1},
+{c:"Let it __________, let it be.",a:"be",h:"Song · The Beatles",d:1},
+{c:"Imagine all the __________.",a:"people",h:"Song · John Lennon",d:1},
+{c:"No woman, no __________.",a:"cry",h:"Song · Bob Marley",d:1},
+{c:"Girls just want to have __________.",a:"fun",h:"Song · Cyndi Lauper",d:1},
+{c:"We are the __________.",a:"champions",h:"Song · Queen",d:1},
+{c:"Another one __________ the dust.",a:"bites",h:"Song · Queen",d:1},
+{c:"Livin' on a __________.",a:"prayer",h:"Song · Bon Jovi",d:1},
+{c:"Don't stop __________ in the night.",a:"believing",h:"Song · Journey",d:1},
+{c:"Lose yourself in the __________.",a:"music",h:"Song · Eminem",d:1},
+{c:"It's a hard knock __________.",a:"life",h:"Musical · Annie",d:1},
+{c:"I'm on top of the __________.",a:"world",h:"Song / phrase",d:1},
+{c:"Under the __________.",a:"sea",h:"Movie · The Little Mermaid",d:1},
+{c:"Circle of __________.",a:"life",h:"Movie · The Lion King",d:1},
+{c:"You've got a __________ in me.",a:"friend",h:"Movie · Toy Story",d:1},
+{c:"A whole new __________.",a:"world",h:"Movie · Aladdin",d:1},
+{c:"Let it __________.",a:"go",h:"Movie · Frozen",d:1},
+{c:"Part of your __________.",a:"world",h:"Movie · The Little Mermaid",d:1},
+{c:"Be our __________.",a:"guest",h:"Movie · Beauty and the Beast",d:1},
+{c:"Bibbidi-Bobbidi-__________.",a:"boo",h:"Movie · Cinderella",d:1},
+{c:"When you wish upon a __________.",a:"star",h:"Movie · Pinocchio",d:1},
+{c:"Supercalifragilistic__________.",a:"expialidocious",h:"Movie · Mary Poppins",d:1},
+{c:"Once upon a __________.",a:"time",h:"Classic story opener",d:1},
+
+// ─── MEDIUM (difficulty 2) ──────────────────────────────────────────
+{c:"Harry Potter and the Chamber of __________.",a:"secrets",h:"Book / Movie",d:2},
+{c:"Harry Potter and the Philosopher's __________.",a:"stone",h:"Book / Movie",d:2},
+{c:"Harry Potter and the Prisoner of __________.",a:"azkaban",h:"Book / Movie",d:2},
+{c:"The Lord of the __________.",a:"rings",h:"Book / Movie",d:2},
+{c:"The Lion, the Witch and the __________.",a:"wardrobe",h:"Book / Movie",d:2},
+{c:"The Silence of the __________.",a:"lambs",h:"Movie · 1991",d:2},
+{c:"Catch Me If You __________.",a:"can",h:"Movie · Spielberg",d:2},
+{c:"Eternal Sunshine of the Spotless __________.",a:"mind",h:"Movie · Jim Carrey",d:2},
+{c:"The Wolf of __________ Street.",a:"wall",h:"Movie · Scorsese",d:2},
+{c:"The Walking __________.",a:"dead",h:"TV series",d:2},
+{c:"House of __________.",a:"cards",h:"TV · political drama",d:2},
+{c:"Black __________.",a:"mirror",h:"TV · Netflix",d:2},
+{c:"Sweet __________ o' mine.",a:"child",h:"Song · Guns N' Roses",d:2},
+{c:"Purple __________ all in my brain.",a:"haze",h:"Song · Jimi Hendrix",d:2},
+{c:"Smells like teen __________.",a:"spirit",h:"Song · Nirvana",d:2},
+{c:"All the single __________, all the single ladies.",a:"ladies",h:"Song · Beyoncé",d:2},
+{c:"You jump, I __________.",a:"jump",h:"Movie · Titanic",d:2},
+{c:"You had me at __________.",a:"hello",h:"Movie · Jerry Maguire",d:2},
+{c:"Houston, we have a __________.",a:"problem",h:"Movie · Apollo 13",d:2},
+{c:"With great power comes great __________.",a:"responsibility",h:"Movie · Spider-Man",d:2},
+{c:"Keep your friends close and your enemies __________.",a:"closer",h:"Movie · The Godfather II",d:2},
+{c:"Elementary, my dear __________.",a:"watson",h:"Sherlock Holmes",d:2},
+{c:"To be or not to be, that is the __________.",a:"question",h:"Shakespeare · Hamlet",d:2},
+{c:"A __________ in need is a friend indeed.",a:"friend",h:"Proverb",d:2},
+{c:"The dark __________ rises.",a:"knight",h:"Movie · Nolan",d:2},
+{c:"A Nightmare on __________ Street.",a:"elm",h:"Horror franchise",d:2},
+{c:"The Fast and the __________.",a:"furious",h:"Movie franchise",d:2},
+{c:"Alvin and the __________.",a:"chipmunks",h:"Movie / Cartoon",d:2},
+{c:"Two wrongs don't make a __________.",a:"right",h:"Proverb",d:2},
+{c:"It's not rocket __________.",a:"science",h:"Common saying",d:2},
+{c:"Curiosity killed the __________.",a:"cat",h:"Proverb",d:2},
+{c:"Birds of a feather flock __________.",a:"together",h:"Proverb",d:2},
+{c:"A penny saved is a penny __________.",a:"earned",h:"Franklin",d:2},
+{c:"Fortune favors the __________.",a:"bold",h:"Latin proverb",d:2},
+{c:"Laughter is the best __________.",a:"medicine",h:"Proverb",d:2},
+{c:"Yes we __________.",a:"can",h:"Political slogan · Obama",d:2},
+{c:"May the odds be ever in your __________.",a:"favor",h:"Movie · Hunger Games",d:2},
+{c:"I volunteer as __________!",a:"tribute",h:"Movie · Hunger Games",d:2},
+{c:"Live, laugh, __________.",a:"love",h:"Popular phrase",d:2},
+{c:"Like a rolling __________.",a:"stone",h:"Song · Bob Dylan",d:2},
+{c:"The times they are a-__________.",a:"changing",h:"Song · Bob Dylan",d:2},
+{c:"Paint it __________.",a:"black",h:"Song · Rolling Stones",d:2},
+{c:"You give love a bad __________.",a:"name",h:"Song · Bon Jovi",d:2},
+{c:"Wake me up before you go-__________.",a:"go",h:"Song · Wham!",d:2},
+{c:"Don't you want me, __________?",a:"baby",h:"Song · The Human League",d:2},
+{c:"Mr. __________ man, play a song for me.",a:"tambourine",h:"Song · Bob Dylan",d:2},
+{c:"Slim __________ please stand up.",a:"shady",h:"Song · Eminem",d:2},
+{c:"My name is __________ — James Bond.",a:"bond",h:"Movie franchise",d:2},
+{c:"Shaken, not __________.",a:"stirred",h:"Movie · James Bond",d:2},
+{c:"Under __________ bridge.",a:"pressure",h:"Song · Queen & Bowie",d:2},
+{c:"Jump! — for my love.",a:"jump",h:"Song · Pointer Sisters",d:2},
+{c:"Every breath you take, every move you __________.",a:"make",h:"Song · The Police",d:2},
+{c:"Come together, right __________.",a:"now",h:"Song · The Beatles",d:2},
+{c:"The course of true love never did run __________.",a:"smooth",h:"Shakespeare",d:2},
+{c:"Ask not what your country can do for you — ask what you can do for your __________.",a:"country",h:"JFK",d:2},
+{c:"I have a __________.",a:"dream",h:"MLK Jr.",d:2},
+{c:"Float like a butterfly, sting like a __________.",a:"bee",h:"Muhammad Ali",d:2},
+{c:"That's one small step for man, one giant leap for __________.",a:"mankind",h:"Neil Armstrong",d:2},
+{c:"The truth will set you __________.",a:"free",h:"Common saying",d:2},
+{c:"Forrest __________, Forrest Gump.",a:"gump",h:"Movie · 1994",d:2},
+{c:"I'm king of the __________.",a:"world",h:"Movie · Titanic",d:2},
+{c:"The __________ must flow.",a:"spice",h:"Book / Movie · Dune",d:2},
+{c:"Not all those who wander are __________.",a:"lost",h:"Tolkien",d:2},
+{c:"To kill a __________.",a:"mockingbird",h:"Novel · Harper Lee",d:2},
+{c:"Big __________ is watching you.",a:"brother",h:"Novel · Orwell",d:2},
+{c:"All work and no play makes Jack a dull __________.",a:"boy",h:"Movie · The Shining",d:2},
+{c:"Heeeere's __________!",a:"johnny",h:"Movie · The Shining",d:2},
+{c:"Say hello to my little __________.",a:"friend",h:"Movie · Scarface",d:2},
+{c:"You're gonna need a bigger __________.",a:"boat",h:"Movie · Jaws",d:2},
+{c:"Life finds a __________.",a:"way",h:"Movie · Jurassic Park",d:2},
+{c:"Do or do not. There is no __________.",a:"try",h:"Star Wars · Yoda",d:2},
+{c:"Get to the __________!",a:"chopper",h:"Movie · Predator",d:2},
+{c:"I feel the need — the need for __________.",a:"speed",h:"Movie · Top Gun",d:2},
+{c:"Wakanda __________.",a:"forever",h:"Movie · Black Panther",d:2},
+{c:"I can do this all __________.",a:"day",h:"Movie · Captain America",d:2},
+{c:"That's what she __________.",a:"said",h:"TV · The Office",d:2},
+{c:"I declare __________!",a:"bankruptcy",h:"TV · The Office",d:2},
+{c:"You can't sit with __________.",a:"us",h:"Movie · Mean Girls",d:2},
+{c:"On Wednesdays we wear __________.",a:"pink",h:"Movie · Mean Girls",d:2},
+{c:"Here's looking at you, __________.",a:"kid",h:"Movie · Casablanca",d:2},
+{c:"A rose by any other name would smell as __________.",a:"sweet",h:"Shakespeare · Romeo & Juliet",d:2},
+{c:"Float like a butterfly, sting like a __________.",a:"bee",h:"Muhammad Ali",d:2},
+{c:"Veni, vidi, __________.",a:"vici",h:"Latin · Julius Caesar",d:2},
+{c:"Cogito ergo __________.",a:"sum",h:"Latin · Descartes",d:2},
+{c:"Carpe __________.",a:"diem",h:"Latin · seize the ____",d:2},
+{c:"Et tu, __________?",a:"brute",h:"Shakespeare · Julius Caesar",d:2},
+{c:"Wax on, wax __________.",a:"off",h:"Movie · The Karate Kid",d:2},
+{c:"Say my __________.",a:"name",h:"TV · Breaking Bad",d:2},
+{c:"A Lannister always pays his __________.",a:"debts",h:"TV · Game of Thrones",d:2},
+{c:"Fear is the mind-__________.",a:"killer",h:"Book · Dune",d:2},
+{c:"Expecto __________.",a:"patronum",h:"Movie · Harry Potter",d:2},
+{c:"After all this time? __________.",a:"always",h:"Harry Potter · Snape",d:2},
+{c:"One ring to rule them __________.",a:"all",h:"Tolkien",d:2},
+{c:"It was the best of times, it was the worst of __________.",a:"times",h:"Dickens",d:2},
+{c:"All animals are equal, but some are more equal than __________.",a:"others",h:"Orwell · Animal Farm",d:2},
+{c:"The __________ in the rye.",a:"catcher",h:"Novel · Salinger",d:2},
+{c:"I'm going to make him an offer he can't __________.",a:"refuse",h:"Movie · The Godfather",d:2},
+{c:"Leave the gun. Take the __________.",a:"cannoli",h:"Movie · The Godfather",d:2},
+{c:"Toto, I have a feeling we're not in __________ anymore.",a:"kansas",h:"Movie · Wizard of Oz",d:2},
+{c:"Inconceivable!",a:"inconceivable",h:"Movie · The Princess Bride",d:2},
+{c:"Frankly, my dear, I don't give a __________.",a:"damn",h:"Movie · Gone with the Wind",d:2},
+{c:"Get busy living, or get busy __________.",a:"dying",h:"Movie · Shawshank Redemption",d:2},
+{c:"Hope is a good thing — no good thing ever __________.",a:"dies",h:"Movie · Shawshank Redemption",d:2},
+{c:"You talking to __________?",a:"me",h:"Movie · Taxi Driver",d:2},
+{c:"I coulda been a __________.",a:"contender",h:"Movie · On the Waterfront",d:2},
+{c:"Hello. My name is Inigo Montoya. Prepare to __________.",a:"die",h:"Movie · The Princess Bride",d:2},
+{c:"Roads? Where we're going, we don't need __________.",a:"roads",h:"Movie · Back to the Future",d:2},
+{c:"Hasta la vista, __________.",a:"baby",h:"Movie · Terminator 2",d:2},
+{c:"The greatest trick the Devil pulled was convincing the world he didn't __________.",a:"exist",h:"Movie · The Usual Suspects",d:2},
+{c:"I'm as mad as hell, and I'm not gonna take this __________!",a:"anymore",h:"Movie · Network",d:2},
+{c:"Give me liberty, or give me __________.",a:"death",h:"Patrick Henry",d:2},
+{c:"The only thing we have to fear is fear __________.",a:"itself",h:"FDR",d:2},
+{c:"In the beginning was the __________.",a:"word",h:"Bible · John 1:1",d:2},
+{c:"They may take our lives but they'll never take our __________!",a:"freedom",h:"Movie · Braveheart",d:2},
+{c:"Of all the gin joints in all the towns, she walks into __________.",a:"mine",h:"Movie · Casablanca",d:2},
+{c:"Why do we fall? So we can learn to pick ourselves __________.",a:"up",h:"Movie · Batman Begins",d:2},
+{c:"You either die a hero or live long enough to see yourself become the __________.",a:"villain",h:"Movie · The Dark Knight",d:2},
+{c:"Some men just want to watch the world __________.",a:"burn",h:"Movie · The Dark Knight",d:2},
+{c:"I am Groot.",a:"groot",h:"Movie · Guardians of the Galaxy",d:2},
+{c:"I am Iron __________.",a:"man",h:"Movie · Avengers Endgame",d:2},
+{c:"Avengers, __________.",a:"assemble",h:"Movie · Avengers Endgame",d:2},
+{c:"We accept the love we think we __________.",a:"deserve",h:"Perks of Being a Wallflower",d:2},
+
+// ─── HARD (difficulty 3) ────────────────────────────────────────────
+{c:"All the world's a __________, and all the men and women merely players.",a:"stage",h:"Shakespeare · As You Like It",d:3},
+{c:"Something is rotten in the state of __________.",a:"denmark",h:"Shakespeare · Hamlet",d:3},
+{c:"Brevity is the soul of __________.",a:"wit",h:"Shakespeare · Hamlet",d:3},
+{c:"The lady doth protest too __________.",a:"much",h:"Shakespeare · Hamlet",d:3},
+{c:"What light through yonder window __________?",a:"breaks",h:"Shakespeare · Romeo & Juliet",d:3},
+{c:"It's not who I am underneath but what I __________ that defines me.",a:"do",h:"Movie · Batman Begins",d:3},
+{c:"The night is darkest just before the __________.",a:"dawn",h:"Movie · The Dark Knight",d:3},
+{c:"I find your lack of faith __________.",a:"disturbing",h:"Movie · Star Wars · Vader",d:3},
+{c:"My mama always said, life was like a box of chocolates. You never know what you're gonna __________.",a:"get",h:"Movie · Forrest Gump",d:3},
+{c:"It's not about how hard you hit — it's about how hard you can get hit and keep moving __________.",a:"forward",h:"Movie · Rocky Balboa",d:3},
+{c:"Ignorance is __________.",a:"strength",h:"Orwell · 1984 slogan",d:3},
+{c:"War is __________.",a:"peace",h:"Orwell · 1984 slogan",d:3},
+{c:"E pluribus __________.",a:"unum",h:"US motto",d:3},
+{c:"In the beginning, God created the __________ and the earth.",a:"heavens",h:"Bible · Genesis 1:1",d:3},
+{c:"I think, therefore I __________.",a:"am",h:"Descartes · in English",d:3},
+{c:"If you can't stand the heat, get out of the __________.",a:"kitchen",h:"Truman",d:3},
+{c:"It does not do to dwell on dreams and forget to __________.",a:"live",h:"Harry Potter · Dumbledore",d:3},
+{c:"Words are, in my not-so-humble opinion, our most inexhaustible source of __________.",a:"magic",h:"Harry Potter · Dumbledore",d:3},
+{c:"It is our choices that show what we truly are, far more than our __________.",a:"abilities",h:"Harry Potter · Dumbledore",d:3},
+{c:"Wit beyond measure is man's greatest __________.",a:"treasure",h:"Harry Potter · Rowena Ravenclaw",d:3},
+{c:"I solemnly swear that I am up to no __________.",a:"good",h:"Harry Potter · Marauder's Map",d:3},
+{c:"To the well-organized mind, death is but the next great __________.",a:"adventure",h:"Harry Potter · Dumbledore",d:3},
+{c:"From the ashes a fire shall be woken, a light from the shadows shall __________.",a:"spring",h:"Tolkien poem",d:3},
+{c:"Not all who wander are __________ — in the roots of the mountain.",a:"lost",h:"Tolkien",d:3},
+{c:"May it be a light to you in dark places, when all other lights go __________.",a:"out",h:"Tolkien · LOTR",d:3},
+{c:"Even the smallest person can change the course of the __________.",a:"future",h:"Tolkien · LOTR",d:3},
+{c:"Precious — my __________!",a:"precious",h:"Movie · LOTR",d:3},
+{c:"You cannot pass. I am a servant of the Secret Fire, wielder of the flame of __________.",a:"anor",h:"Movie · LOTR",d:3},
+{c:"Life is what happens when you're busy making other __________.",a:"plans",h:"John Lennon",d:3},
+{c:"In the end, it's not the years in your life that count — it's the __________ in your years.",a:"life",h:"Abraham Lincoln",d:3},
+{c:"The measure of intelligence is the ability to __________.",a:"change",h:"Albert Einstein",d:3},
+{c:"Imagination is more important than __________.",a:"knowledge",h:"Albert Einstein",d:3},
+{c:"Two roads diverged in a wood, and I — I took the one less __________ by.",a:"traveled",h:"Robert Frost",d:3},
+{c:"Do not go gentle into that good __________.",a:"night",h:"Dylan Thomas",d:3},
+{c:"I have measured out my life with coffee __________.",a:"spoons",h:"T.S. Eliot",d:3},
+{c:"April is the cruellest __________.",a:"month",h:"T.S. Eliot · The Waste Land",d:3},
+{c:"Turning and turning in the widening __________ — the falcon cannot hear the falconer.",a:"gyre",h:"W.B. Yeats",d:3},
+{c:"Things fall apart; the centre cannot __________.",a:"hold",h:"W.B. Yeats · The Second Coming",d:3},
+{c:"I am large, I contain __________.",a:"multitudes",h:"Walt Whitman · Song of Myself",d:3},
+{c:"That's no moon — it's a space __________!",a:"station",h:"Movie · Star Wars",d:3},
+{c:"Never tell me the __________.",a:"odds",h:"Movie · Star Wars · Han Solo",d:3},
+{c:"It's a trap!",a:"trap",h:"Movie · Star Wars · Ackbar",d:3},
+{c:"I am your father — No! That's not __________.",a:"true",h:"Movie · Empire Strikes Back",d:3},
+{c:"Help me, Obi-Wan Kenobi — you're my only __________.",a:"hope",h:"Movie · Star Wars",d:3},
+{c:"Always in motion is the __________.",a:"future",h:"Movie · Star Wars · Yoda",d:3},
+{c:"When 900 years old, you reach, look as good, you will __________.",a:"not",h:"Movie · Star Wars · Yoda",d:3},
+{c:"These aren't the droids you're looking __________.",a:"for",h:"Movie · Star Wars",d:3},
+{c:"We're gonna need a bigger __________.",a:"boat",h:"Movie · Jaws",d:3},
+{c:"Here's Johnny — wait, he said Heeeere's __________.",a:"johnny",h:"Movie · The Shining",d:3},
+{c:"All work and no play makes Jack a __________ boy.",a:"dull",h:"Movie · The Shining",d:3},
+{c:"Come play with us, __________. Forever and ever and ever.",a:"danny",h:"Movie · The Shining",d:3},
+{c:"Redrum. Redrum. __________.",a:"redrum",h:"Movie · The Shining",d:3},
+{c:"I drink your milkshake! I drink it __________!",a:"up",h:"Movie · There Will Be Blood",d:3},
+{c:"Wolfie's got a big __________.",a:"mouth",h:"Cultural reference",d:3},
+{c:"I'm the most brilliant orange you have ever __________.",a:"seen",h:"Movie phrase",d:3},
+{c:"To infinity, to __________, and beyond.",a:"eternity",h:"Buzz Lightyear extended",d:3},
+{c:"I'm not superstitious, but I am a little __________.",a:"stitious",h:"TV · The Office · Michael Scott",d:3},
+{c:"Bears. Beets. Battlestar __________.",a:"galactica",h:"TV · The Office · Dwight",d:3},
+{c:"Identity theft is not a joke, __________! Millions of families suffer every year.",a:"jim",h:"TV · The Office · Dwight",d:3},
+{c:"That's what she said — classic Michael __________.",a:"scott",h:"TV · The Office",d:3},
+{c:"Winter is coming — and so is __________.",a:"night",h:"Game of Thrones extended",d:3},
+{c:"Chaos isn't a pit. Chaos is a __________.",a:"ladder",h:"TV · Game of Thrones · Littlefinger",d:3},
+{c:"The night is dark and full of __________.",a:"terrors",h:"TV · Game of Thrones",d:3},
+{c:"Hodor. Hodor. __________.",a:"hodor",h:"TV · Game of Thrones",d:3},
+{c:"You know nothing, Jon __________.",a:"snow",h:"TV · Game of Thrones",d:3},
+{c:"What is dead may never __________.",a:"die",h:"TV · Game of Thrones",d:3},
+{c:"A girl is no __________.",a:"one",h:"TV · Game of Thrones",d:3},
+{c:"Dracarys.",a:"dracarys",h:"TV · Game of Thrones · what does Daenerys say to her dragons?",d:3},
+{c:"I drink and I know __________.",a:"things",h:"TV · Game of Thrones · Tyrion",d:3},
+{c:"When you play the Game of Thrones, you win or you __________.",a:"die",h:"TV · Game of Thrones",d:3},
+{c:"The Dude abides.",a:"abides",h:"Movie · The Big Lebowski · what does the Dude do?",d:3},
+{c:"Yeah well, that's just like, your __________, man.",a:"opinion",h:"Movie · The Big Lebowski",d:3},
+{c:"I'm Walter Sobchak — this isn't 'Nam, this is bowling — there are __________.",a:"rules",h:"Movie · The Big Lebowski",d:3},
+{c:"You don't talk about Fight __________.",a:"club",h:"Movie · Fight Club",d:3},
+{c:"The first rule of Fight Club is: you do not talk about __________.",a:"fight club",h:"Movie · Fight Club",d:3},
+{c:"We've got a situation here — say hello to my little __________.",a:"friend",h:"Movie · Scarface",d:3},
+{c:"In this country, you gotta make the money first. Then when you get the money, you get the __________.",a:"power",h:"Movie · Scarface",d:3},
+{c:"Say goodnight to the bad __________.",a:"guy",h:"Movie · Scarface",d:3},
+{c:"Carpe diem. Seize the day, boys. Make your lives __________.",a:"extraordinary",h:"Movie · Dead Poets Society",d:3},
+{c:"O Captain, my __________!",a:"captain",h:"Whitman / Dead Poets Society",d:3},
+{c:"We're all mad __________.",a:"here",h:"Book · Alice in Wonderland",d:3},
+{c:"Off with their __________!",a:"heads",h:"Book · Alice in Wonderland",d:3},
+{c:"Curiouser and __________.",a:"curiouser",h:"Book · Alice in Wonderland",d:3},
+{c:"Why, sometimes I've believed as many as six impossible things before __________.",a:"breakfast",h:"Alice in Wonderland · Red Queen",d:3},
+{c:"It was a bright cold day in April, and the clocks were striking __________.",a:"thirteen",h:"Novel · Orwell · 1984",d:3},
+{c:"It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a __________.",a:"wife",h:"Jane Austen · Pride and Prejudice",d:3},
+{c:"Call me __________.",a:"ishmael",h:"Novel · Melville · Moby-Dick",d:3},
+{c:"It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of __________.",a:"foolishness",h:"Dickens · A Tale of Two Cities",d:3},
+{c:"Lolita, light of my life, fire of my __________.",a:"loins",h:"Novel · Nabokov",d:3},
+{c:"The sky above the port was the color of television, tuned to a dead __________.",a:"channel",h:"Novel · Gibson · Neuromancer",d:3},
+{c:"A long time ago in a galaxy far, far __________.",a:"away",h:"Movie · Star Wars opening",d:3},
+{c:"We'll always have __________.",a:"paris",h:"Movie · Casablanca",d:3},
+{c:"Play it again, __________.",a:"sam",h:"Movie · Casablanca (misquote)",d:3},
+{c:"Rosebud.",a:"rosebud",h:"Movie · Citizen Kane · the final word",d:3},
+{c:"I'm gonna make him an offer he can't __________.",a:"refuse",h:"Movie · The Godfather",d:3},
+{c:"Just when I thought I was out, they pull me back __________.",a:"in",h:"Movie · The Godfather III",d:3},
+{c:"I know it was you, Fredo — you broke my __________.",a:"heart",h:"Movie · The Godfather II",d:3},
+{c:"Keep your friends close, but your enemies __________.",a:"closer",h:"Movie · The Godfather II",d:3},
+];
+
+// ═══════════════════════════════════════════════════════════════════════
+//  ACHIEVEMENTS  —  52 definitions
+// ═══════════════════════════════════════════════════════════════════════
+const ACHS = [
+// PERFORMANCE
+{id:'perfect_run',     icon:'✨', name:'Perfect Run',        desc:'Get 10/10 correct in one game',             cat:'Performance', rare:false},
+{id:'near_perfect',    icon:'💫', name:'Near Perfect',       desc:'Get 9/10 correct in one game',              cat:'Performance', rare:false},
+{id:'flawless_mind',   icon:'🧠', name:'Flawless Mind',      desc:'Finish a game with zero wrong answers',     cat:'Performance', rare:false},
+{id:'clutch_win',      icon:'🎯', name:'Clutch Win',         desc:'Pass Career level with exactly 8 correct',  cat:'Performance', rare:false},
+{id:'no_hints_win',    icon:'👁',  name:'Purist',             desc:'Complete a game without using any hints',   cat:'Performance', rare:false},
+{id:'no_reveals_win',  icon:'🔒', name:'Sealed',             desc:'Complete a game without revealing letters', cat:'Performance', rare:false},
+{id:'no_help_win',     icon:'🏔', name:'Solo Climber',       desc:'Win using zero hints and zero reveals',     cat:'Performance', rare:true},
+{id:'comeback',        icon:'🔄', name:'Comeback',           desc:'Pass after getting the first 2 wrong',      cat:'Performance', rare:false},
+{id:'perfect_career',  icon:'🌟', name:'Career Perfect',     desc:'Get 10/10 in a Career level',               cat:'Performance', rare:true},
+// SPEED
+{id:'speed_demon',     icon:'⚡', name:'Speed Demon',        desc:'Answer 5 questions in under 5 seconds each',cat:'Speed',       rare:false},
+{id:'lightning_brain', icon:'🌩', name:'Lightning Brain',    desc:'Answer 3 questions in under 3 seconds each',cat:'Speed',       rare:false},
+{id:'under_pressure',  icon:'⏱', name:'Under Pressure',     desc:'Get a correct answer with ≤3 seconds left',  cat:'Speed',       rare:false},
+{id:'flash_round',     icon:'💥', name:'Flash Round',        desc:'Complete all 10 rounds in under 90 seconds', cat:'Speed',       rare:true},
+// STREAK
+{id:'streak_3',        icon:'🔥', name:'On Fire',            desc:'Get 3 correct answers in a row',            cat:'Streak',      rare:false},
+{id:'streak_5',        icon:'🌋', name:'Streak Master',      desc:'Get 5 correct answers in a row',            cat:'Streak',      rare:false},
+{id:'streak_7',        icon:'🚀', name:'Unstoppable',        desc:'Get 7 correct answers in a row',            cat:'Streak',      rare:false},
+{id:'streak_10',       icon:'🏆', name:'Legendary Streak',   desc:'Get 10 correct in a row (a full game!)',    cat:'Streak',      rare:true},
+{id:'streak_comeback', icon:'🦅', name:'Phoenix',            desc:'Build a streak of 5+ after an early wrong', cat:'Streak',      rare:true},
+// SCORE
+{id:'score_300',       icon:'⭐', name:'Rising Star',        desc:'Score 300+ points in one game',             cat:'Score',       rare:false},
+{id:'score_600',       icon:'🌟', name:'High Scorer',        desc:'Score 600+ points in one game',             cat:'Score',       rare:false},
+{id:'score_1000',      icon:'💎', name:'Master Mind',        desc:'Score 1,000+ points in one game',           cat:'Score',       rare:false},
+{id:'score_1200',      icon:'👑', name:'Genius',             desc:'Score 1,200+ points in one game',           cat:'Score',       rare:false},
+{id:'score_1500',      icon:'🔮', name:'Legend Score',       desc:'Score 1,500+ points in one game',           cat:'Score',       rare:true},
+// PROGRESSION
+{id:'first_game',      icon:'🎮', name:'First Blank',        desc:'Complete your first ever game',             cat:'Progression', rare:false},
+{id:'career_l5',       icon:'🥉', name:'Rookie',             desc:'Reach Career Level 5',                      cat:'Progression', rare:false},
+{id:'career_l10',      icon:'🥈', name:'Veteran',            desc:'Reach Career Level 10',                     cat:'Progression', rare:false},
+{id:'career_l20',      icon:'🥇', name:'Pro',                desc:'Reach Career Level 20',                     cat:'Progression', rare:false},
+{id:'career_l50',      icon:'🏆', name:'Grand Master',       desc:'Reach Career Level 50',                     cat:'Progression', rare:true},
+{id:'career_l100',     icon:'🌈', name:'Century',            desc:'Reach Career Level 100',                    cat:'Progression', rare:true},
+{id:'played_5',        icon:'🎲', name:'Getting Warmed Up',  desc:'Play 5 total games',                        cat:'Progression', rare:false},
+{id:'played_10',       icon:'🎯', name:'Dedicated',          desc:'Play 10 total games',                       cat:'Progression', rare:false},
+{id:'played_25',       icon:'🎪', name:'Regular',            desc:'Play 25 total games',                       cat:'Progression', rare:false},
+{id:'played_50',       icon:'🏅', name:'Addict',             desc:'Play 50 total games',                       cat:'Progression', rare:false},
+{id:'played_100',      icon:'🌠', name:'Centurion',          desc:'Play 100 total games',                      cat:'Progression', rare:true},
+// SKILL
+{id:'almost_saver',    icon:'🪝', name:'Close Call',         desc:'Get 3 "almost correct" answers in one game',cat:'Skill',       rare:false},
+{id:'full_game_easy',  icon:'📗', name:'Easy Rider',         desc:'Complete a game using only easy questions', cat:'Skill',       rare:false},
+{id:'full_game_hard',  icon:'💀', name:'Hard Mode',          desc:'Complete a level using only hard questions', cat:'Skill',      rare:true},
+{id:'both_modes',      icon:'🎭', name:'Versatile',          desc:'Play both Quick Game and Career Mode',      cat:'Skill',       rare:false},
+{id:'retry_pass',      icon:'💪', name:'Never Give Up',      desc:'Pass a Career level after previously failing it',cat:'Skill',  rare:false},
+{id:'no_almost',       icon:'🎯', name:'Laser Focused',      desc:'Finish a game with zero "almost" answers',  cat:'Skill',       rare:false},
+{id:'perfect_hints',   icon:'🧩', name:'Hint Master',        desc:'Use a hint and still get the answer right', cat:'Skill',       rare:false},
+// EXPLORATION / HIDDEN
+{id:'first_almost',    icon:'🤏', name:'So Close!',          desc:'Get your first almost-correct answer',      cat:'Hidden',      rare:false},
+{id:'timeout_all',     icon:'⏰', name:'Time Bandit',        desc:'Run out of time on 3 questions in one game',cat:'Hidden',      rare:false},
+{id:'quick_first',     icon:'🐇', name:'Fast Start',         desc:'Answer the first question in under 2 seconds',cat:'Hidden',   rare:false},
+{id:'night_owl',       icon:'🦉', name:'Night Owl',          desc:'Play a game (works any time — it\'s always late somewhere!)',cat:'Hidden',rare:false},
+{id:'triple_bonus',    icon:'🎰', name:'Triple Jackpot',     desc:'Get a 3× streak bonus in a game',          cat:'Hidden',      rare:false},
+{c:'score_every',      id:'score_every',icon:'📈',name:'On the Board',desc:'Score at least 1 point in every round',cat:'Hidden',  rare:false},
+{id:'all_correct_fast',icon:'🏎', name:'Perfect Speedrun',   desc:'Get 10/10 correct and finish in under 120 seconds',cat:'Hidden',rare:true},
+{id:'career_first',    icon:'🎓', name:'Enrolled',           desc:'Play your first Career Mode game',          cat:'Hidden',      rare:false},
+{id:'quick_10',        icon:'⚡', name:'Quick Draw',         desc:'Play 10 Quick Games',                       cat:'Hidden',      rare:false},
+{id:'d3_correct',      icon:'🧐', name:'Scholar',            desc:'Get 5 hard questions correct in one game',  cat:'Hidden',      rare:true},
+{id:'long_answer',     icon:'📝', name:'Wordsmith',          desc:'Correctly answer a question where the answer is 3+ words',cat:'Hidden',rare:false},
+];
+
+// ═══════════════════════════════════════════════════════════════════════
+//  LEVENSHTEIN
+// ═══════════════════════════════════════════════════════════════════════
+function lev(a,b){
+  const m=a.length,n=b.length;
+  const dp=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++)dp[0][j]=j;
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  return dp[m][n];
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  SAVE
+// ═══════════════════════════════════════════════════════════════════════
+const LS='blankd_v3';
+function load(){try{return JSON.parse(localStorage.getItem(LS))||{}}catch{return{}}}
+function save(p){try{localStorage.setItem(LS,JSON.stringify({...load(),...p}))}catch{}}
+function gs(){
+  const d=load();
+  return{
+    lv:d.lv||1, bestScore:d.bestScore||0, bestStreak:d.bestStreak||0,
+    gp:d.gp||0, qgp:d.qgp||0,           // total games, quick games
+    achs:d.achs||[], recentQ:d.recentQ||[],
+    lastR:d.lastR||[], lastS:d.lastS||0,
+    failedLvls:d.failedLvls||[],         // levels that were failed at least once
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════════════
+const TOTAL=10, PASS=8, TSECS=15, MAX_RECENT=50;
+let mode,careerLevel,questions,roundIdx;
+let score,streak,bestStreak,statsCorrect,statsAlmost,statsFast,statsD3Correct;
+let roundResults,roundActive,hintUsed,revealsUsed,revealedIdxs;
+let earlyMistakes,hintsUsedCount,revealsUsedCount,almostCount,timeoutCount;
+let gameStartTime,roundStartTime;
+let newAchs=[];
+
+// ═══════════════════════════════════════════════════════════════════════
+//  SCREENS
+// ═══════════════════════════════════════════════════════════════════════
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  refreshAchBadge();
+}
+
+function refreshAchBadge(){
+  const s=gs();
+  const cnt=(s.achs||[]).filter(id=>ACHS.find(a=>a.id===id)).length;
+  const badge=document.getElementById('introAchBadge');
+  if(cnt>0){badge.style.display='inline-block';badge.textContent=cnt;}
+  else badge.style.display='none';
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  CAREER PRE
+// ═══════════════════════════════════════════════════════════════════════
+function openCareerPre(){
+  const s=gs();
+  const lv=s.lv;
+  document.getElementById('preLevelTag').textContent=`Level ${lv}`;
+  document.getElementById('preTitle').textContent=lv===1?'Ready to start?':'Back for more?';
+  document.getElementById('preStatLevel').textContent=lv;
+  document.getElementById('preStatBest').textContent=s.bestScore>0?s.bestScore.toLocaleString():'—';
+  document.getElementById('preStatStreak').textContent=s.bestStreak>0?s.bestStreak:'—';
+  document.getElementById('preStartLevelNum').textContent=lv;
+  let diff,dc;
+  if(lv<=2){diff='Easy';dc='easy';}
+  else if(lv<=6){diff='Medium';dc='medium';}
+  else{diff='Hard';dc='hard';}
+  const b=document.getElementById('preDiffBadge');
+  b.textContent=diff;b.className='pre-diff-badge '+dc;
+  document.getElementById('preProgressFill').style.width=(Math.min(((lv-1)%10)/9,1)*100)+'%';
+  document.getElementById('preRequireNote').textContent=`Need ${PASS} / ${TOTAL} correct to advance`;
+  const dots=document.getElementById('preRecentDots');
+  dots.innerHTML='';
+  if(s.lastR&&s.lastR.length){
+    s.lastR.forEach(r=>{const d=document.createElement('div');d.className='pre-recent-dot '+r;dots.appendChild(d);});
+    const lc=s.lastR.filter(r=>r==='correct').length;
+    document.getElementById('preLastScore').textContent=`Last score: ${(s.lastS||0).toLocaleString()} pts · ${lc}/${s.lastR.length} correct`;
+    document.getElementById('preLastCard').style.display='block';
+  }else{
+    document.getElementById('preLastCard').style.display='none';
+  }
+  showScreen('careerPreScreen');
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  START GAME
+// ═══════════════════════════════════════════════════════════════════════
+function startGame(m){
+  mode=m;
+  const s=gs();
+  if(mode==='career')careerLevel=s.lv;
+  score=streak=bestStreak=statsCorrect=statsAlmost=statsFast=statsD3Correct=0;
+  roundResults=[];roundIdx=0;
+  earlyMistakes=hintsUsedCount=revealsUsedCount=almostCount=timeoutCount=0;
+  newAchs=[];
+  gameStartTime=performance.now();
+  questions=buildQ(s.recentQ||[]);
+  showScreen('gameScreen');
+  buildDots();
+  updateCareerBanner();
+  startRound();
+}
+
+function shuffle(a){
+  const r=[...a];
+  for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}
+  return r;
+}
+
+function qhash(q){return q.c.slice(0,28);}
+
+function buildQ(recentQ){
+  let pool;
+  if(mode==='career'){
+    if(careerLevel<=2)       pool=QB.filter(q=>q.d===1);
+    else if(careerLevel<=4)  pool=QB.filter(q=>q.d<=2);
+    else if(careerLevel<=6)  pool=QB.filter(q=>q.d===2);
+    else if(careerLevel<=10) pool=QB.filter(q=>q.d>=2);
+    else                     pool=QB.filter(q=>q.d===3);
+  }else{
+    pool=[...QB];
+  }
+  const fresh=shuffle(pool.filter(q=>!recentQ.includes(qhash(q))));
+  const stale=shuffle(pool.filter(q=>recentQ.includes(qhash(q))));
+  return [...fresh,...stale].slice(0,TOTAL);
+}
+
+function buildDots(){
+  const w=document.getElementById('roundDots');w.innerHTML='';
+  for(let i=0;i<TOTAL;i++){
+    const d=document.createElement('div');
+    d.className='rdot'+(i===0?' active':'');d.id='rd-'+i;w.appendChild(d);
+  }
+}
+
+function updateCareerBanner(){
+  const b=document.getElementById('careerBanner');
+  if(mode==='career'){
+    b.classList.add('visible');
+    document.getElementById('careerLevelLabel').textContent=`Level ${careerLevel}`;
+    document.getElementById('careerReq').textContent=`Need ${PASS}/10 to advance`;
+  }else b.classList.remove('visible');
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  ROUND
+// ═══════════════════════════════════════════════════════════════════════
+function startRound(){
+  const q=questions[roundIdx];
+  hintUsed=false;revealsUsed=0;revealedIdxs=[];roundActive=true;
+  ['hintBox','feedbackCard','timesUpBar'].forEach(id=>{document.getElementById(id).className=document.getElementById(id).className.split(' ')[0];});
+  document.getElementById('btnNext').className='btn-next';
+  const gi=document.getElementById('guessInput');
+  gi.value='';gi.disabled=false;gi.classList.remove('shake');
+  document.getElementById('btnGo').disabled=false;
+  document.getElementById('btnHint').disabled=false;
+  document.getElementById('btnReveal').disabled=false;
+  document.getElementById('progressFill').style.width=(roundIdx/TOTAL*100)+'%';
+  document.getElementById('progressLabel').textContent=`Round ${roundIdx+1} / ${TOTAL}`;
+  document.getElementById('scoreLabel').textContent=score.toLocaleString()+' pts';
+  const prev=document.getElementById('rd-'+(roundIdx-1));
+  if(prev)prev.classList.remove('active');
+  const cur=document.getElementById('rd-'+roundIdx);
+  if(cur){cur.classList.remove('wrong','correct','almost','timeout');cur.classList.add('active');}
+  document.getElementById('typeChip').textContent=q.h.split('·')[0].trim();
+  updateStreakBadge();
+  document.getElementById('imgWrap').style.display='none';
+  document.getElementById('textWrap').style.display='block';
+  renderText(q.c);
+  buildRevealStrip(q.a);
+  startTimer();
+  setTimeout(()=>document.getElementById('guessInput').focus(),200);
+}
+
+function renderText(c){
+  const html=c.replace(/__________/g,'<span class="blank-line"></span>');
+  document.getElementById('textQuote').innerHTML='\u201c'+html+'\u201d';
+}
+
+function buildRevealStrip(answer){
+  const strip=document.getElementById('revealStrip');strip.innerHTML='';
+  answer.split('').forEach((ch,i)=>{
+    const cell=document.createElement('div');
+    cell.className=ch===' '?'rev-char space':'rev-char';
+    if(ch!==' ')cell.textContent='·';
+    cell.id='rc-'+i;strip.appendChild(cell);
+  });
+}
+
+function updateRevealStrip(idxs,answer){
+  idxs.forEach(i=>{
+    const c=document.getElementById('rc-'+i);
+    if(c&&answer[i]!==' '){c.textContent=answer[i].toUpperCase();c.classList.add('revealed');}
+  });
+}
+
+function revealAll(){
+  const a=questions[roundIdx].a;
+  updateRevealStrip(a.split('').map((_,i)=>i),a);
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  TIMER
+// ═══════════════════════════════════════════════════════════════════════
+let timerRaf=null,timerEndAt=0,timerPausedLeft=0,timerPaused=false,timerRoundStart=0;
+
+function startTimer(){
+  cancelAnimationFrame(timerRaf);
+  timerPaused=false;timerPausedLeft=0;
+  timerEndAt=performance.now()+TSECS*1000;
+  timerRoundStart=performance.now();
+  rafTick();
+}
+
+function rafTick(){
+  if(timerPaused)return;
+  const now=performance.now();
+  const left=Math.max(0,timerEndAt-now);
+  const pct=left/(TSECS*1000);
+  const secs=Math.ceil(left/1000);
+  document.getElementById('timerFill').style.width=(pct*100)+'%';
+  const ne=document.getElementById('timerNum');
+  if(ne._last!==secs){
+    ne._last=secs;ne.textContent=secs;
+    ne.className='timer-num'+(secs<=3?' danger':secs<=7?' warn':'');
+    document.getElementById('timerFill').style.background=secs<=3?'var(--red)':secs<=7?'var(--orange)':'var(--green)';
+  }
+  if(left>0&&roundActive)timerRaf=requestAnimationFrame(rafTick);
+  else if(left<=0&&roundActive)handleTimeout();
+}
+
+function stopTimer(){cancelAnimationFrame(timerRaf);timerRaf=null;}
+function pauseTimer(){
+  if(timerPaused||!roundActive)return;
+  timerPaused=true;cancelAnimationFrame(timerRaf);
+  timerPausedLeft=Math.max(0,timerEndAt-performance.now());
+}
+function resumeTimer(){
+  if(!timerPaused||!roundActive)return;
+  timerPaused=false;timerEndAt=performance.now()+timerPausedLeft;
+  timerRoundStart=timerEndAt-timerPausedLeft;rafTick();
+}
+function getTimeBonus(){
+  const used=(performance.now()-timerRoundStart)/1000;
+  return Math.round(Math.max(0,(TSECS-used)/TSECS)*50);
+}
+function getAnswerSecs(){return(performance.now()-timerRoundStart)/1000;}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  PAUSE
+// ═══════════════════════════════════════════════════════════════════════
+function openMenu(){
+  pauseTimer();
+  document.getElementById('pauseSub').textContent=`Round ${roundIdx+1} of ${TOTAL} · ${score.toLocaleString()} pts`;
+  document.getElementById('pauseOverlay').classList.add('visible');
+}
+function resumeGame(){document.getElementById('pauseOverlay').classList.remove('visible');resumeTimer();}
+function restartFromPause(){document.getElementById('pauseOverlay').classList.remove('visible');stopTimer();startGame(mode);}
+function quitToMenu(){document.getElementById('pauseOverlay').classList.remove('visible');stopTimer();showScreen('introScreen');}
+document.getElementById('pauseOverlay').addEventListener('click',function(e){if(e.target===this)resumeGame();});
+
+// ═══════════════════════════════════════════════════════════════════════
+//  TIMEOUT
+// ═══════════════════════════════════════════════════════════════════════
+function handleTimeout(){
+  if(!roundActive)return;
+  roundActive=false;stopTimer();streak=0;
+  ['guessInput','btnGo','btnHint','btnReveal'].forEach(id=>document.getElementById(id).disabled=true);
+  document.getElementById('timeoutAnswer').textContent=questions[roundIdx].a;
+  document.getElementById('timesUpBar').classList.add('visible');
+  if(roundIdx<2)earlyMistakes++;
+  timeoutCount++;
+  markDot(roundIdx,'timeout');roundResults.push('timeout');
+  revealAll();updateStreakBadge();showNext();
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  SUBMIT
+// ═══════════════════════════════════════════════════════════════════════
+function submitGuess(){
+  if(!roundActive)return;
+  const raw=document.getElementById('guessInput').value.trim();
+  if(!raw){
+    const gi=document.getElementById('guessInput');
+    gi.classList.add('shake');setTimeout(()=>gi.classList.remove('shake'),400);return;
+  }
+  stopTimer();roundActive=false;
+  ['guessInput','btnGo','btnHint','btnReveal'].forEach(id=>document.getElementById(id).disabled=true);
+  const guess=raw.toLowerCase();
+  const answer=questions[roundIdx].a.toLowerCase().trim();
+  const dist=lev(guess,answer);
+  const timeBonus=getTimeBonus();
+  const answerSecs=getAnswerSecs();
+  const timerLeft=Math.max(0,timerEndAt-performance.now());
+  let pts=0,result,fbMsg,fbType;
+
+  if(dist===0){
+    pts=100+timeBonus;
+    if(hintUsed)pts-=30;
+    pts-=revealsUsed*20;pts=Math.max(pts,10);
+    streak++;bestStreak=Math.max(bestStreak,streak);statsCorrect++;
+    if(questions[roundIdx].d===3)statsD3Correct++;
+    const mult=streak>=5?3:streak>=3?2:1;pts*=mult;
+    result='correct';fbType='correct';
+    fbMsg=`✓ Correct! <strong>${questions[roundIdx].a}</strong>`;
+    if(mult>1)fbMsg+=` · ${mult}× streak bonus!`;
+    triggerFlash('correct-flash');showScorePop('+'+pts,'pos');
+    if(answerSecs<5)statsFast++;
+    if(answerSecs<2&&roundIdx===0)tryUnlock('quick_first');
+    if(timerLeft/1000<=3)tryUnlock('under_pressure');
+    if(questions[roundIdx].a.split(' ').length>=3)tryUnlock('long_answer');
+    if(hintUsed)tryUnlock('perfect_hints');
+  }else if(dist===1){
+    pts=50;if(hintUsed)pts-=30;pts-=revealsUsed*20;pts=Math.max(pts,5);
+    streak=0;statsAlmost++;almostCount++;
+    result='almost';fbType='almost';
+    fbMsg=`≈ Almost! Answer: <strong>${questions[roundIdx].a}</strong>`;
+    showScorePop('+'+pts,'pos');
+    if(!document.getElementById('introAchBadge').__firstAlmost){
+      document.getElementById('introAchBadge').__firstAlmost=true;
+      tryUnlock('first_almost');
+    }
+  }else{
+    pts=0;streak=0;result='wrong';fbType='wrong';
+    fbMsg=`✗ Wrong. Answer: <strong>${questions[roundIdx].a}</strong>`;
+    triggerFlash('wrong-flash');showScorePop('✗','neg');
+    document.getElementById('guessInput').classList.add('shake');
+    if(roundIdx<2)earlyMistakes++;
+  }
+
+  score+=pts;roundResults.push(result);markDot(roundIdx,result);updateStreakBadge();
+  document.getElementById('scoreLabel').textContent=score.toLocaleString()+' pts';
+  document.getElementById('feedbackMsg').innerHTML=fbMsg;
+  document.getElementById('feedbackPts').textContent=pts>0?'+'+pts+' pts':'';
+  document.getElementById('feedbackCard').className='feedback-card visible '+fbType;
+  revealAll();showNext();
+}
+
+function markDot(i,r){
+  const d=document.getElementById('rd-'+i);
+  if(d){d.classList.remove('active');d.classList.add(r);}
+}
+
+function showNext(){
+  const btn=document.getElementById('btnNext');
+  btn.classList.add('visible');
+  btn.textContent=roundIdx<TOTAL-1?'Next round →':'See results →';
+}
+
+function nextRound(){roundIdx++;if(roundIdx>=TOTAL)showEndScreen();else startRound();}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  HINT / REVEAL
+// ═══════════════════════════════════════════════════════════════════════
+function useHint(){
+  if(!roundActive||hintUsed)return;
+  hintUsed=true;hintsUsedCount++;
+  document.getElementById('btnHint').disabled=true;
+  const hb=document.getElementById('hintBox');
+  hb.innerHTML=`💡 <strong>Hint:</strong> ${questions[roundIdx].h}`;
+  hb.classList.add('visible');
+}
+
+function revealLetter(){
+  if(!roundActive||revealsUsed>=3)return;
+  const a=questions[roundIdx].a;
+  const chars=a.split('');
+  const avail=chars.map((_,i)=>i).filter(i=>chars[i]!==' '&&!revealedIdxs.includes(i));
+  if(!avail.length)return;
+  const idx=avail[Math.floor(Math.random()*avail.length)];
+  revealedIdxs.push(idx);revealsUsed++;revealsUsedCount++;
+  updateRevealStrip(revealedIdxs,a);
+  if(revealsUsed>=3)document.getElementById('btnReveal').disabled=true;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  STREAK BADGE
+// ═══════════════════════════════════════════════════════════════════════
+function updateStreakBadge(){
+  const b=document.getElementById('streakBadge');
+  if(streak>=5){b.classList.remove('hidden');document.getElementById('streakTxt').textContent=streak+' 🔥 3×';}
+  else if(streak>=3){b.classList.remove('hidden');document.getElementById('streakTxt').textContent=streak+' 🔥 2×';}
+  else b.classList.add('hidden');
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  FLASH / POP
+// ═══════════════════════════════════════════════════════════════════════
+function triggerFlash(cls){
+  const el=document.getElementById('flashOverlay');
+  el.className='flash-overlay '+cls;
+  setTimeout(()=>el.className='flash-overlay',450);
+}
+function showScorePop(txt,type){
+  const wrap=document.getElementById('scorePopWrap');
+  const el=document.createElement('div');
+  el.className='score-pop '+type;el.textContent=txt;
+  el.style.left=(30+Math.random()*40)+'%';el.style.top='40%';
+  wrap.appendChild(el);setTimeout(()=>el.remove(),850);
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  ACHIEVEMENT UNLOCK
+// ═══════════════════════════════════════════════════════════════════════
+const _unlocked=new Set();
+
+function tryUnlock(id){
+  const s=gs();
+  const already=new Set(s.achs||[]);
+  if(already.has(id)||_unlocked.has(id))return false;
+  _unlocked.add(id);
+  newAchs.push(id);
+  // persist immediately
+  const newList=[...already,id];
+  save({achs:newList});
+  return true;
+}
+
+function checkEndAchs(){
+  const s=gs();
+  const lv=mode==='career'?careerLevel:s.lv;
+  const gameSecs=(performance.now()-gameStartTime)/1000;
+  const passed=mode==='career'&&statsCorrect>=PASS;
+  const allPts=roundResults.every(r=>r==='correct'||r==='almost');
+
+  // first game
+  if((s.gp||0)===0)tryUnlock('first_game');
+  // first career
+  if(mode==='career'&&(s.gp||0)===0)tryUnlock('career_first');
+  // games played
+  const newGp=(s.gp||0)+1;
+  if(newGp>=5)tryUnlock('played_5');
+  if(newGp>=10)tryUnlock('played_10');
+  if(newGp>=25)tryUnlock('played_25');
+  if(newGp>=50)tryUnlock('played_50');
+  if(newGp>=100)tryUnlock('played_100');
+  // quick games
+  if(mode==='quick'){
+    const nqgp=(s.qgp||0)+1;
+    if(nqgp>=10)tryUnlock('quick_10');
+    save({qgp:nqgp});
+  }
+  // performance
+  if(statsCorrect===10)tryUnlock('perfect_run');
+  if(statsCorrect===9)tryUnlock('near_perfect');
+  if(roundResults.every(r=>r==='correct'))tryUnlock('flawless_mind');
+  if(mode==='career'&&statsCorrect===10)tryUnlock('perfect_career');
+  if(mode==='career'&&passed&&statsCorrect===PASS)tryUnlock('clutch_win');
+  if(hintsUsedCount===0)tryUnlock('no_hints_win');
+  if(revealsUsedCount===0)tryUnlock('no_reveals_win');
+  if(hintsUsedCount===0&&revealsUsedCount===0)tryUnlock('no_help_win');
+  if(earlyMistakes>=2&&statsCorrect>=8)tryUnlock('comeback');
+  // speed
+  if(statsFast>=5)tryUnlock('speed_demon');
+  if(statsFast>=3)tryUnlock('lightning_brain');
+  if(gameSecs<90)tryUnlock('flash_round');
+  if(statsCorrect===10&&gameSecs<120)tryUnlock('all_correct_fast');
+  // streak
+  if(bestStreak>=3)tryUnlock('streak_3');
+  if(bestStreak>=5)tryUnlock('streak_5');
+  if(bestStreak>=7)tryUnlock('streak_7');
+  if(bestStreak>=10)tryUnlock('streak_10');
+  if(bestStreak>=3){
+    // check if there was an early miss
+    const wrongIdx=roundResults.findIndex(r=>r==='wrong'||r==='timeout');
+    if(wrongIdx<3&&wrongIdx>=0)tryUnlock('streak_comeback');
+  }
+  if(streak>=3)tryUnlock('triple_bonus');
+  // score
+  if(score>=300)tryUnlock('score_300');
+  if(score>=600)tryUnlock('score_600');
+  if(score>=1000)tryUnlock('score_1000');
+  if(score>=1200)tryUnlock('score_1200');
+  if(score>=1500)tryUnlock('score_1500');
+  // skill
+  if(almostCount>=3)tryUnlock('almost_saver');
+  if(timeoutCount>=3)tryUnlock('timeout_all');
+  if(statsAlmost===0&&statsCorrect>0)tryUnlock('no_almost');
+  if(statsD3Correct>=5)tryUnlock('d3_correct');
+  // progression
+  if(mode==='career'){
+    const newLv=passed?lv+1:lv;
+    if(newLv>=5)tryUnlock('career_l5');
+    if(newLv>=10)tryUnlock('career_l10');
+    if(newLv>=20)tryUnlock('career_l20');
+    if(newLv>=50)tryUnlock('career_l50');
+    if(newLv>=100)tryUnlock('career_l100');
+    if(!passed&&!(s.failedLvls||[]).includes(lv))save({failedLvls:[...(s.failedLvls||[]),lv]});
+    if(passed&&(s.failedLvls||[]).includes(lv))tryUnlock('retry_pass');
+  }
+  // modes played
+  if(mode==='career'&&(s.qgp||0)>0)tryUnlock('both_modes');
+  if(mode==='quick'&&(s.gp||0)>0)tryUnlock('both_modes');
+  // hidden
+  tryUnlock('night_owl');
+  if(allPts)tryUnlock('score_every');
+  // difficulty mode
+  if(questions.every(q=>q.d===1))tryUnlock('full_game_easy');
+  if(mode==='career'&&questions.every(q=>q.d===3))tryUnlock('full_game_hard');
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  ACHIEVEMENT TOAST QUEUE
+// ═══════════════════════════════════════════════════════════════════════
+let toastQ=[],toastT=null;
+function queueToast(id){toastQ.push(id);if(!toastT)drainToast();}
+function drainToast(){
+  if(!toastQ.length){toastT=null;return;}
+  const id=toastQ.shift();
+  const def=ACHS.find(a=>a.id===id);if(!def){drainToast();return;}
+  const t=document.getElementById('achToast');
+  document.getElementById('achToastIcon').textContent=def.icon;
+  document.getElementById('achToastName').textContent=def.name;
+  document.getElementById('achToastDesc').textContent=def.desc;
+  t.classList.add('show');
+  toastT=setTimeout(()=>{t.classList.remove('show');setTimeout(drainToast,400);},2800);
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  SHARE CARD
+// ═══════════════════════════════════════════════════════════════════════
+let currentShareId=null;
+function openShareCard(id){
+  const def=ACHS.find(a=>a.id===id);if(!def)return;
+  currentShareId=id;
+  const canvas=document.getElementById('shareCanvas');
+  const ctx=canvas.getContext('2d');
+  const W=600,H=340;
+  canvas.width=W;canvas.height=H;
+  // bg
+  ctx.fillStyle='#f5f2ee';ctx.fillRect(0,0,W,H);
+  // grid
+  ctx.strokeStyle='#ddd9d3';ctx.lineWidth=1;
+  for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  // card
+  const cx=36,cy=36,cw=W-72,ch=H-72,cr=16;
+  ctx.fillStyle='#ffffff';ctx.shadowColor='rgba(0,0,0,0.08)';ctx.shadowBlur=20;ctx.shadowOffsetY=4;
+  rrect(ctx,cx,cy,cw,ch,cr);ctx.fill();ctx.shadowColor='transparent';
+  // accent stripe
+  if(def.rare){ctx.fillStyle='#7c3aed';}else{ctx.fillStyle='#2d5be3';}
+  ctx.fillRect(cx,cy,5,ch);
+  // logo pill
+  ctx.fillStyle='#1a1714';rrect(ctx,cx+20,cy+20,88,26,13);ctx.fill();
+  ctx.fillStyle='#ffffff';ctx.font='bold 11px sans-serif';ctx.fillText('BLANKD',cx+34,cy+37);
+  // icon
+  ctx.font='52px serif';ctx.fillStyle='#1a1714';ctx.fillText(def.icon,cx+20,cy+110);
+  // name
+  ctx.font='bold 30px sans-serif';ctx.fillStyle='#1a1714';ctx.fillText(def.name,cx+20,cy+148);
+  // desc
+  ctx.font='16px sans-serif';ctx.fillStyle='#6b6560';
+  wrapText(ctx,def.desc,cx+20,cy+174,cw-40,22);
+  // category badge
+  const bc=def.rare?'#7c3aed':'#c8860a';
+  const bbg=def.rare?'#f5f0ff':'#fef8e7';
+  const bbd=def.rare?'#c4b5fd':'#f0d080';
+  ctx.fillStyle=bbg;rrect(ctx,cx+20,cy+ch-46,def.rare?80:100,26,13);ctx.fill();
+  ctx.strokeStyle=bbd;ctx.lineWidth=1;rrect(ctx,cx+20,cy+ch-46,def.rare?80:100,26,13);ctx.stroke();
+  ctx.fillStyle=bc;ctx.font='bold 10px sans-serif';
+  ctx.fillText(def.rare?'★ RARE':def.cat.toUpperCase(),cx+32,cy+ch-28);
+  // watermark
+  ctx.font='12px sans-serif';ctx.fillStyle='#9e9890';ctx.fillText('blankd — fill in the blanks',W-230,H-46);
+  document.getElementById('sharePanelTitle').textContent=def.name;
+  document.getElementById('shareOverlay').classList.add('visible');
+}
+
+function rrect(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+}
+
+function wrapText(ctx,text,x,y,maxW,lh){
+  const words=text.split(' ');let line='';
+  for(const w of words){
+    const t=line?line+' '+w:w;
+    if(ctx.measureText(t).width>maxW&&line){ctx.fillText(line,x,y);line=w;y+=lh;}else line=t;
+  }
+  ctx.fillText(line,x,y);
+}
+
+function downloadShareCard(){
+  const canvas=document.getElementById('shareCanvas');
+  const name=currentShareId?(ACHS.find(a=>a.id===currentShareId)?.name||'achievement').replace(/\s+/g,'-').toLowerCase():'achievement';
+  const link=document.createElement('a');link.download='blankd-'+name+'.png';link.href=canvas.toDataURL('image/png');link.click();
+}
+function closeShare(){document.getElementById('shareOverlay').classList.remove('visible');}
+document.getElementById('shareOverlay').addEventListener('click',function(e){if(e.target===this)closeShare();});
+
+// ═══════════════════════════════════════════════════════════════════════
+//  ACHIEVEMENTS SCREEN
+// ═══════════════════════════════════════════════════════════════════════
+let achFilter='All';
+
+function showAchievements(){
+  const s=gs();
+  const unlocked=new Set(s.achs||[]);
+  const total=ACHS.length;
+  const cnt=[...unlocked].filter(id=>ACHS.find(a=>a.id===id)).length;
+  document.getElementById('achSubtitle').textContent=`${cnt} of ${total} unlocked`;
+  document.getElementById('achSummaryCount').textContent=cnt;
+  document.getElementById('achSummaryText').textContent=cnt===total?'All unlocked! 🎉':`${total-cnt} still to unlock`;
+  document.getElementById('achSummaryFill').style.width=(cnt/total*100)+'%';
+  // filters
+  const cats=['All',...new Set(ACHS.map(a=>a.cat))];
+  const filterRow=document.getElementById('achFilterRow');filterRow.innerHTML='';
+  cats.forEach(cat=>{
+    const btn=document.createElement('button');
+    btn.className='ach-filter-btn'+(achFilter===cat?' active':'');
+    btn.textContent=cat;
+    btn.onclick=()=>{achFilter=cat;showAchievements();};
+    filterRow.appendChild(btn);
+  });
+  renderAchList(unlocked);
+  showScreen('achievementsScreen');
+}
+
+function renderAchList(unlocked){
+  const wrap=document.getElementById('achListWrap');wrap.innerHTML='';
+  const cats=achFilter==='All'?[...new Set(ACHS.map(a=>a.cat))]:['Hidden' === achFilter ? 'Hidden' : achFilter];
+  const filteredCats=achFilter==='All'?[...new Set(ACHS.map(a=>a.cat))]:[achFilter];
+  filteredCats.forEach(cat=>{
+    const defs=ACHS.filter(a=>a.cat===cat);if(!defs.length)return;
+    const header=document.createElement('div');header.className='ach-section-title';header.textContent=cat;wrap.appendChild(header);
+    const grid=document.createElement('div');grid.className='ach-grid';
+    defs.forEach(def=>{
+      const isU=unlocked.has(def.id);
+      const card=document.createElement('div');
+      card.className='ach-card'+(isU?' unlocked':' locked')+(def.rare?' rare':'');
+      card.innerHTML=`<div class="ach-card-icon">${def.icon}</div><div class="ach-card-name">${def.name}</div><div class="ach-card-desc">${def.desc}</div>${isU?'<div class="ach-card-badge">'+(def.rare?'★ RARE':'DONE')+'</div>':''}`;
+      if(isU)card.addEventListener('click',()=>openShareCard(def.id));
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  END SCREEN
+// ═══════════════════════════════════════════════════════════════════════
+function showEndScreen(){
+  stopTimer();
+  const s=gs();
+  const newBest=Math.max(score,s.bestScore||0);
+  const newBestStreak=Math.max(bestStreak,s.bestStreak||0);
+  const newGp=(s.gp||0)+1;
+  const usedH=questions.map(qhash);
+  let rq=[...(s.recentQ||[]),...usedH];
+  if(rq.length>MAX_RECENT)rq=rq.slice(-MAX_RECENT);
+  let newLv=s.lv||1;
+  if(mode==='career'){
+    const passed=statsCorrect>=PASS;
+    if(passed)newLv=(s.lv||1)+1;
+  }
+  save({bestScore:newBest,bestStreak:newBestStreak,gp:newGp,lv:newLv,lastR:roundResults,lastS:score,recentQ:rq});
+  if(mode==='career')careerLevel=newLv;
+  checkEndAchs();
+  newAchs.forEach((id,i)=>setTimeout(()=>queueToast(id),i*3200+600));
+  showScreen('endScreen');
+  document.getElementById('finalScore').textContent=score.toLocaleString();
+  document.getElementById('stCorrect').textContent=statsCorrect;
+  document.getElementById('stAlmost').textContent=statsAlmost;
+  document.getElementById('stBest').textContent=bestStreak;
+  document.getElementById('endModeTag').textContent=mode==='career'?`Career Mode · Level ${s.lv||1}`:'Quick Game';
+  const pct=statsCorrect/TOTAL;
+  const titles=['Better luck next time!','Nice try!','Good effort!','Well done!','Impressive!','Outstanding!'];
+  document.getElementById('endTitle').textContent=titles[Math.min(Math.floor(pct*titles.length),titles.length-1)];
+  const ed=document.getElementById('endDots');ed.innerHTML='';
+  roundResults.forEach(r=>{const d=document.createElement('div');d.className='rdot '+r;ed.appendChild(d);});
+  let rank;
+  if(score>=1500)rank='🔮 Genius';
+  else if(score>=1200)rank='👑 Legend';
+  else if(score>=900)rank='🥇 Expert';
+  else if(score>=600)rank='🥈 Skilled';
+  else if(score>=300)rank='🥉 Learner';
+  else rank='📚 Beginner';
+  document.getElementById('rankTag').textContent=rank;
+  const crEl=document.getElementById('careerResult');
+  const btnP=document.getElementById('btnEndPrimary');
+  if(mode==='career'){
+    const passed=statsCorrect>=PASS;
+    crEl.style.display='block';
+    if(passed){crEl.className='career-result passed';crEl.textContent=`✓ Level ${s.lv||1} passed! Now on Level ${newLv}`;btnP.textContent=`Play Level ${newLv} →`;}
+    else{crEl.className='career-result failed';crEl.textContent=`✗ Need ${PASS}/10 — got ${statsCorrect}/10. Retry!`;btnP.textContent=`Retry Level ${s.lv||1} →`;}
+  }else{crEl.style.display='none';btnP.textContent='Play Again';}
+  const achWrap=document.getElementById('endNewAchievements');achWrap.innerHTML='';
+  if(newAchs.length){
+    newAchs.forEach(id=>{
+      const def=ACHS.find(a=>a.id===id);if(!def)return;
+      const pill=document.createElement('div');pill.className='end-ach-pill';
+      pill.innerHTML=`<div class="end-ach-pill-icon">${def.icon}</div><div class="end-ach-pill-text"><div class="end-ach-pill-name">${def.name}</div><div class="end-ach-pill-desc">${def.desc}</div></div><div class="end-ach-pill-share">Share →</div>`;
+      pill.addEventListener('click',()=>openShareCard(id));achWrap.appendChild(pill);
+    });
+  }
+  refreshAchBadge();
+}
+
+window.handleEndPrimary=function(){if(mode==='career')startGame('career');else startGame('quick');};
+window.goHome=function(){stopTimer();showScreen('introScreen');};
+
+// ═══════════════════════════════════════════════════════════════════════
+//  EVENTS
+// ═══════════════════════════════════════════════════════════════════════
+document.getElementById('btnGo').addEventListener('click',submitGuess);
+document.getElementById('guessInput').addEventListener('keydown',e=>{if(e.key==='Enter')submitGuess();});
+document.getElementById('btnHint').addEventListener('click',useHint);
+document.getElementById('btnReveal').addEventListener('click',revealLetter);
+document.getElementById('btnNext').addEventListener('click',nextRound);
+
+// init badge
+refreshAchBadge();
+</script>
+</body>
+</html>
