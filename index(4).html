@@ -1,0 +1,2605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+<title>BlankD</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+  --bg:#0c0c10;
+  --bg2:#121218;
+  --surface:#1a1a23;
+  --surface2:#20202c;
+  --surface3:#252530;
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.12);
+  --text:#f2f2f8;
+  --muted:#8b8b9e;
+  --faint:#5a5a6e;
+  --accent:#6c6fff;
+  --accent2:#9b9dff;
+  --accent-glow:rgba(108,111,255,.28);
+  --gold:#f0c355;
+  --gold-soft:rgba(240,195,85,.15);
+  --gold-glow:rgba(240,195,85,.3);
+  --good:#3dd68c;
+  --good-soft:rgba(61,214,140,.12);
+  --warn:#f5a623;
+  --warn-soft:rgba(245,166,35,.12);
+  --bad:#f5607a;
+  --bad-soft:rgba(245,96,122,.12);
+  --purple:#b06fff;
+  --r:20px;
+  --r-lg:28px;
+  --r-xl:36px;
+  --app:430px;
+  --topbar:56px;
+  --tabbar:72px;
+  --safe-top:max(16px,env(safe-area-inset-top));
+  --safe-bottom:max(16px,env(safe-area-inset-bottom));
+  --font:'Inter',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+/* CLASSIC LIGHT */
+body[data-theme="classic"]{
+  --bg:#f0ede8;--bg2:#e8e4de;--surface:#ffffff;--surface2:#f7f4ef;--surface3:#eeeae4;
+  --border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.12);--text:#18171f;--muted:#6e6d7a;--faint:#a0a0b0;
+  --accent:#4e52e8;--accent2:#7f82ff;--accent-glow:rgba(78,82,232,.2);
+}
+body[data-theme="paper"]{
+  --bg:#f5f0e4;--bg2:#ede7d8;--surface:#fffef8;--surface2:#f7f0e2;--surface3:#ede6d4;
+  --border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.12);--text:#1e1a0e;--muted:#7a6e56;--faint:#b0a48c;
+  --accent:#8a6020;--accent2:#b8882a;--accent-glow:rgba(138,96,32,.2);
+}
+body[data-theme="midnight"]{
+  --bg:#0d0f1a;--bg2:#111420;--surface:#171a27;--surface2:#1e2130;--surface3:#242837;
+  --accent:#7ca4ff;--accent2:#a8bfff;--accent-glow:rgba(124,164,255,.28);
+  --good:#3dd68c;--gold:#ffca5f;--bad:#ff7d7d;
+}
+body[data-theme="glacier"]{
+  --bg:#eaf4fd;--bg2:#deeef9;--surface:#ffffff;--surface2:#f2f9ff;--surface3:#e4f2fc;
+  --border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.12);--text:#0d1e2d;--muted:#607285;--faint:#8ba0b4;
+  --accent:#2e74dd;--accent2:#5e97f6;--accent-glow:rgba(46,116,221,.2);
+}
+body[data-theme="nebula"]{
+  --bg:#150e1f;--bg2:#1a1227;--surface:#20173a;--surface2:#271e44;--surface3:#2d234e;
+  --accent:#ae88ff;--accent2:#d0b4ff;--accent-glow:rgba(174,136,255,.28);
+  --good:#4bd49b;--gold:#ffd35d;
+}
+body[data-theme="velvet"]{
+  --bg:#1a0d12;--bg2:#22121a;--surface:#2a1820;--surface2:#331e28;--surface3:#3a2330;
+  --accent:#ff8faf;--accent2:#ffb3cc;--accent-glow:rgba(255,143,175,.28);
+  --good:#62d7a2;--gold:#ffd26f;
+}
+body[data-theme="monolith"]{
+  --bg:#111111;--bg2:#181818;--surface:#1e1e1e;--surface2:#252525;--surface3:#2c2c2c;
+  --accent:#c7c7c2;--accent2:#e0e0db;--accent-glow:rgba(199,199,194,.2);
+  --good:#59c98d;--gold:#e1c16c;
+}
+body[data-theme="eclipse"]{
+  --bg:#0a0e1c;--bg2:#0f1428;--surface:#141a34;--surface2:#1b2240;--surface3:#22294e;
+  --accent:#90b4ff;--accent2:#b8d0ff;--accent-glow:rgba(144,180,255,.28);
+  --good:#52d6a0;--gold:#ffcf6d;
+}
+body[data-theme="royal"]{
+  --bg:#f5f0f8;--bg2:#ede6f4;--surface:#ffffff;--surface2:#f8f2ff;--surface3:#ede6f8;
+  --border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.12);--text:#1a1022;--muted:#7a6888;--faint:#b0a0be;
+  --accent:#8444cf;--accent2:#aa78f0;--accent-glow:rgba(132,68,207,.2);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--body);overscroll-behavior:none;height:100%;overflow:hidden}
+button{font-family:var(--font);cursor:pointer;border:none;background:none;color:inherit;-webkit-font-smoothing:antialiased}
+input{font-family:var(--body)}
+a{text-decoration:none;color:inherit}
+.hidden{display:none!important}
+
+/* APP SHELL */
+.app{
+  width:min(100vw,var(--app));
+  height:100dvh;
+  margin:0 auto;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+}
+
+/* TOP RESOURCE BAR */
+.topbar{
+  position:relative;
+  z-index:20;
+  flex:0 0 auto;
+  padding:var(--safe-top) 14px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+}
+.brand-mark{
+  font-family:var(--font);
+  font-weight:900;
+  font-size:1.3rem;
+  letter-spacing:-.06em;
+  line-height:1;
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  flex:0 0 auto;
+  padding:6px 0;
+}
+.brand-mark .d{color:var(--accent)}
+.topbar-resources{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:flex-end;
+  flex:0 0 auto;
+  margin-left:auto;
+}
+.res-chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  min-height:42px;
+  padding:0 12px;
+  border-radius:999px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  font-family:var(--font);
+  font-size:.75rem;
+  font-weight:800;
+  line-height:1;
+  letter-spacing:.02em;
+}
+.res-chip .ic{font-size:.9rem}
+.res-chip.xp{color:var(--accent2);border-color:var(--accent-glow)}
+.res-chip.ink-c{color:var(--gold)}
+.res-chip.str-c{color:var(--purple)}
+
+.lang-panel{
+  display:grid;
+  gap:14px;
+}
+.lang-card{
+  background:linear-gradient(180deg,var(--surface),var(--surface2));
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+.lang-card-title{
+  font-family:var(--font);
+  font-size:1.18rem;
+  font-weight:900;
+  letter-spacing:-.04em;
+  margin-bottom:6px;
+}
+.lang-card-sub{
+  color:var(--muted);
+  font-size:.92rem;
+  line-height:1.45;
+}
+.lang-options{
+  display:grid;
+  gap:12px;
+  margin-top:14px;
+}
+.lang-choice{
+  width:100%;
+  text-align:left;
+  padding:16px 18px;
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:var(--surface2);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.lang-choice.active{
+  border-color:var(--accent);
+  background:color-mix(in srgb,var(--surface2) 65%,var(--accent) 35%);
+  box-shadow:0 10px 24px var(--accent-glow);
+}
+.settings-stack{display:grid;gap:12px;margin-top:10px}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:18px;border:1px solid var(--border);background:linear-gradient(180deg,var(--surface2),var(--surface3))}
+.settings-copy{display:flex;align-items:center;gap:10px;min-width:0}
+.settings-k{font-family:var(--font);font-size:.98rem;font-weight:900;letter-spacing:-.03em}
+.settings-v{display:none}
+.sound-toggle{display:inline-flex;align-items:center;gap:6px;padding:5px;background:var(--surface3);border:1px solid var(--border);border-radius:999px;flex:0 0 auto}
+.sound-opt{min-width:52px;height:38px;padding:0 14px;border-radius:999px;font-family:var(--font);font-size:.78rem;font-weight:900;letter-spacing:.04em;color:var(--muted)}
+.sound-opt.active{background:var(--accent);color:#fff;box-shadow:0 8px 18px var(--accent-glow)}
+.settings-icon{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--surface3);border:1px solid var(--border);font-size:1rem;flex:0 0 auto}
+.lang-choice-copy{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.lang-choice-k{
+  font-family:var(--font);
+  font-size:1rem;
+  font-weight:900;
+  letter-spacing:-.03em;
+}
+.lang-choice-v{
+  color:var(--muted);
+  font-size:.86rem;
+}
+.lang-choice-mark{
+  font-family:var(--font);
+  font-size:.68rem;
+  font-weight:900;
+  letter-spacing:.12em;
+  color:var(--faint);
+  text-transform:uppercase;
+}
+.lang-choice.active .lang-choice-mark{
+  color:#fff;
+}
+
+/* MAIN CONTENT */
+.main-content{
+  flex:1 1 auto;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  position:relative;
+}
+.main-content::-webkit-scrollbar{display:none}
+
+/* TAB CONTENT */
+.tab-panel{
+  display:none;
+  min-height:100%;
+  padding:14px 14px calc(var(--safe-bottom) + var(--tabbar) + 20px);
+}
+.tab-panel.active{display:block}
+
+/* BOTTOM TAB BAR */
+.tabbar{
+  position:relative;
+  z-index:20;
+  flex:0 0 auto;
+  display:flex;
+  align-items:stretch;
+  background:var(--surface);
+  border-top:1px solid var(--border2);
+  padding-bottom:var(--safe-bottom);
+  height:calc(var(--tabbar) + var(--safe-bottom));
+}
+.tab-btn{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+  padding:6px 4px;
+  position:relative;
+  transition:opacity .15s;
+  color:var(--faint);
+}
+.tab-btn.active{color:var(--accent)}
+.tab-btn .t-icon{font-size:1.46rem;line-height:1;display:block}
+.tab-btn .t-label{
+  display:none;
+}
+.tab-btn::before{
+  content:'';
+  position:absolute;
+  top:0;left:50%;
+  transform:translateX(-50%);
+  width:0;height:2px;
+  background:var(--accent);
+  border-radius:0 0 2px 2px;
+  transition:width .2s cubic-bezier(.16,1,.3,1);
+}
+.tab-btn.active::before{width:28px}
+.badge{
+  position:absolute;
+  top:4px;right:50%;
+  transform:translateX(8px);
+  min-width:16px;height:16px;
+  border-radius:999px;
+  background:var(--bad);
+  color:#fff;
+  font-size:.6rem;
+  font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 4px;
+  border:2px solid var(--surface);
+}
+
+/* ─── CAREER / HOME SCREEN ─── */
+#homePanel{padding-top:10px}
+.chapter-nav{
+  display:flex;
+  gap:8px;
+  padding:0 0 12px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.chapter-nav::-webkit-scrollbar{display:none}
+.ch-pill{
+  flex:0 0 auto;
+  padding:7px 14px;
+  border-radius:999px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  font-family:var(--font);
+  font-size:.72rem;
+  font-weight:800;
+  color:var(--muted);
+  white-space:nowrap;
+  transition:all .15s;
+}
+.ch-pill.active{background:var(--accent);color:#fff;border-color:transparent}
+.ch-pill.done{border-color:var(--accent);color:var(--accent)}
+
+/* Current focus hero card */
+.focus-card{
+  border-radius:var(--r-lg);
+  background:linear-gradient(135deg,var(--surface2),var(--surface));
+  border:1px solid var(--border2);
+  padding:20px;
+  margin-bottom:14px;
+  position:relative;
+  overflow:hidden;
+}
+.focus-card::before{
+  content:'';
+  position:absolute;
+  top:-40%;right:-20%;
+  width:260px;height:260px;
+  background:radial-gradient(circle,var(--accent-glow),transparent 65%);
+  pointer-events:none;
+}
+.focus-label{
+  font-family:var(--font);
+  font-size:.62rem;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--accent2);
+  margin-bottom:8px;
+}
+.focus-title{
+  font-family:var(--font);
+  font-size:1.5rem;
+  font-weight:900;
+  letter-spacing:-.04em;
+  line-height:1.1;
+  margin-bottom:4px;
+}
+.focus-sub{
+  font-size:.85rem;
+  color:var(--muted);
+  margin-bottom:14px;
+  line-height:1.4;
+}
+.focus-meta{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+.meta-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:var(--surface3);
+  border:1px solid var(--border);
+  font-family:var(--font);
+  font-size:.68rem;
+  font-weight:800;
+  color:var(--muted);
+}
+.play-btn{
+  width:100%;
+  padding:16px;
+  border-radius:var(--r);
+  background:var(--accent);
+  color:#fff;
+  font-family:var(--font);
+  font-size:1.05rem;
+  font-weight:900;
+  letter-spacing:-.01em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  box-shadow:0 6px 24px var(--accent-glow);
+  transition:transform .12s, box-shadow .12s, opacity .12s;
+}
+.play-btn:active{transform:scale(.97);box-shadow:0 2px 8px var(--accent-glow)}
+.play-btn.locked{background:var(--surface3);color:var(--faint);box-shadow:none}
+.stars-bar{display:flex;gap:4px;align-items:center;margin-top:10px}
+.s{font-size:1.2rem;opacity:.25}
+.s.on{opacity:1;filter:drop-shadow(0 2px 6px var(--gold-glow))}
+
+/* Level map path */
+.level-path{
+  display:grid;
+  gap:10px;
+}
+.level-node{
+  display:grid;
+  grid-template-columns:52px 1fr;
+  gap:12px;
+  align-items:center;
+  cursor:pointer;
+  position:relative;
+}
+.level-node::before{
+  content:'';
+  position:absolute;
+  left:25px;bottom:-10px;
+  width:2px;height:10px;
+  background:var(--border2);
+  pointer-events:none;
+}
+.level-node:last-child::before{display:none}
+.node-btn{
+  width:52px;height:52px;
+  border-radius:50%;
+  border:2px solid var(--border2);
+  background:var(--surface2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--font);
+  font-size:.95rem;
+  font-weight:900;
+  color:var(--muted);
+  position:relative;
+  transition:all .15s;
+  flex:0 0 52px;
+}
+.node-btn.done{
+  background:var(--accent);
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 4px 14px var(--accent-glow);
+}
+.node-btn.current{
+  background:var(--surface);
+  border-color:var(--accent);
+  color:var(--accent);
+  box-shadow:0 0 0 4px var(--accent-glow);
+  transform:scale(1.06);
+}
+.node-btn.perfect{
+  background:var(--gold);
+  border-color:transparent;
+  color:#000;
+  box-shadow:0 4px 14px var(--gold-glow);
+}
+.node-btn.locked{
+  opacity:.45;
+  cursor:default;
+}
+.node-info{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:12px 14px;
+  transition:border-color .15s;
+}
+.node-info.current-info{border-color:var(--accent);background:linear-gradient(135deg,var(--surface),var(--surface2))}
+.node-name{
+  font-family:var(--font);
+  font-weight:800;
+  font-size:.92rem;
+  letter-spacing:-.02em;
+  margin-bottom:2px;
+}
+.node-sub-text{
+  font-size:.75rem;
+  color:var(--muted);
+  line-height:1.3;
+  margin-bottom:6px;
+}
+.node-tags{display:flex;gap:5px;flex-wrap:wrap}
+.nt{
+  padding:3px 8px;
+  border-radius:999px;
+  background:var(--surface2);
+  font-size:.62rem;
+  font-weight:700;
+  color:var(--muted);
+}
+.node-stars{display:flex;gap:3px;margin-left:auto}
+.ns{font-size:.9rem;opacity:.2}
+.ns.on{opacity:1}
+
+/* ─── MODES PANEL ─── */
+.modes-grid{
+  display:grid;
+  gap:10px;
+}
+.mode-card{
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:18px;
+  display:flex;
+  gap:16px;
+  align-items:center;
+  cursor:pointer;
+  transition:border-color .15s, box-shadow .15s;
+  position:relative;
+  overflow:hidden;
+}
+.mode-card:active{transform:scale(.99)}
+.mode-card.locked-card{opacity:.55}
+.mode-icon{
+  width:52px;height:52px;
+  border-radius:18px;
+  background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;
+  flex:0 0 52px;
+}
+.mode-body{flex:1;min-width:0}
+.mode-name{
+  font-family:var(--font);
+  font-weight:900;
+  font-size:1rem;
+  letter-spacing:-.03em;
+  margin-bottom:3px;
+}
+.mode-desc{font-size:.8rem;color:var(--muted);line-height:1.35}
+.mode-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.mc{
+  padding:3px 8px;
+  border-radius:999px;
+  background:var(--surface2);
+  font-size:.62rem;
+  font-weight:800;
+  color:var(--muted);
+  font-family:var(--font);
+}
+.mode-arrow{
+  font-size:1.2rem;
+  color:var(--faint);
+  flex:0 0 auto;
+}
+.lock-overlay-chip{
+  position:absolute;
+  top:14px;right:14px;
+  background:var(--surface3);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:4px 10px;
+  font-size:.62rem;
+  font-weight:900;
+  color:var(--faint);
+  font-family:var(--font);
+}
+
+/* ─── SHOP PANEL ─── */
+.shop-currency{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:16px;
+}
+.curr-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:14px;
+}
+.curr-amount{
+  font-family:var(--font);
+  font-size:1.4rem;
+  font-weight:900;
+  letter-spacing:-.04em;
+}
+.curr-label{
+  font-size:.68rem;
+  color:var(--muted);
+  font-weight:700;
+  margin-top:2px;
+}
+.shop-section-title{
+  font-family:var(--font);
+  font-size:.62rem;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--faint);
+  margin:16px 0 10px;
+}
+.shop-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.shop-tile{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:14px;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  transition:border-color .15s;
+}
+.shop-tile:active{transform:scale(.98)}
+.shop-tile.owned{border-color:var(--accent)}
+.shop-tile-icon{font-size:1.8rem;margin-bottom:8px;display:block}
+.shop-tile-name{
+  font-family:var(--font);
+  font-weight:800;
+  font-size:.85rem;
+  letter-spacing:-.02em;
+  margin-bottom:3px;
+}
+.shop-tile-price{
+  font-size:.72rem;
+  color:var(--muted);
+  font-weight:700;
+}
+.shop-tile-price.can-buy{color:var(--gold)}
+.owned-badge{
+  position:absolute;
+  top:8px;right:8px;
+  background:var(--accent);
+  color:#fff;
+  font-size:.55rem;
+  font-weight:900;
+  padding:2px 6px;
+  border-radius:999px;
+  font-family:var(--font);
+}
+.active-badge{
+  position:absolute;
+  top:8px;right:8px;
+  background:var(--good);
+  color:#fff;
+  font-size:.55rem;
+  font-weight:900;
+  padding:2px 6px;
+  border-radius:999px;
+  font-family:var(--font);
+}
+.locked-req{
+  font-size:.62rem;
+  color:var(--bad);
+  font-weight:700;
+  margin-top:2px;
+}
+.shop-list-item{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:14px 16px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+  margin-bottom:8px;
+  cursor:pointer;
+  transition:border-color .15s;
+}
+.shop-list-item.owned{border-color:var(--accent)}
+.sli-icon{
+  width:46px;height:46px;
+  border-radius:14px;
+  background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;
+  flex:0 0 46px;
+}
+.sli-body{flex:1;min-width:0}
+.sli-name{
+  font-family:var(--font);
+  font-weight:800;
+  font-size:.92rem;
+  letter-spacing:-.02em;
+}
+.sli-desc{font-size:.75rem;color:var(--muted);margin-top:2px;line-height:1.3}
+.sli-action{flex:0 0 auto}
+.action-btn{
+  padding:8px 14px;
+  border-radius:999px;
+  font-family:var(--font);
+  font-size:.72rem;
+  font-weight:900;
+  letter-spacing:.02em;
+  transition:all .12s;
+}
+.action-btn:active{transform:scale(.95)}
+.action-btn.primary{background:var(--accent);color:#fff;box-shadow:0 4px 12px var(--accent-glow)}
+.action-btn.secondary{background:var(--surface2);border:1px solid var(--border2);color:var(--text)}
+.action-btn.success{background:var(--good-soft);color:var(--good);border:1px solid rgba(61,214,140,.3)}
+.action-btn.dim{background:var(--surface2);color:var(--faint);cursor:not-allowed}
+
+/* ─── ACHIEVEMENTS PANEL ─── */
+.ach-header{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:18px;
+  margin-bottom:14px;
+}
+.ach-progress-bar{
+  height:8px;
+  background:var(--surface3);
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:10px;
+}
+.ach-progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--accent),var(--purple));
+  border-radius:999px;
+  transition:width .6s cubic-bezier(.16,1,.3,1);
+}
+.ach-cat-title{
+  font-family:var(--font);
+  font-size:.62rem;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--faint);
+  margin:16px 0 10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.ach-cat-count{
+  font-family:var(--font);
+  font-size:.7rem;
+  font-weight:800;
+  color:var(--muted);
+}
+.ach-item{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:12px 14px;
+  margin-bottom:8px;
+  transition:border-color .15s;
+}
+.ach-item.unlocked{border-color:var(--gold)}
+.ach-icon-box{
+  width:40px;height:40px;
+  border-radius:12px;
+  background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+  flex:0 0 40px;
+  filter:grayscale(1) opacity(.4);
+}
+.ach-item.unlocked .ach-icon-box{filter:none}
+.ach-body{flex:1;min-width:0}
+.ach-name{font-family:var(--font);font-weight:800;font-size:.87rem;letter-spacing:-.02em}
+.ach-desc{font-size:.73rem;color:var(--muted);margin-top:2px;line-height:1.3}
+.ach-tick{
+  font-size:1rem;
+  color:var(--gold);
+  flex:0 0 auto;
+  opacity:0;
+}
+.ach-item.unlocked .ach-tick{opacity:1}
+
+/* ─── GAME SCREEN ─── */
+#gameScreen{
+  position:absolute;
+  inset:0;
+  z-index:50;
+  display:none;
+  flex-direction:column;
+  background:var(--bg);
+}
+#gameScreen.show{display:flex}
+.game-topbar{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:var(--safe-top) 14px 12px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+}
+.game-back-btn{
+  width:40px;height:40px;
+  border-radius:12px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;
+  flex:0 0 40px;
+}
+.game-back-btn:active{transform:scale(.93)}
+.game-mode-info{flex:1;min-width:0;text-align:center}
+.game-mode-label{
+  font-family:var(--font);
+  font-size:.6rem;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--faint);
+}
+.game-level-name{
+  font-family:var(--font);
+  font-size:.95rem;
+  font-weight:900;
+  letter-spacing:-.03em;
+  color:var(--text);
+}
+.game-score{
+  font-family:var(--font);
+  font-size:1.1rem;
+  font-weight:900;
+  color:var(--accent);
+  letter-spacing:-.03em;
+}
+/* Round track */
+.round-track{
+  display:flex;
+  gap:4px;
+  padding:10px 14px;
+  flex:0 0 auto;
+}
+.rd{
+  flex:1;
+  height:5px;
+  border-radius:999px;
+  background:var(--surface3);
+  transition:background .2s;
+}
+.rd.curr{background:var(--accent);opacity:.6}
+.rd.correct{background:var(--good)}
+.rd.almost{background:var(--warn)}
+.rd.wrong,.rd.timeout{background:var(--bad)}
+/* Timer */
+.timer-bar-wrap{
+  padding:0 14px 10px;
+  flex:0 0 auto;
+}
+.timer-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:6px;
+}
+.timer-label{font-size:.7rem;color:var(--muted);font-weight:600}
+.timer-num{
+  font-family:var(--font);
+  font-size:.9rem;
+  font-weight:900;
+  color:var(--text);
+}
+.timer-num.warn{color:var(--warn)}
+.timer-num.bad{color:var(--bad)}
+.timer-track{
+  height:8px;
+  border-radius:999px;
+  background:var(--surface3);
+  overflow:hidden;
+}
+.timer-fill{
+  height:100%;
+  border-radius:999px;
+  transition:width .15s linear, background .2s;
+}
+/* Game content area (scrollable) */
+.game-content{
+  flex:1 1 auto;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:10px 14px;
+  -webkit-overflow-scrolling:touch;
+}
+.game-content::-webkit-scrollbar{display:none}
+/* Question card */
+.question-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:18px;
+  margin-bottom:10px;
+}
+.q-context{
+  font-size:.78rem;
+  color:var(--accent2);
+  font-weight:700;
+  margin-bottom:10px;
+  letter-spacing:.04em;
+  font-family:var(--font);
+}
+.q-text{
+  font-family:var(--font);
+  font-size:1.35rem;
+  font-weight:900;
+  letter-spacing:-.04em;
+  line-height:1.25;
+  color:var(--text);
+}
+.q-blank{
+  display:inline-block;
+  min-width:60px;
+  border-bottom:3px solid var(--accent);
+  color:var(--accent);
+  padding:0 4px 2px;
+  vertical-align:bottom;
+}
+/* Answer display */
+.answer-display{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:14px;
+  align-items:center;
+}
+.ac{
+  width:34px;
+  min-width:34px;
+  max-width:34px;
+  height:34px;
+  padding:0;
+  border-radius:10px;
+  border:1px solid var(--border2);
+  background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--body);
+  font-weight:800;
+  font-size:.8rem;
+  line-height:1;
+  color:var(--faint);
+  transition:background .2s,border-color .2s,box-shadow .2s,transform .2s,color .2s;
+  overflow:hidden;
+  flex:0 0 34px;
+}
+.ac.revealed{
+  background:rgba(108,111,255,.15);
+  border-color:var(--accent);
+  color:var(--accent2);
+}
+.ac.filled{
+  color:var(--text);
+  background:var(--surface3);
+  border-color:var(--border2);
+  transform:translateY(0);
+}
+.ac.result-good,.ac.result-warn,.ac.result-bad{
+  color:#fff;
+  animation:answerRevealPop 420ms cubic-bezier(.18,.9,.22,1);
+}
+.ac.result-good{background:var(--good);border-color:rgba(61,214,140,.5);box-shadow:0 10px 20px rgba(61,214,140,.18)}
+.ac.result-warn{background:var(--warn);border-color:rgba(245,166,35,.5);box-shadow:0 10px 20px rgba(245,166,35,.16)}
+.ac.result-bad{background:var(--bad);border-color:rgba(245,96,122,.5);box-shadow:0 10px 20px rgba(245,96,122,.16)}
+.ac.sp{width:10px;min-width:10px;max-width:10px;flex:0 0 10px;border:none;background:transparent}
+@keyframes answerRevealPop{
+  0%{opacity:.2;transform:translateY(8px) scale(.84)}
+  55%{opacity:1;transform:translateY(-3px) scale(1.06)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+/* Hint/feedback */
+.helper-area{
+  background:var(--surface);
+  border-radius:var(--r);
+  padding:12px 14px;
+  margin-bottom:10px;
+  font-size:.83rem;
+  font-weight:600;
+  line-height:1.4;
+  display:none;
+}
+.helper-area.show{display:block}
+.helper-area.good{background:var(--good-soft);color:var(--good);border:1px solid rgba(61,214,140,.3)}
+.helper-area.warn{background:var(--warn-soft);color:var(--warn);border:1px solid rgba(245,166,35,.3)}
+.helper-area.bad{background:var(--bad-soft);color:var(--bad);border:1px solid rgba(245,96,122,.3)}
+/* Input display */
+.input-display{
+  background:var(--surface);
+  border:2px solid var(--border2);
+  border-radius:var(--r);
+  padding:14px 16px;
+  margin-bottom:10px;
+  min-height:52px;
+  display:flex;
+  align-items:center;
+  font-family:var(--font);
+  font-size:1.1rem;
+  font-weight:700;
+  letter-spacing:.04em;
+  color:var(--text);
+  transition:border-color .15s;
+}
+.input-display.active-input{border-color:var(--accent)}
+.input-display .cursor{
+  display:inline-block;
+  width:2px;height:1.1em;
+  background:var(--accent);
+  margin-left:2px;
+  animation:blink 1s step-end infinite;
+  vertical-align:text-top;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.assist-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:10px;
+}
+.assist-btn{
+  padding:12px;
+  border-radius:var(--r);
+  background:var(--surface);
+  border:1px solid var(--border);
+  font-family:var(--font);
+  font-size:.75rem;
+  font-weight:900;
+  color:var(--muted);
+  letter-spacing:.02em;
+  transition:all .12s;
+}
+.assist-btn:active{transform:scale(.97)}
+.assist-btn:disabled{opacity:.4;cursor:default}
+.next-btn{
+  width:100%;
+  padding:17px;
+  border-radius:var(--r);
+  background:var(--accent);
+  color:#fff;
+  font-family:var(--font);
+  font-size:1rem;
+  font-weight:900;
+  box-shadow:0 4px 16px var(--accent-glow);
+  margin-bottom:10px;
+  display:none;
+  transition:all .12s;
+}
+.next-btn:active{transform:scale(.98)}
+.next-btn.show{display:none}
+/* Custom keyboard */
+.custom-kb{
+  flex:0 0 auto;
+  padding:9px 8px calc(var(--safe-bottom) + 8px);
+  background:var(--surface);
+  border-top:1px solid var(--border);
+}
+.kb-row{
+  display:flex;
+  gap:5px;
+  justify-content:center;
+  margin-bottom:4px;
+}
+.kb-row.space-row{
+  justify-content:center;
+  margin-top:4px;
+}
+.k{
+  flex:1 1 0;
+  max-width:58px;
+  min-width:0;
+  height:50px;
+  border-radius:12px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  font-family:var(--body);
+  font-size:1.22rem;
+  font-weight:700;
+  color:var(--text);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .08s;
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.k:active{transform:scale(.95);background:var(--accent);color:#fff;border-color:transparent}
+.k.wide{max-width:none;flex:1;font-size:.82rem;font-weight:700;letter-spacing:.06em;padding:0 12px}
+.k.spacebar{flex:0 1 29%;width:min(29%,118px);max-width:118px;height:34px;font-size:.6rem;letter-spacing:.1em;padding:0 10px}
+.k.action{background:var(--accent);color:#fff;border-color:transparent;font-size:.88rem}
+.k.action:active{background:color-mix(in srgb,var(--accent) 80%,black)}
+.k.backspace{background:var(--surface3);flex:1.45 1 0;max-width:90px;font-size:1.3rem}
+.kb-submit{
+  width:100%;
+  padding:15px;
+  border-radius:var(--r);
+  background:var(--accent);
+  color:#fff;
+  font-family:var(--font);
+  font-size:1rem;
+  font-weight:900;
+  box-shadow:0 4px 16px var(--accent-glow);
+  margin-top:8px;
+  display:none;
+  transition:all .12s;
+}
+.kb-submit.show{display:block}
+.kb-submit:active{transform:scale(.98)}
+
+@media (max-width:430px){
+  .custom-kb{padding:7px 5px calc(var(--safe-bottom) + 6px)}
+  .kb-row{gap:4px;margin-bottom:4px}
+  .k{max-width:56px;height:46px;font-size:1.1rem;border-radius:10px}
+  .k.backspace{max-width:78px;font-size:1.24rem}
+  .k.spacebar{width:min(31%,118px);max-width:118px;height:34px;font-size:.58rem}
+}
+
+/* Overlays */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  z-index:100;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:16px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s;
+}
+.overlay.show{opacity:1;pointer-events:all}
+.sheet{
+  width:min(100%,var(--app));
+  max-height:82dvh;
+  overflow-y:auto;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--r-xl) var(--r-xl) 20px 20px;
+  padding:20px 20px calc(var(--safe-bottom) + 20px);
+  animation:slideUp .25s cubic-bezier(.16,1,.3,1) both;
+}
+.sheet::-webkit-scrollbar{display:none}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{opacity:1;transform:none}}
+.sheet-eyebrow{
+  font-family:var(--font);
+  font-size:.62rem;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--accent2);
+  margin-bottom:6px;
+}
+.sheet-title{
+  font-family:var(--font);
+  font-size:1.7rem;
+  font-weight:900;
+  letter-spacing:-.05em;
+  line-height:1;
+  margin-bottom:6px;
+}
+.sheet-sub{font-size:.85rem;color:var(--muted);line-height:1.4;margin-bottom:16px}
+.sheet-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:16px;
+}
+.stat-box{
+  background:var(--surface2);
+  border-radius:var(--r);
+  padding:12px;
+  border:1px solid var(--border);
+}
+.stat-k{font-size:.62rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:4px;font-family:var(--font)}
+.stat-v{font-family:var(--font);font-size:1.1rem;font-weight:900;letter-spacing:-.03em}
+.rule-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.rule-chip{
+  padding:5px 10px;
+  border-radius:999px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  font-size:.7rem;
+  font-weight:700;
+  color:var(--muted);
+}
+.sheet-actions{display:grid;gap:8px;margin-top:8px}
+.btn-primary{
+  width:100%;
+  padding:16px;
+  border-radius:var(--r);
+  background:var(--accent);
+  color:#fff;
+  font-family:var(--font);
+  font-size:1rem;
+  font-weight:900;
+  box-shadow:0 6px 20px var(--accent-glow);
+  transition:all .12s;
+}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:disabled{opacity:.45;box-shadow:none}
+.btn-secondary{
+  width:100%;
+  padding:14px;
+  border-radius:var(--r);
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:.9rem;
+  font-weight:800;
+  transition:all .12s;
+}
+.btn-secondary:active{transform:scale(.98)}
+.btn-ghost{
+  width:100%;
+  padding:14px;
+  border-radius:var(--r);
+  background:transparent;
+  color:var(--muted);
+  font-family:var(--font);
+  font-size:.9rem;
+  font-weight:800;
+  transition:all .12s;
+}
+.sheet-x{
+  float:right;
+  width:32px;height:32px;
+  border-radius:999px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);
+  cursor:pointer;
+}
+
+/* End screen */
+#endScreen{
+  position:absolute;
+  inset:0;
+  z-index:60;
+  display:none;
+  flex-direction:column;
+  background:var(--bg);
+  overflow-y:auto;
+}
+#endScreen::-webkit-scrollbar{display:none}
+#endScreen.show{display:flex}
+.end-top{
+  flex:0 0 auto;
+  padding:var(--safe-top) 14px 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.end-hero{
+  margin:0 14px 14px;
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:1px solid var(--border2);
+  border-radius:var(--r-xl);
+  padding:22px;
+  position:relative;
+  overflow:hidden;
+}
+.end-hero::before{
+  content:'';
+  position:absolute;
+  top:-40%;right:-20%;
+  width:260px;height:260px;
+  background:radial-gradient(circle,var(--accent-glow),transparent 65%);
+  pointer-events:none;
+}
+.end-eyebrow{
+  font-family:var(--font);
+  font-size:.62rem;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--accent2);
+  margin-bottom:8px;
+}
+.end-title{
+  font-family:var(--font);
+  font-size:2rem;
+  font-weight:900;
+  letter-spacing:-.05em;
+  line-height:1;
+  margin-bottom:6px;
+}
+.end-sub{font-size:.85rem;color:var(--muted);line-height:1.4;margin-bottom:14px}
+.end-stars{display:flex;gap:8px;margin-bottom:14px}
+.es{font-size:2rem;opacity:.2;transition:all .3s}
+.es.on{opacity:1;filter:drop-shadow(0 4px 10px var(--gold-glow))}
+.end-metrics{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+.em{
+  background:var(--surface3);
+  border-radius:var(--r);
+  padding:12px 8px;
+  text-align:center;
+}
+.em-v{
+  display:block;
+  font-family:var(--font);
+  font-size:1.2rem;
+  font-weight:900;
+  letter-spacing:-.04em;
+}
+.em-k{
+  display:block;
+  font-size:.6rem;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--faint);
+  margin-top:3px;
+}
+.end-body{padding:0 14px calc(var(--safe-bottom) + 20px)}
+.unlock-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:14px;
+  margin-bottom:8px;
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.uc-icon{
+  width:38px;height:38px;
+  border-radius:12px;
+  background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+  flex:0 0 38px;
+}
+.uc-body{min-width:0;flex:1}
+.uc-k{font-size:.62rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:2px;font-family:var(--font)}
+.uc-v{font-family:var(--font);font-weight:800;font-size:.9rem;letter-spacing:-.02em;margin-bottom:2px}
+.uc-t{font-size:.75rem;color:var(--muted);line-height:1.3}
+.end-actions{display:grid;gap:8px;margin-top:8px}
+
+/* Toast */
+.toast{
+  position:fixed;
+  left:50%;bottom:calc(var(--safe-bottom) + var(--tabbar) + 14px);
+  transform:translate(-50%,20px);
+  background:var(--text);
+  color:var(--bg);
+  padding:12px 18px;
+  border-radius:var(--r);
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
+  z-index:200;
+  opacity:0;
+  transition:all .25s cubic-bezier(.16,1,.3,1);
+  white-space:nowrap;
+  pointer-events:none;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast-t{font-family:var(--font);font-weight:900;font-size:.9rem}
+.toast-s{font-size:.75rem;opacity:.75;margin-top:2px}
+
+/* Particles */
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.particle{
+  position:absolute;
+  width:8px;height:8px;
+  border-radius:999px;
+  animation:pfloat 900ms ease-out forwards;
+}
+@keyframes pfloat{
+  from{transform:translateY(0) scale(1);opacity:.9}
+  to{transform:translateY(-120px) translateX(var(--px)) scale(.1);opacity:0}
+}
+
+/* Career result chip */
+.career-result-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 14px;
+  border-radius:999px;
+  font-family:var(--font);
+  font-size:.85rem;
+  font-weight:900;
+}
+.career-result-chip.passed{background:rgba(61,214,140,.15);color:var(--good);border:1px solid rgba(61,214,140,.3)}
+.career-result-chip.failed{background:var(--bad-soft);color:var(--bad);border:1px solid rgba(245,96,122,.3)}
+
+/* Pause overlay sheet */
+#pauseOverlay .sheet-x{float:none;margin-left:auto}
+
+/* XP bar on career panel */
+.xp-bar-wrap{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:12px 14px;
+  margin-bottom:12px;
+}
+.xp-bar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.xp-bar-label{font-family:var(--font);font-size:.8rem;font-weight:800;letter-spacing:-.02em}
+.xp-bar-val{font-size:.72rem;color:var(--muted);font-weight:700}
+.xp-track{height:7px;background:var(--surface3);border-radius:999px;overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:999px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+
+/* Mobile fit & density */
+.topbar{padding-inline:12px}
+.topbar-resources{min-width:0;flex-wrap:wrap;row-gap:6px}
+.res-chip,.lang-btn{max-width:100%;white-space:nowrap}
+.brand-mark{flex:0 0 auto}
+.focus-title,.sheet-title,.end-title,.q-text{overflow-wrap:anywhere;word-break:break-word}
+.mode-card,.shop-list-item,.ach-item,.node-info,.question-card,.focus-card,.curr-card,.ach-header,.sheet,.end-hero,.unlock-card{max-width:100%}
+.k.wide{max-width:none}
+.assist-btn,.next-btn,.btn-primary,.btn-secondary,.btn-ghost,.play-btn{min-height:0}
+
+@media (max-width: 430px){
+  :root{--r:18px;--r-lg:24px;--r-xl:30px}
+  .tab-panel{padding:12px 12px calc(var(--safe-bottom) + var(--tabbar) + 14px)}
+  .focus-card,.question-card,.ach-header,.curr-card,.mode-card,.shop-tile,.shop-list-item,.unlock-card,.end-hero,.sheet{padding:16px}
+  .focus-title{font-size:1.28rem}
+  .q-text{font-size:1.12rem;line-height:1.22}
+  .game-topbar{padding:var(--safe-top) 12px 10px}
+  .round-track{padding:8px 12px}
+  .timer-bar-wrap{padding:0 12px 8px}
+  .game-content{padding:8px 12px}
+  .topbar{gap:6px;padding:var(--safe-top) 12px 8px}
+  .topbar-resources{gap:5px}
+  .res-chip{padding:5px 8px;font-size:.69rem}
+  .lang-btn{padding:5px 8px;font-size:.64rem}
+  .tab-btn .t-label{display:none}
+  .mode-card{gap:12px}
+  .mode-icon{width:46px;height:46px;border-radius:15px;font-size:1.3rem;flex-basis:46px}
+  .node-info{padding:10px 12px}
+  .node-btn{width:48px;height:48px;flex-basis:48px}
+  .level-node{grid-template-columns:48px 1fr;gap:10px}
+  .level-node::before{left:23px}
+  .input-display{padding:12px 14px;min-height:46px;font-size:1rem}
+  .assist-row{gap:6px}
+  .assist-btn{padding:10px;font-size:.7rem}
+  .kb-row{gap:4px;margin-bottom:4px}
+  .k{height:46px;font-size:1.1rem;border-radius:10px}
+  .k.wide{font-size:.72rem}
+  .kb-submit{padding:11px;font-size:.9rem}
+  .end-metrics{gap:6px}
+  .em{padding:10px 6px}
+}
+
+@media (max-width: 360px){
+  .topbar-resources{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));justify-content:stretch}
+  .res-chip{justify-content:center;width:100%}
+  .brand-mark{font-size:1.12rem}
+  .q-text{font-size:1.02rem}
+  .focus-title{font-size:1.16rem}
+  .shop-grid,.shop-currency,.sheet-stats,.assist-row{grid-template-columns:1fr}
+  .end-metrics{grid-template-columns:1fr 1fr}
+}
+
+/* Misc */
+.section-divider{height:1px;background:var(--border);margin:16px 0}
+
+/* FINAL MOBILE POLISH · v9 */
+body.intro-lock{overflow:hidden}
+.topbar{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  padding:calc(var(--safe-top) + 2px) 15px 11px;
+  gap:8px;
+  min-height:74px;
+}
+.brand-mark{
+  font-size:1.52rem;
+  padding:6px 0;
+  align-self:center;
+}
+.topbar-resources{
+  justify-self:end;
+  gap:6px;
+  flex-wrap:nowrap;
+}
+.res-chip{
+  min-height:38px;
+  padding:0 11px;
+  border-radius:16px;
+  font-size:.74rem;
+}
+.res-chip .ic{font-size:.78rem}
+.tab-panel{
+  padding:18px 14px calc(var(--safe-bottom) + var(--tabbar) + 26px);
+}
+#homePanel{padding-top:16px}
+.xp-bar-wrap{margin-bottom:18px}
+.focus-card,
+.mode-card,
+.shop-list-item,
+.ach-item,
+.curr-card,
+.ach-header,
+.sheet,
+.end-hero,
+.unlock-card{
+  padding-top:20px;
+  padding-bottom:20px;
+}
+.chapter-nav{padding:2px 0 14px}
+.level-path{gap:18px}
+.question-card{
+  padding:20px 18px;
+  margin-bottom:12px;
+}
+.game-content{
+  padding:12px 14px;
+}
+.round-track{
+  padding:12px 14px;
+}
+.timer-bar-wrap{
+  padding:0 14px 12px;
+}
+.helper-area{
+  padding:14px 16px;
+  margin-bottom:12px;
+}
+
+/* Audio settings */
+.audio-section{
+  display:grid;gap:10px;margin-top:12px;
+}
+.audio-row{
+  background:linear-gradient(180deg,var(--surface2),var(--surface3));
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:14px 16px;
+}
+.audio-row-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:2px;
+}
+.audio-row-label{
+  font-family:var(--font);font-size:.88rem;font-weight:800;letter-spacing:-.02em;
+  display:flex;align-items:center;gap:8px;
+}
+.audio-row-label .audio-ic{font-size:.95rem;opacity:.7}
+.audio-toggle{
+  position:relative;width:44px;height:26px;border-radius:999px;
+  background:var(--surface3);border:1px solid var(--border);cursor:pointer;
+  transition:background .2s,border-color .2s;flex:0 0 auto;
+}
+.audio-toggle.on{background:var(--accent);border-color:transparent}
+.audio-toggle::after{
+  content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;
+  border-radius:50%;background:#fff;transition:transform .2s;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+.audio-toggle.on::after{transform:translateX(18px)}
+.audio-slider-wrap{
+  display:flex;align-items:center;gap:10px;margin-top:8px;
+  padding:0 2px;
+}
+.audio-slider-wrap.disabled{opacity:.35;pointer-events:none}
+.audio-vol-label{
+  font-family:var(--font);font-size:.62rem;font-weight:800;
+  color:var(--faint);letter-spacing:.06em;min-width:28px;text-align:right;
+}
+.audio-slider{
+  -webkit-appearance:none;appearance:none;flex:1;height:6px;
+  border-radius:999px;background:var(--surface3);outline:none;cursor:pointer;
+}
+.audio-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:20px;height:20px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--surface);
+  box-shadow:0 2px 8px var(--accent-glow);cursor:pointer;transition:transform .1s;
+}
+.audio-slider::-webkit-slider-thumb:active{transform:scale(1.15)}
+.audio-slider::-moz-range-thumb{
+  width:20px;height:20px;border-radius:50%;background:var(--accent);
+  border:2px solid var(--surface);box-shadow:0 2px 8px var(--accent-glow);
+  cursor:pointer;
+}
+
+/* Intro splash */
+.intro-splash{
+  position:fixed;
+  inset:0;
+  z-index:250;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 50% 42%, color-mix(in srgb,var(--accent) 28%, transparent) 0%, transparent 38%),
+    radial-gradient(circle at 50% 58%, rgba(255,255,255,.08) 0%, transparent 26%),
+    linear-gradient(180deg, color-mix(in srgb,var(--bg) 88%, black) 0%, var(--bg) 100%);
+  opacity:1;
+  visibility:visible;
+  transition:opacity .62s ease, visibility .62s ease;
+}
+.intro-splash.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.intro-splash-core{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:9px;
+  padding:18px;
+}
+.intro-logo-glow{
+  position:absolute;
+  width:min(46vw,190px);
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(circle, color-mix(in srgb,var(--accent) 34%, transparent) 0%, transparent 68%);
+  filter:blur(10px);
+  opacity:.9;
+  animation:introPulse 2.2s ease-in-out both;
+}
+.intro-mark{
+  position:relative;
+  z-index:2;
+  font-family:var(--font);
+  font-size:clamp(2.45rem,11vw,3.5rem);
+  font-weight:900;
+  line-height:.94;
+  letter-spacing:-.085em;
+  transform:translateY(18px) scale(.92);
+  opacity:0;
+  animation:introMarkIn 1.1s cubic-bezier(.22,1,.36,1) .16s forwards;
+}
+.intro-mark .d{color:var(--accent)}
+.intro-tag{
+  position:relative;
+  z-index:2;
+  font-family:var(--font);
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.23em;
+  text-transform:uppercase;
+  color:var(--faint);
+  opacity:0;
+  transform:translateY(8px);
+  animation:introTagIn .82s ease .72s forwards;
+}
+@keyframes introMarkIn{
+  0%{opacity:0;transform:translateY(18px) scale(.92)}
+  60%{opacity:1}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes introTagIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes introPulse{
+  0%{transform:scale(.72);opacity:.18}
+  55%{transform:scale(1);opacity:.92}
+  100%{transform:scale(1.08);opacity:.46}
+}
+
+/* Keyboard redesign */
+.custom-kb{
+  padding:8px 8px calc(var(--safe-bottom) + 8px);
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  box-shadow:0 -8px 20px rgba(0,0,0,.08);
+}
+.kb-row{
+  display:flex;
+  gap:5px;
+  justify-content:center;
+  width:100%;
+  margin-bottom:5px;
+}
+#kbRow1{padding:0 2px}
+#kbRow2{padding:0 12px}
+#kbRow3{padding:0 24px}
+.kb-row.space-row{
+  justify-content:center;
+  margin-top:4px;
+  margin-bottom:8px;
+}
+.k{
+  flex:1 1 0;
+  max-width:none;
+  min-width:0;
+  height:50px;
+  border-radius:12px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  box-shadow:0 2px 6px rgba(0,0,0,.10);
+  font-family:var(--body);
+  font-size:1.22rem;
+  font-weight:700;
+  letter-spacing:.01em;
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform .08s, background .08s, box-shadow .08s;
+}
+.k:active{
+  transform:translateY(1px) scale(.97);
+  background:var(--accent);
+  color:#fff;
+  border-color:transparent;
+  box-shadow:0 4px 10px var(--accent-glow);
+}
+.k.wide{
+  max-width:none;
+  flex:1;
+  font-size:.82rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  padding:0 10px;
+}
+.k.spacebar{
+  flex:0 1 24%;
+  width:min(22%,92px);
+  max-width:92px;
+  height:34px;
+  border-radius:10px;
+  font-size:.6rem;
+  font-weight:700;
+  letter-spacing:.12em;
+  padding:0 10px;
+}
+.k.backspace{
+  background:var(--surface3);
+  flex:1.42 1 0;
+  max-width:86px;
+  font-size:1.3rem;
+}
+.kb-submit{
+  width:100%;
+  padding:13px;
+  border-radius:14px;
+  font-size:.95rem;
+  box-shadow:0 6px 18px var(--accent-glow);
+  margin-top:6px;
+}
+.kb-submit:active{transform:translateY(1px) scale(.985)}
+
+@media (max-width:430px){
+  .topbar{
+    padding:calc(var(--safe-top) + 2px) 12px 10px;
+    min-height:68px;
+    gap:7px;
+  }
+  .brand-mark{font-size:1.34rem}
+  .topbar-resources{gap:5px}
+  .res-chip{
+    min-height:36px;
+    padding:0 9px;
+    font-size:.68rem;
+  }
+  .res-chip .ic{font-size:.72rem}
+  .tab-panel{
+    padding:17px 12px calc(var(--safe-bottom) + var(--tabbar) + 24px);
+  }
+  .custom-kb{
+    padding:7px 6px calc(var(--safe-bottom) + 6px);
+  }
+  .kb-row{
+    gap:4px;
+    margin-bottom:4px;
+  }
+  #kbRow2{padding:0 8px}
+  #kbRow3{padding:0 16px}
+  .k{
+    height:46px;
+    font-size:1.1rem;
+    border-radius:10px;
+  }
+  .k.backspace{
+    max-width:80px;
+    font-size:1.24rem;
+  }
+  .k.spacebar{
+    width:min(24%,96px);
+    max-width:96px;
+    height:34px;
+    font-size:.58rem;
+  }
+}
+
+
+
+/* polish add-ons · v12 */
+.perfect-burst{
+  position:fixed;
+  left:50%;
+  bottom:calc(var(--safe-bottom) + 188px);
+  transform:translate(-50%,18px) scale(.86);
+  padding:10px 16px;
+  border-radius:999px;
+  background:linear-gradient(135deg, color-mix(in srgb,var(--accent) 78%, white 22%) 0%, color-mix(in srgb,var(--purple) 70%, white 30%) 100%);
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 16px 34px rgba(0,0,0,.22), 0 0 26px color-mix(in srgb,var(--accent) 42%, transparent);
+  color:#fff;
+  font-family:var(--font);
+  font-weight:900;
+  font-size:.92rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  opacity:0;
+  pointer-events:none;
+  z-index:260;
+  white-space:nowrap;
+}
+.perfect-burst.show{animation:perfectBurstIn 900ms cubic-bezier(.2,.9,.2,1) forwards}
+.perfect-burst.good{background:linear-gradient(135deg, color-mix(in srgb,var(--good) 82%, white 18%) 0%, color-mix(in srgb,var(--accent) 68%, white 32%) 100%)}
+.perfect-burst.warn{background:linear-gradient(135deg, color-mix(in srgb,var(--warn) 84%, white 16%) 0%, color-mix(in srgb,var(--gold) 74%, white 26%) 100%)}
+.perfect-burst.bad{background:linear-gradient(135deg, color-mix(in srgb,var(--bad) 82%, white 18%) 0%, color-mix(in srgb,var(--purple) 68%, white 32%) 100%)}
+.perfect-burst::before,
+.perfect-burst::after{
+  content:'';
+  position:absolute;
+  inset:-10px;
+  border-radius:inherit;
+  border:1px solid rgba(255,255,255,.16);
+  opacity:0;
+}
+.perfect-burst.show::before{animation:perfectRing 900ms ease-out forwards}
+.perfect-burst.show::after{animation:perfectRing 900ms ease-out 90ms forwards}
+.question-card.perfect-pop{animation:questionPerfect 520ms ease-out}
+@keyframes perfectBurstIn{
+  0%{opacity:0;transform:translate(-50%,18px) scale(.82)}
+  18%{opacity:1;transform:translate(-50%,-6px) scale(1.04)}
+  62%{opacity:1;transform:translate(-50%,-14px) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-28px) scale(.98)}
+}
+@keyframes perfectRing{
+  0%{opacity:.34;transform:scale(.92)}
+  100%{opacity:0;transform:scale(1.22)}
+}
+@keyframes questionPerfect{
+  0%{transform:scale(1)}
+  30%{transform:scale(1.014)}
+  100%{transform:scale(1)}
+}
+@media (max-width:430px){
+  .perfect-burst{bottom:calc(var(--safe-bottom) + 176px);font-size:.84rem;padding:9px 14px}
+}
+
+</style>
+</head>
+<body data-theme="default">
+<div class="app">
+
+  <!-- TOP RESOURCE BAR -->
+  <div class="topbar" id="mainTopbar">
+    <div class="brand-mark">Blank<span class="d">D</span></div>
+    <div class="topbar-resources">
+      <div class="res-chip xp" id="topXP"><span class="ic">⚡</span><span id="topXPVal">Lv 1</span></div>
+      <div class="res-chip ink-c" id="topInk"><span class="ic">✒️</span><span id="topInkVal">0</span></div>
+      <div class="res-chip str-c" id="topStars"><span class="ic">★</span><span id="topStarsVal">0</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <!-- HOME / CAREER PANEL -->
+    <div class="tab-panel active" id="homePanel">
+      <div class="xp-bar-wrap">
+        <div class="xp-bar-head">
+          <span class="xp-bar-label" id="rankName">Rookie</span>
+          <span class="xp-bar-val" id="xpBarVal">0 / 120 XP</span>
+        </div>
+        <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+      </div>
+
+      <!-- Current focus card -->
+      <div class="focus-card" id="focusCard">
+        <div class="focus-label" id="focusLabel">NEXT UP</div>
+        <div class="focus-title" id="focusTitle">–</div>
+        <div class="focus-sub" id="focusSub">–</div>
+        <div class="focus-meta" id="focusMeta"></div>
+        <div class="stars-bar" id="focusStars"></div>
+        <div style="height:14px"></div>
+        <button class="play-btn" id="focusPlayBtn">▶ Play</button>
+      </div>
+
+      <!-- Chapter filter pills -->
+      <div class="chapter-nav" id="chapterNav"></div>
+
+      <!-- Level path -->
+      <div class="level-path" id="levelPath"></div>
+    </div>
+
+    <!-- MODES PANEL -->
+    <div class="tab-panel" id="modesPanel">
+      <div class="modes-grid" id="modesGrid"></div>
+    </div>
+
+    <!-- SHOP PANEL -->
+    <div class="tab-panel" id="shopPanel">
+      <div class="shop-currency">
+        <div class="curr-card">
+          <div class="curr-amount" id="shopInkAmt" style="color:var(--gold)">0</div>
+          <div class="curr-label" data-i18n="ink"></div>
+        </div>
+        <div class="curr-card">
+          <div class="curr-amount" id="shopStarsAmt" style="color:var(--purple)">0</div>
+          <div class="curr-label" data-i18n="stars"></div>
+        </div>
+      </div>
+      <div id="shopContent"></div>
+    </div>
+
+    <!-- ACHIEVEMENTS PANEL -->
+    <div class="tab-panel" id="achPanel">
+      <div class="ach-header">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-family:var(--font);font-size:.62rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:4px" data-i18n="achEyebrow"></div>
+            <div style="font-family:var(--font);font-size:1.3rem;font-weight:900;letter-spacing:-.04em" data-i18n="achievementsTitle"></div>
+          </div>
+          <div style="font-family:var(--font);font-size:1.6rem;font-weight:900;color:var(--gold)" id="achCount">0/32</div>
+        </div>
+        <div class="ach-progress-bar" style="margin-top:12px">
+          <div class="ach-progress-fill" id="achFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div id="achContent"></div>
+    </div>
+
+    <!-- SETTINGS PANEL -->
+    <div class="tab-panel" id="langPanel">
+      <div class="lang-panel">
+        <div class="lang-card">
+          <div class="lang-card-title" style="margin-bottom:4px" data-i18n="settingsTitle"></div>
+          <div class="settings-stack">
+            <div class="settings-row">
+              <span class="settings-copy">
+                <span class="settings-k">Switch taal</span>
+                <span class="settings-v" data-i18n="languageSub"></span>
+              </span>
+              <span class="settings-icon">🌐</span>
+            </div>
+            <div class="lang-options">
+              <button class="lang-choice" id="langChoiceIntl">
+                <span class="lang-choice-copy">
+                  <span class="lang-choice-k" data-i18n="languageIntl"></span>
+                  <span class="lang-choice-v">Quotes, UI and content in international English.</span>
+                </span>
+                <span class="lang-choice-mark" id="langChoiceIntlMark">INTL</span>
+              </button>
+              <button class="lang-choice" id="langChoiceNl">
+                <span class="lang-choice-copy">
+                  <span class="lang-choice-k" data-i18n="languageNl"></span>
+                  <span class="lang-choice-v">Alle quote-vragen en interface in het Nederlands.</span>
+                </span>
+                <span class="lang-choice-mark" id="langChoiceNlMark">NL</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="lang-card">
+          <div class="lang-card-title" style="margin-bottom:2px" data-i18n="soundTitle"></div>
+          <div style="font-size:.82rem;color:var(--muted);line-height:1.35;margin-bottom:4px" data-i18n="soundSub"></div>
+          <div class="audio-section">
+            <div class="audio-row" id="audioRowKeys">
+              <div class="audio-row-head">
+                <span class="audio-row-label"><span class="audio-ic">⌨️</span><span id="audioLabelKeys">Toetsenbord</span></span>
+                <div class="audio-toggle" id="audioToggleKeys"></div>
+              </div>
+              <div class="audio-slider-wrap" id="audioSliderWrapKeys">
+                <span class="audio-vol-label">🔈</span>
+                <input type="range" class="audio-slider" id="audioVolKeys" min="0" max="100" value="60">
+                <span class="audio-vol-label" id="audioVolKeysVal">60%</span>
+              </div>
+            </div>
+            <div class="audio-row" id="audioRowFeedback">
+              <div class="audio-row-head">
+                <span class="audio-row-label"><span class="audio-ic">✅</span><span id="audioLabelFeedback">Goed / Fout</span></span>
+                <div class="audio-toggle" id="audioToggleFeedback"></div>
+              </div>
+              <div class="audio-slider-wrap" id="audioSliderWrapFeedback">
+                <span class="audio-vol-label">🔈</span>
+                <input type="range" class="audio-slider" id="audioVolFeedback" min="0" max="100" value="70">
+                <span class="audio-vol-label" id="audioVolFeedbackVal">70%</span>
+              </div>
+            </div>
+            <div class="audio-row" id="audioRowMusic">
+              <div class="audio-row-head">
+                <span class="audio-row-label"><span class="audio-ic">🎵</span><span id="audioLabelMusic">Achtergrondmuziek</span></span>
+                <div class="audio-toggle" id="audioToggleMusic"></div>
+              </div>
+              <div class="audio-slider-wrap" id="audioSliderWrapMusic">
+                <span class="audio-vol-label">🔈</span>
+                <input type="range" class="audio-slider" id="audioVolMusic" min="0" max="100" value="50">
+                <span class="audio-vol-label" id="audioVolMusicVal">50%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM TAB BAR -->
+  <div class="tabbar">
+    <button class="tab-btn" data-tab="shopPanel" id="tabShop">
+      <span class="t-icon">🛍</span>
+      <span class="t-label" data-i18n="shopTitle"></span>
+      <span class="badge hidden" id="shopBadge">!</span>
+    </button>
+    <button class="tab-btn" data-tab="modesPanel" id="tabModes">
+      <span class="t-icon">⚡</span>
+      <span class="t-label">Modes</span>
+      <span class="badge hidden" id="modesBadge">!</span>
+    </button>
+    <button class="tab-btn active" data-tab="homePanel" id="tabHome">
+      <span class="t-icon">🏠</span>
+      <span class="t-label" data-i18n="careerMode"></span>
+    </button>
+    <button class="tab-btn" data-tab="achPanel" id="tabAch">
+      <span class="t-icon">🏆</span>
+      <span class="t-label" data-i18n="achievementsTitle"></span>
+      <span class="badge hidden" id="achBadge">!</span>
+    </button>
+    <button class="tab-btn" data-tab="langPanel" id="tabLang">
+      <span class="t-icon">⚙️</span>
+      <span class="t-label" data-i18n="languageTitle"></span>
+    </button>
+  </div>
+
+</div><!-- /app -->
+
+<!-- GAME SCREEN -->
+<div id="gameScreen">
+  <div class="game-topbar">
+    <button class="game-back-btn" id="btnPauseGame">⏸</button>
+    <div class="game-mode-info">
+      <div class="game-mode-label" id="gameModeLabel">CAREER</div>
+      <div class="game-level-name" id="gameLevelName">–</div>
+    </div>
+    <div class="game-score" id="gameScore">0</div>
+  </div>
+  <div class="round-track" id="roundTrack"></div>
+  <div class="timer-bar-wrap">
+    <div class="timer-row">
+      <span class="timer-label" id="roundLabel">Round 1/10</span>
+      <span class="timer-num" id="timerNum">15s</span>
+    </div>
+    <div class="timer-track"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+  </div>
+  <div class="game-content">
+    <div class="question-card">
+      <div class="q-context" id="qContext"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="answer-display" id="answerDisplay"></div>
+    </div>
+    <div class="helper-area" id="hintArea"></div>
+    <div class="helper-area" id="feedbackArea"></div>
+    <div class="assist-row">
+      <button class="assist-btn" id="btnHint">💡 Hint −20</button>
+      <button class="assist-btn" id="btnReveal">🔍 Letter −15</button>
+    </div>
+    <div class="input-display active-input" id="inputDisplay">
+      <span id="inputText"></span><span class="cursor"></span>
+    </div>
+    <button class="next-btn" id="btnNextRound">Next →</button>
+  </div>
+  <div class="custom-kb" id="customKb">
+    <div class="kb-row" id="kbRow1"></div>
+    <div class="kb-row" id="kbRow2"></div>
+    <div class="kb-row" id="kbRow3"></div>
+    <button class="kb-submit" id="kbSubmit">GO ▶</button>
+  </div>
+</div>
+
+<!-- END SCREEN -->
+<div id="endScreen">
+  <div class="end-top">
+    <button class="game-back-btn" id="btnEndHome">⌂</button>
+    <div style="flex:1;font-family:var(--font);font-size:.85rem;font-weight:800;color:var(--muted);text-align:center" id="endModeLabel"></div>
+    <div style="width:40px"></div>
+  </div>
+  <div class="end-hero">
+    <div class="particles" id="endParticles"></div>
+    <div class="end-eyebrow" id="endEyebrow"></div>
+    <div class="end-title" id="endTitle"></div>
+    <div class="end-sub" id="endSub"></div>
+    <div class="end-stars" id="endStars"></div>
+    <div class="end-metrics">
+      <div class="em"><span class="em-v" id="endCorrect">–</span><span class="em-k" data-i18n="correct"></span></div>
+      <div class="em"><span class="em-v" id="endXP">–</span><span class="em-k">XP</span></div>
+      <div class="em"><span class="em-v" id="endInk">–</span><span class="em-k" data-i18n="ink"></span></div>
+    </div>
+  </div>
+  <div class="end-body">
+    <div id="unlockStack"></div>
+    <div class="end-actions">
+      <button class="btn-primary" id="btnEndPrimary">–</button>
+      <button class="btn-secondary" id="btnEndSecondary">–</button>
+      <button class="btn-ghost" id="btnEndTertiary">–</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEVEL SHEET OVERLAY -->
+<div class="overlay" id="levelOverlay">
+  <div class="sheet">
+    <button class="sheet-x" id="btnCloseLevelSheet">✕</button>
+    <div class="sheet-eyebrow" id="sheetEyebrow"></div>
+    <div class="sheet-title" id="sheetTitle"></div>
+    <div class="sheet-sub" id="sheetSub"></div>
+    <div id="sheetStarsRow" style="display:flex;gap:6px;align-items:center;margin-bottom:14px"></div>
+    <div class="sheet-stats">
+      <div class="stat-box"><div class="stat-k" data-i18n="bestResult"></div><div class="stat-v" id="sheetBest">–</div></div>
+      <div class="stat-box"><div class="stat-k" data-i18n="rewardPreview"></div><div class="stat-v" id="sheetReward">–</div></div>
+      <div class="stat-box"><div class="stat-k" data-i18n="passRequirement"></div><div class="stat-v" id="sheetPass">–</div></div>
+      <div class="stat-box"><div class="stat-k" data-i18n="difficulty"></div><div class="stat-v" id="sheetDiff">–</div></div>
+    </div>
+    <div class="rule-chips" id="sheetRules"></div>
+    <div class="sheet-actions">
+      <button class="btn-primary" id="btnSheetPlay">Play</button>
+      <button class="btn-secondary" id="btnSheetRetry">Retry</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div class="overlay" id="pauseOverlay">
+  <div class="sheet">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <div style="font-family:var(--font);font-size:.62rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)" data-i18n="paused"></div>
+        <div style="font-family:var(--font);font-size:1.6rem;font-weight:900;letter-spacing:-.05em" data-i18n="pauseTitle"></div>
+      </div>
+      <button class="sheet-x" id="btnClosePause">✕</button>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn-primary" id="btnResumeGame" data-i18n="pauseResume"></button>
+      <button class="btn-secondary" id="btnRestartGame" data-i18n="pauseRestart"></button>
+      <button class="btn-ghost" id="btnQuitGame" data-i18n="pauseQuit"></button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-t" id="toastTitle"></div>
+  <div class="toast-s" id="toastSub"></div>
+</div>
+
+
+<div class="intro-splash" id="introSplash" aria-hidden="true">
+  <div class="intro-splash-core">
+    <div class="intro-logo-glow"></div>
+    <div class="intro-mark">Blank<span class="d">D</span></div>
+    <div class="intro-tag">Fill The Blanks</div>
+  </div>
+</div>
+
+<div id="perfectBurst" class="perfect-burst" aria-hidden="true"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════════
+const QUOTE_BANK=[{c:"May the __________ be with you.",a:"force",h:"Movie · Star Wars",d:1},{c:"To infinity and __________!",a:"beyond",h:"Movie · Toy Story",d:1},{c:"The __________ of the Rings.",a:"lord",h:"Quote",d:2},{c:"The Lord of the __________.",a:"rings",h:"Quote",d:2},{c:"The __________ of the Lambs.",a:"silence",h:"Quote",d:2},{c:"The Silence of the __________.",a:"lambs",h:"Quote",d:2},{c:"There's no place like __________.",a:"home",h:"Movie · Wizard of Oz",d:1},{c:"I am your __________.",a:"father",h:"Movie · Star Wars",d:1},{c:"The __________ of Wall Street.",a:"wolf",h:"Quote",d:2},{c:"The Wolf of Wall __________.",a:"street",h:"Quote",d:2},{c:"The __________ in the Rye.",a:"catcher",h:"Quote",d:2},{c:"The Catcher in the __________.",a:"rye",h:"Quote",d:2},{c:"Is this the real life? Is this just __________?",a:"fantasy",h:"Song · Queen",d:1},{c:"Rolling in the __________.",a:"deep",h:"Song · Adele",d:1},{c:"We will, we will __________ you.",a:"rock",h:"Song · Queen",d:1},{c:"The __________ and the Furious.",a:"fast",h:"Quote",d:2},{c:"The early bird catches the __________.",a:"worm",h:"Proverb",d:1},{c:"Actions speak louder than __________.",a:"words",h:"Proverb",d:1},{c:"All that glitters is not __________.",a:"gold",h:"Shakespeare",d:1},{c:"Have it your __________.",a:"way",h:"Brand · Burger King",d:1},{c:"The Fast and the __________.",a:"furious",h:"Quote",d:2},{c:"Red Bull gives you __________.",a:"wings",h:"Brand slogan",d:1},{c:"A Nightmare on __________ Street.",a:"elm",h:"Quote",d:2},{c:"__________ to the Future.",a:"back",h:"Quote",d:2},{c:"Back to the __________.",a:"future",h:"Quote",d:2},{c:"Don't stop me now — I'm having such a good __________.",a:"time",h:"Song · Queen",d:1},{c:"Hello from the other __________.",a:"side",h:"Song · Adele",d:1},{c:"Every cloud has a __________ lining.",a:"silver",h:"Proverb",d:1},{c:"The pen is mightier than the __________.",a:"sword",h:"Saying",d:1},{c:"The __________ of Music.",a:"sound",h:"Quote",d:2},{c:"The sound of __________.",a:"music",h:"Musical / Movie",d:1},{c:"__________ and the Beast.",a:"beauty",h:"Quote",d:2},{c:"Beauty and the __________.",a:"beast",h:"Quote",d:2},{c:"The Dark __________ Rises.",a:"knight",h:"Quote",d:2},{c:"__________ of the Apes.",a:"planet",h:"Quote",d:2},{c:"Planet of the __________.",a:"apes",h:"Quote",d:2},{c:"__________ with the Wind.",a:"gone",h:"Quote",d:2},{c:"You can't judge a book by its __________.",a:"cover",h:"Proverb",d:1},{c:"Gone with the __________.",a:"wind",h:"Quote",d:2},{c:"E.T. phone __________.",a:"home",h:"Movie · Spielberg",d:1},{c:"I see dead __________.",a:"people",h:"Movie · The Sixth Sense",d:1},{c:"Here comes the __________.",a:"sun",h:"Song · The Beatles",d:1},{c:"Imagine all the __________.",a:"people",h:"Song · John Lennon",d:1},{c:"No woman, no __________.",a:"cry",h:"Song · Bob Marley",d:1},{c:"Girls just want to have __________.",a:"fun",h:"Song · Cyndi Lauper",d:1},{c:"Another one __________ the dust.",a:"bites",h:"Song · Queen",d:1},{c:"Livin' on a __________.",a:"prayer",h:"Song · Bon Jovi",d:1},{c:"Lose yourself in the __________.",a:"music",h:"Song · Eminem",d:1},{c:"It's a hard knock __________.",a:"life",h:"Musical · Annie",d:1},{c:"You've got a __________ in me.",a:"friend",h:"Movie · Toy Story",d:1},{c:"A whole new __________.",a:"world",h:"Movie · Aladdin",d:1},{c:"Part of your __________.",a:"world",h:"Movie · The Little Mermaid",d:1},{c:"When you wish upon a __________.",a:"star",h:"Movie · Pinocchio",d:1},{c:"Once upon a __________.",a:"time",h:"Classic story opener",d:1},{c:"Harry Potter and the Chamber of __________.",a:"secrets",h:"Book / Movie",d:2},{c:"Harry Potter and the Philosopher's __________.",a:"stone",h:"Book / Movie",d:2},{c:"Harry Potter and the Prisoner of __________.",a:"azkaban",h:"Book / Movie",d:2},{c:"Catch Me If You __________.",a:"can",h:"Movie · Spielberg",d:2},{c:"Eternal Sunshine of the Spotless __________.",a:"mind",h:"Movie · Jim Carrey",d:2},{c:"Sweet __________ o' mine.",a:"child",h:"Song · Guns N' Roses",d:2},{c:"Purple __________ all in my brain.",a:"haze",h:"Song · Jimi Hendrix",d:2},{c:"Smells like teen __________.",a:"spirit",h:"Song · Nirvana",d:2},{c:"You had me at __________.",a:"hello",h:"Movie · Jerry Maguire",d:2},{c:"Houston, we have a __________.",a:"problem",h:"Movie · Apollo 13",d:2},{c:"Keep your friends close and your enemies __________.",a:"closer",h:"Movie · The Godfather II",d:2},{c:"Elementary, my dear __________.",a:"watson",h:"Sherlock Holmes",d:2},{c:"May the odds be ever in your __________.",a:"favor",h:"Movie · Hunger Games",d:2},{c:"I volunteer as __________!",a:"tribute",h:"Movie · Hunger Games",d:2},{c:"Like a rolling __________.",a:"stone",h:"Song · Bob Dylan",d:2},{c:"The __________ must flow.",a:"spice",h:"Book / Movie · Dune",d:2},{c:"Not all those who wander are __________.",a:"lost",h:"Tolkien",d:2},{c:"Big __________ is watching you.",a:"brother",h:"Novel · Orwell",d:2},{c:"Say hello to my little __________.",a:"friend",h:"Movie · Scarface",d:2},{c:"You're gonna need a bigger __________.",a:"boat",h:"Movie · Jaws",d:2},{c:"Life finds a __________.",a:"way",h:"Movie · Jurassic Park",d:2},{c:"Do or do not. There is no __________.",a:"try",h:"Star Wars · Yoda",d:2},{c:"I feel the need — the need for __________.",a:"speed",h:"Movie · Top Gun",d:2},{c:"I can do this all __________.",a:"day",h:"Movie · Captain America",d:2},{c:"That's what she __________.",a:"said",h:"TV · The Office",d:2},{c:"On Wednesdays we wear __________.",a:"pink",h:"Movie · Mean Girls",d:2},{c:"Here's looking at you, __________.",a:"kid",h:"Movie · Casablanca",d:2},{c:"One ring to rule them __________.",a:"all",h:"Tolkien",d:2},{c:"After all this time? __________.",a:"always",h:"Harry Potter · Snape",d:2},{c:"I'm going to make him an offer he can't __________.",a:"refuse",h:"Movie · The Godfather",d:2},{c:"I have a __________.",a:"dream",h:"MLK Jr.",d:2},{c:"Float like a butterfly, sting like a __________.",a:"bee",h:"Muhammad Ali",d:2},{c:"That's one small step for man, one giant leap for __________.",a:"mankind",h:"Neil Armstrong",d:2},{c:"I'm king of the __________.",a:"world",h:"Movie · Titanic",d:2},{c:"All the world's a __________.",a:"stage",h:"Shakespeare",d:3},{c:"Something is rotten in the state of __________.",a:"denmark",h:"Shakespeare · Hamlet",d:3},{c:"Brevity is the soul of __________.",a:"wit",h:"Shakespeare · Hamlet",d:3},{c:"Do not go gentle into that good __________.",a:"night",h:"Dylan Thomas",d:3},{c:"A long time ago in a galaxy far, far __________.",a:"away",h:"Movie · Star Wars opening",d:3},{c:"We'll always have __________.",a:"paris",h:"Movie · Casablanca",d:3},{c:"The night is dark and full of __________.",a:"terrors",h:"TV · Game of Thrones",d:3},{c:"You know nothing, Jon __________.",a:"snow",h:"TV · Game of Thrones",d:3},{c:"I drink and I know __________.",a:"things",h:"TV · Game of Thrones · Tyrion",d:3},{c:"You don't talk about Fight __________.",a:"club",h:"Movie · Fight Club",d:3},{c:"We're all mad __________.",a:"here",h:"Book · Alice in Wonderland",d:3},{c:"Life is what happens when you're busy making other __________.",a:"plans",h:"John Lennon",d:3},{c:"Lolita, light of my life, fire of my __________.",a:"loins",h:"Novel · Nabokov",d:3},{c:"Get busy living, or get busy __________.",a:"dying",h:"Movie · Shawshank Redemption",d:3},{c:"They may take our lives but they'll never take our __________!",a:"freedom",h:"Movie · Braveheart",d:3},{c:"I'm as mad as hell, and I'm not gonna take this __________!",a:"anymore",h:"Movie · Network",d:3},{c:"Frankly, my dear, I don't give a __________.",a:"damn",h:"Movie · Gone with the Wind",d:3}];
+const NL_QUOTE_BANK=[{c:"Wie het eerst komt, het eerst __________.",a:"maalt",h:"Spreekwoord",d:1},{c:"Oost, west, thuis __________.",a:"best",h:"Spreekwoord",d:1},{c:"Na regen komt __________.",a:"zonneschijn",h:"Spreekwoord",d:1},{c:"Beter één vogel in de hand dan tien in de __________.",a:"lucht",h:"Spreekwoord",d:1},{c:"Hoge bomen vangen veel __________.",a:"wind",h:"Spreekwoord",d:1},{c:"Al draagt een aap een gouden ring, het is en blijft een lelijk __________.",a:"ding",h:"Spreekwoord",d:1},{c:"De appel valt niet ver van de __________.",a:"boom",h:"Spreekwoord",d:1},{c:"Twee vliegen in één __________.",a:"klap",h:"Spreekwoord",d:1},{c:"Zoals de waard is, vertrouwt hij zijn __________.",a:"gasten",h:"Spreekwoord",d:2},{c:"Een goed begin is het halve __________.",a:"werk",h:"Spreekwoord",d:1},{c:"Wie een kuil graaft voor een ander, valt er zelf __________.",a:"in",h:"Spreekwoord",d:1},{c:"Wie het kleine niet eert, is het grote niet __________.",a:"weerd",h:"Spreekwoord",d:2},{c:"Wie zwijgt, __________ toe.",a:"stemt",h:"Spreekwoord",d:1},{c:"Gedane zaken nemen geen __________.",a:"keer",h:"Spreekwoord",d:1},{c:"De aanhouder __________.",a:"wint",h:"Spreekwoord",d:1},{c:"Belofte maakt __________.",a:"schuld",h:"Spreekwoord",d:1},{c:"Beter laat dan __________.",a:"nooit",h:"Spreekwoord",d:1},{c:"Een ezel stoot zich in het gemeen geen twee keer aan dezelfde __________.",a:"steen",h:"Spreekwoord",d:2},{c:"Het gras is altijd groener aan de overkant van de __________.",a:"schutting",h:"Spreekwoord",d:2},{c:"Van uitstel komt __________.",a:"afstel",h:"Spreekwoord",d:1},{c:"Oefening baart __________.",a:"kunst",h:"Spreekwoord",d:1},{c:"Kennis is __________.",a:"macht",h:"Spreekwoord",d:1},{c:"Wie A zegt, moet ook B __________.",a:"zeggen",h:"Spreekwoord",d:1},{c:"De uitzondering bevestigt de __________.",a:"regel",h:"Spreekwoord",d:2},{c:"Een ongeluk komt nooit __________.",a:"alleen",h:"Spreekwoord",d:1},{c:"De muren hebben __________.",a:"oren",h:"Spreekwoord",d:1},{c:"De vroege vogel vangt de __________.",a:"worm",h:"Spreekwoord",d:1},{c:"Wie niet waagt, die niet __________.",a:"wint",h:"Spreekwoord",d:1},{c:"Als twee honden vechten om een been, loopt de derde ermee __________.",a:"heen",h:"Spreekwoord",d:2},{c:"Alle wegen leiden naar __________.",a:"rome",h:"Spreekwoord",d:1},{c:"Wie zijn billen brandt, moet op de blaren __________.",a:"zitten",h:"Spreekwoord",d:2},{c:"De beste stuurlui staan aan __________.",a:"wal",h:"Spreekwoord",d:1},{c:"Blaffende honden bijten __________.",a:"niet",h:"Spreekwoord",d:1},{c:"Wie de schoen past, trekke hem __________.",a:"aan",h:"Spreekwoord",d:2},{c:"Er is geen rook zonder __________.",a:"vuur",h:"Spreekwoord",d:1},{c:"De kat uit de boom __________.",a:"kijken",h:"Spreekwoord",d:2},{c:"Meten is __________.",a:"weten",h:"Spreekwoord",d:1},{c:"Wie goed doet, goed __________.",a:"ontmoet",h:"Spreekwoord",d:2},{c:"Ieder huisje heeft zijn __________.",a:"kruisje",h:"Spreekwoord",d:2},{c:"Liefde maakt __________.",a:"blind",h:"Spreekwoord",d:1},{c:"Een beeld zegt meer dan duizend __________.",a:"woorden",h:"Spreekwoord",d:1},{c:"Het bloed kruipt waar het niet gaan __________.",a:"kan",h:"Spreekwoord",d:2},{c:"Beter ten halve gekeerd dan ten hele __________.",a:"gedwaald",h:"Spreekwoord",d:3},{c:"Nood breekt __________.",a:"wet",h:"Spreekwoord",d:1},{c:"Spreken is zilver, zwijgen is __________.",a:"goud",h:"Spreekwoord",d:1},{c:"Morgenstond heeft goud in de __________.",a:"mond",h:"Spreekwoord",d:1},{c:"Wie het laatst lacht, lacht het __________.",a:"best",h:"Spreekwoord",d:1},{c:"Waar rook is, is __________.",a:"vuur",h:"Spreekwoord",d:1},{c:"Ik heb een zwaar __________.",a:"vermoeden",h:"Uitdrukking",d:2},{c:"Op rolletjes __________.",a:"lopen",h:"Uitdrukking",d:1},{c:"Door dik en __________.",a:"dun",h:"Uitdrukking",d:1},{c:"Kort maar __________.",a:"krachtig",h:"Uitdrukking",d:1},{c:"Boter bij de __________.",a:"vis",h:"Uitdrukking",d:1},{c:"Met vallen en __________.",a:"opstaan",h:"Uitdrukking",d:1},{c:"Kop in het __________.",a:"zand",h:"Uitdrukking",d:1},{c:"De knoop __________.",a:"doorhakken",h:"Uitdrukking",d:2},{c:"De handdoek in de ring __________.",a:"gooien",h:"Uitdrukking",d:2},{c:"Iets onder de knie __________.",a:"krijgen",h:"Uitdrukking",d:2},{c:"Een stapje extra __________.",a:"zetten",h:"Uitdrukking",d:1},{c:"Alles op alles __________.",a:"zetten",h:"Uitdrukking",d:1},{c:"De draad weer __________.",a:"oppakken",h:"Uitdrukking",d:2},{c:"In het diepe __________.",a:"springen",h:"Uitdrukking",d:2},{c:"Water bij de wijn __________.",a:"doen",h:"Uitdrukking",d:1},{c:"Met open armen __________.",a:"ontvangen",h:"Uitdrukking",d:2},{c:"Aan het kortste eind __________.",a:"trekken",h:"Uitdrukking",d:2},{c:"Dat is niet mijn kopje __________.",a:"thee",h:"Uitdrukking",d:1},{c:"Zand erover en door met de __________.",a:"dag",h:"Uitdrukking",d:1}];
+const FOOTBALL_MODE_DATA=[{context:'Club waar Messi groot werd',c:'De club is __________.',a:'barcelona',h:'Voetbalclubs · Spanje'},{context:'Koninklijke topclub uit Madrid in het wit',c:'De club is __________.',a:'real',h:'Voetbalclubs · Spanje'},{context:'Rood-witte topclub uit Eindhoven',c:'De club is __________.',a:'psv',h:'Voetbalclubs · Nederland'},{context:'Amsterdamse recordkampioen uit de Johan Cruijff ArenA',c:'De club is __________.',a:'ajax',h:'Voetbalclubs · Nederland'},{context:'Rotterdamse club uit De Kuip',c:'De club is __________.',a:'feyenoord',h:'Voetbalclubs · Nederland'},{context:'Club met twee letters uit Alkmaar',c:'De club is __________.',a:'az',h:'Voetbalclubs · Nederland'},{context:'Tukkers uit Enschede in rood',c:'De club is __________.',a:'twente',h:'Voetbalclubs · Nederland'},{context:'Friese trots met pompeblêden op het shirt',c:'De club is __________.',a:'heerenveen',h:'Voetbalclubs · Nederland'},{context:'Rode topclub uit de stad van The Beatles',c:'De club is __________.',a:'liverpool',h:'Voetbalclubs · Engeland'},{context:'Blauwe Londense club van Stamford Bridge',c:'De club is __________.',a:'chelsea',h:'Voetbalclubs · Engeland'},{context:'Londense club van het Emirates Stadium',c:'De club is __________.',a:'arsenal',h:'Voetbalclubs · Engeland'},{context:'Hemelsblauwe topclub uit Manchester',c:'De club is __________.',a:'city',h:'Voetbalclubs · Engeland'},{context:'Rode grootmacht van Old Trafford',c:'De club is __________.',a:'united',h:'Voetbalclubs · Engeland'},{context:'Londense club van White Hart Lane',c:'De club is __________.',a:'spurs',h:'Voetbalclubs · Engeland'},{context:'Parijse topclub vol sterren',c:'De club is __________.',a:'psg',h:'Voetbalclubs · Frankrijk'},{context:'Franse volksclub aan de zuidkust',c:'De club is __________.',a:'marseille',h:'Voetbalclubs · Frankrijk'},{context:'Duitse recordkampioen uit München',c:'De club is __________.',a:'bayern',h:'Voetbalclubs · Duitsland'},{context:'Gele muur uit het Ruhrgebied',c:'De club is __________.',a:'dortmund',h:'Voetbalclubs · Duitsland'},{context:'Topclub uit Turijn met zwart-witte strepen',c:'De club is __________.',a:'juventus',h:'Voetbalclubs · Italië'},{context:'Rood-zwarte club uit Milaan',c:'De club is __________.',a:'milan',h:'Voetbalclubs · Italië'},{context:'Club uit Napels waar Maradona heilig is',c:'De club is __________.',a:'napoli',h:'Voetbalclubs · Italië'},{context:'Lissabonse topclub met adelaar als symbool',c:'De club is __________.',a:'benfica',h:'Voetbalclubs · Portugal'},{context:'Portugese topclub uit de havenstad',c:'De club is __________.',a:'porto',h:'Voetbalclubs · Portugal'},{context:'Turkse topclub in geel-rood uit Istanbul',c:'De club is __________.',a:'galatasaray',h:'Voetbalclubs · Turkije'},{context:'Braziliaanse volksclub uit Rio in zwart-rood',c:'De club is __________.',a:'flamengo',h:'Voetbalclubs · Brazilië'},{context:'Argentijnse club uit La Bombonera',c:'De club is __________.',a:'boca',h:'Voetbalclubs · Argentinië'},{context:'Argentijnse rivaal uit het Monumental',c:'De club is __________.',a:'river',h:'Voetbalclubs · Argentinië'}];
+const TRIVIA_MODE_DATA=[{context:'De hoofdstad van Nederland is',c:'Het antwoord is __________.',a:'amsterdam',h:'Trivia · Aardrijkskunde'},{context:'De hoofdstad van België is',c:'Het antwoord is __________.',a:'brussel',h:'Trivia · Aardrijkskunde'},{context:'De hoofdstad van Frankrijk is',c:'Het antwoord is __________.',a:'parijs',h:'Trivia · Aardrijkskunde'},{context:'De hoofdstad van Duitsland is',c:'Het antwoord is __________.',a:'berlijn',h:'Trivia · Aardrijkskunde'},{context:'De hoofdstad van Italië is',c:'Het antwoord is __________.',a:'rome',h:'Trivia · Aardrijkskunde'},{context:'De hoofdstad van Spanje is',c:'Het antwoord is __________.',a:'madrid',h:'Trivia · Aardrijkskunde'},{context:'De hoofdstad van Japan is',c:'Het antwoord is __________.',a:'tokio',h:'Trivia · Aardrijkskunde'},{context:'De kleur van gras is',c:'Het antwoord is __________.',a:'groen',h:'Trivia · Algemeen'},{context:'De kleur van een banaan is meestal',c:'Het antwoord is __________.',a:'geel',h:'Trivia · Algemeen'},{context:'Sneeuw is meestal',c:'Het antwoord is __________.',a:'wit',h:'Trivia · Algemeen'},{context:'De ster die overdag licht geeft is de',c:'Het antwoord is __________.',a:'zon',h:'Trivia · Wetenschap'},{context:'Na maandag komt',c:'Het antwoord is __________.',a:'dinsdag',h:'Trivia · Tijd'},{context:'De eerste maand van het jaar is',c:'Het antwoord is __________.',a:'januari',h:'Trivia · Tijd'},{context:'Een week heeft zeven',c:'Het antwoord is __________.',a:'dagen',h:'Trivia · Tijd'},{context:'Een jaar heeft twaalf',c:'Het antwoord is __________.',a:'maanden',h:'Trivia · Tijd'},{context:'Je ziet met je',c:'Het antwoord is __________.',a:'ogen',h:'Trivia · Lichaam'},{context:'Je hoort met je',c:'Het antwoord is __________.',a:'oren',h:'Trivia · Lichaam'},{context:'Je ruikt met je',c:'Het antwoord is __________.',a:'neus',h:'Trivia · Lichaam'},{context:'Een dokter werkt vaak in een',c:'Het antwoord is __________.',a:'ziekenhuis',h:'Trivia · Beroepen'},{context:'Een bakker bakt vaak',c:'Het antwoord is __________.',a:'brood',h:'Trivia · Beroepen'},{context:'Een trein rijdt op een',c:'Het antwoord is __________.',a:'spoor',h:'Trivia · Vervoer'},{context:'Een boot vaart op het',c:'Het antwoord is __________.',a:'water',h:'Trivia · Vervoer'},{context:'Je slaapt meestal in een',c:'Het antwoord is __________.',a:'bed',h:'Trivia · Wonen'},{context:'Je kookt vaak in de',c:'Het antwoord is __________.',a:'keuken',h:'Trivia · Wonen'}];
+
+const SAVE_KEY='blankd_v5';
+const LEGACY_KEYS=['blankd_v4','blankd_v3'];
+const I18N={
+intl:{homeEyebrow:'Fast guessing. Clean pressure.',profileEyebrow:'Profile',careerEyebrow:'Next stop',homeHeroTitle:'Fill the blank.<br>Feel the click.',homeHeroSub:'Career roadmap. Clear levels, earn stars, unlock rewards.',ink:'Ink',stars:'Stars',games:'Games',careerMode:'Career',quickMode:'Quick',blitzMode:'Blitz',endlessMode:'Endless',footballMode:'Football',triviaMode:'Trivia',quickSub:'10-round sprint.',blitzSub:'8 rounds. Fast clock.',endlessSub:'20 rounds, streaks and Ink.',careerMapEyebrow:'World map',careerMapTitle:'Career Roadmap',careerMapSub:'Clear levels to unlock the next.',openCareer:'Open roadmap',resumeCareer:'Resume career',shopTitle:'Shop',shopEyebrow:'Ink + level + stars',shopSub:'Spend Ink on themes and modes.',shopModes:'Modes',shopThemes:'Themes',shopBadges:'Badges',achievementsTitle:'Achievements',achEyebrow:'Track your climb',achievementsSub:'Profile milestones.',bestResult:'Best result',rewardPreview:'Reward',passRequirement:'Pass',difficulty:'Difficulty',paused:'Paused',pauseTitle:'Hold your nerve',pauseSub:'Jump back in, restart, or leave.',pauseResume:'Resume',pauseRestart:'Restart',pauseQuit:'Quit',hint:'💡 Hint −20',reveal:'🔍 Letter −15',submit:'GO',nextRound:'Next round',correct:'Correct',almost:'Almost',wrong:'Wrong',timeout:'Time',careerOutcome:'Career result',map:'Map',retry:'Retry',continueMap:'Back to map',nextLevel:'Next level',playLevel:'Play',locked:'Locked',unlocked:'Unlocked',completed:'Completed',perfect:'Perfect',level:'Level',chapter:'Chapter',rewardUnlocked:'Unlocked',bestStars:'Best stars',currentTarget:'Current target',available:'Available',equipped:'Equipped',equip:'Equip',buy:'Buy',owned:'Owned',requiresLevel:'Lv {level}',requiresStars:'{stars} ★',costsInk:'{ink} Ink',lockedReq:'Need Lv {level}{starsText}',modeUnlocked:'Mode unlocked',themeUnlocked:'Theme unlocked',badgeUnlocked:'Badge unlocked',achievementUnlocked:'Achievement unlocked',clearToUnlock:'Clear to unlock next level.',oneStar:'1★ = clear',twoStars:'2★ = 90%+',threeStars:'3★ = perfect',noBestYet:'No clear yet',bestFmt:'{correct}/{rounds} · {percent}%',rewardFmt:'≈{xp} XP · ≈{ink} Ink',accuracy:'Accuracy',profileLevel:'Lv {level}',inkTotal:'{ink} Ink',starsTotal:'{stars} ★',gamesTotal:'{games} runs',xpNeed:'{need} XP to Lv {level}',careerSummary:'{cleared}/{total} · {stars}★',chapterSummary:'{cleared}/{count} · {stars}★',careerButtonSub:'Structured route through BlankD.',quickMini:'10 rds',blitzMini:'8 rds',endlessMini:'20 rds',shopSummary:'{ink} Ink',achSummary:'{unlocked}/{total}',achProgress:'{unlocked} of {total}',passText:'{pass}/{rounds} correct',runRules:'{rounds} rds · {timer}s',noAssists:'No assists',mixedPool:'Mixed',quotePool:'Quotes',footballPool:'Football',triviaPool:'Trivia',starsExplain:'Replay for 2★ and 3★.',introNext:'Next: {title}',readyToPlay:'Ready',levelUnlocked:'Level unlocked',noUnlocks:'Progress banked.',earned:'Earned',failureStillCounts:'Partial reward banked.',successFeels:'Clean clear.',almostPerfect:'Almost perfect.',titleRanks:['Rookie','Scout','Chaser','Controller','Operator','Architect','Elite','Sovereign'],close:'Close',backHome:'Home',play:'Play',languageTitle:'Language',languageEyebrow:'Language',languageSub:'Choose the language for the app and question pool.',languageIntl:'International English',languageNl:'Nederlands',settingsTitle:'Settings',settingsEyebrow:'Control room',settingsSub:'Language and audio in one clean place.',soundTitle:'Sound',soundSub:'Toggle effects and the subtle tension track.'},
+nl:{homeEyebrow:'Snel raden. Schone druk.',profileEyebrow:'Profiel',careerEyebrow:'Volgende stop',homeHeroTitle:'Vul de blank.<br>Voel die klik.',homeHeroSub:'Career-roadmap. Speel levels vrij, verdien sterren.',ink:'Inkt',stars:'Sterren',games:'Potjes',careerMode:'Career',quickMode:'Quick',blitzMode:'Blitz',endlessMode:'Endless',footballMode:'Voetbal',triviaMode:'Trivia',quickSub:'10 rondes sprint.',blitzSub:'8 rondes. Snel klok.',endlessSub:'20 rondes, streaks en inkt.',careerMapEyebrow:'Wereldkaart',careerMapTitle:'Career-roadmap',careerMapSub:'Haal levels om volgende vrij te spelen.',openCareer:'Open roadmap',resumeCareer:'Verder in career',shopTitle:'Shop',shopEyebrow:'Inkt + level + sterren',shopSub:'Geef inkt uit aan thema\'s en modi.',shopModes:'Modi',shopThemes:'Thema\'s',shopBadges:'Badges',achievementsTitle:'Achievements',achEyebrow:'Volg je klim',achievementsSub:'Profielprogressie en mijlpalen.',bestResult:'Beste resultaat',rewardPreview:'Reward',passRequirement:'Doel',difficulty:'Moeilijkheid',paused:'Gepauzeerd',pauseTitle:'Houd je hoofd koel',pauseSub:'Terug het potje in, opnieuw of stoppen.',pauseResume:'Verder',pauseRestart:'Opnieuw',pauseQuit:'Stoppen',hint:'💡 Hint −20',reveal:'🔍 Letter −15',submit:'GO',nextRound:'Volgende',correct:'Goed',almost:'Bijna',wrong:'Fout',timeout:'Tijd',careerOutcome:'Career-resultaat',map:'Map',retry:'Opnieuw',continueMap:'Terug naar map',nextLevel:'Volgend level',playLevel:'Speel',locked:'Vergrendeld',unlocked:'Open',completed:'Gehaald',perfect:'Perfect',level:'Level',chapter:'Chapter',rewardUnlocked:'Vrijgespeeld',bestStars:'Beste sterren',currentTarget:'Huidig doel',available:'Beschikbaar',equipped:'Actief',equip:'Activeren',buy:'Kopen',owned:'In bezit',requiresLevel:'Lv {level}',requiresStars:'{stars} ★',costsInk:'{ink} inkt',lockedReq:'Nodig: lv {level}{starsText}',modeUnlocked:'Mode vrijgespeeld',themeUnlocked:'Thema vrijgespeeld',badgeUnlocked:'Badge vrijgespeeld',achievementUnlocked:'Achievement vrijgespeeld',clearToUnlock:'Haal dit level om volgende vrij te spelen.',oneStar:'1★ = clear',twoStars:'2★ = 90%+',threeStars:'3★ = perfect',noBestYet:'Nog geen clear',bestFmt:'{correct}/{rounds} · {percent}%',rewardFmt:'≈{xp} XP · ≈{ink} inkt',accuracy:'Nauwkeurigheid',profileLevel:'Lv {level}',inkTotal:'{ink} inkt',starsTotal:'{stars} ★',gamesTotal:'{games} runs',xpNeed:'{need} XP tot Lv {level}',careerSummary:'{cleared}/{total} · {stars}★',chapterSummary:'{cleared}/{count} · {stars}★',careerButtonSub:'Jouw gestructureerde route door BlankD.',quickMini:'10 rnd',blitzMini:'8 rnd',endlessMini:'20 rnd',shopSummary:'{ink} inkt',achSummary:'{unlocked}/{total}',achProgress:'{unlocked} van {total}',passText:'{pass}/{rounds} goed',runRules:'{rounds} rnd · {timer}s',noAssists:'Geen hulp',mixedPool:'Gemixte pool',quotePool:'Quote-pool',footballPool:'Voetbal-pool',triviaPool:'Trivia-pool',starsExplain:'Replay voor 2★ en 3★.',introNext:'Volgende: {title}',readyToPlay:'Klaar',levelUnlocked:'Level vrijgespeeld',noUnlocks:'Progressie geteld.',earned:'Verdiend',failureStillCounts:'Kleine reward banked.',successFeels:'Strakke clear.',almostPerfect:'Bijna perfect.',titleRanks:['Starter','Spotter','Jager','Controller','Operator','Architect','Elite','Sovereign'],close:'Sluiten',backHome:'Home',play:'Speel',languageTitle:'Taal',languageEyebrow:'Taal',languageSub:'Kies hier de taal voor de app en de vragenpool.',languageIntl:'Internationaal Engels',languageNl:'Nederlands',settingsTitle:'Settings',settingsEyebrow:'Control room',settingsSub:'Taal en audio op één nette plek.',soundTitle:'Geluid',soundSub:'Zet effecten en de subtiele spanningsmuziek aan of uit.'}
+};
+const MODE_DEFS={quick:{id:'quick',key:'quick',labelKey:'quickMode',rounds:10,timer:14,pools:[{pool:'quotes',count:10,minDiff:1,maxDiff:2}],assists:true},blitz:{id:'blitz',key:'blitz',labelKey:'blitzMode',rounds:8,timer:8,pools:[{pool:'quotes',count:8,minDiff:1,maxDiff:3}],assists:true},endless:{id:'endless',key:'endless',labelKey:'endlessMode',rounds:20,timer:8,pools:[{pool:'quotes',count:20,minDiff:1,maxDiff:3}],assists:true},football:{id:'football',key:'football',labelKey:'footballMode',rounds:10,timer:11,pools:[{pool:'football',count:10}],assists:true,unlockId:'mode_football'},trivia:{id:'trivia',key:'trivia',labelKey:'triviaMode',rounds:10,timer:11,pools:[{pool:'trivia',count:10}],assists:true,unlockId:'mode_trivia'}};
+const SHOP_ITEMS=[{id:'mode_football',type:'mode',cost:180,reqLevel:5,starReq:0,icon:'⚽',mode:'football',label:{intl:'Football Clubs',nl:'Voetbalclubs'},desc:{intl:'Dedicated club-guessing mode.',nl:'Aparte modus voor clubs.'}},{id:'mode_trivia',type:'mode',cost:260,reqLevel:8,starReq:4,icon:'🧠',mode:'trivia',label:{intl:'Trivia',nl:'Trivia'},desc:{intl:'Short knowledge prompts.',nl:'Korte kennisvragen.'}},{id:'theme_classic',type:'theme',cost:0,reqLevel:1,starReq:0,icon:'☀️',theme:'classic',label:{intl:'Classic Light',nl:'Classic Light'},desc:{intl:'Clean light skin.',nl:'Helder licht thema.'}},{id:'theme_paper',type:'theme',cost:120,reqLevel:1,starReq:0,icon:'📜',theme:'paper',label:{intl:'Paper',nl:'Papier'},desc:{intl:'Warm paper surfaces.',nl:'Warme papieren vlakken.'}},{id:'theme_midnight',type:'theme',cost:260,reqLevel:4,starReq:0,icon:'🌙',theme:'midnight',label:{intl:'Midnight',nl:'Midnight'},desc:{intl:'Polished dark theme.',nl:'Gepolijst donker thema.'}},{id:'theme_glacier',type:'theme',cost:480,reqLevel:8,starReq:0,icon:'🧊',theme:'glacier',label:{intl:'Glacier',nl:'Gletsjer'},desc:{intl:'Crisp premium blue.',nl:'Heldere premium-blauw.'}},{id:'theme_nebula',type:'theme',cost:850,reqLevel:13,starReq:10,icon:'🌌',theme:'nebula',label:{intl:'Nebula',nl:'Nebula'},desc:{intl:'Deep cosmic purple.',nl:'Diepe kosmische paars.'}},{id:'theme_velvet',type:'theme',cost:1350,reqLevel:19,starReq:18,icon:'🥀',theme:'velvet',label:{intl:'Velvet',nl:'Velvet'},desc:{intl:'Boutique dark luxury.',nl:'Boutique donkere luxe.'}},{id:'theme_monolith',type:'theme',cost:1950,reqLevel:26,starReq:30,icon:'🗿',theme:'monolith',label:{intl:'Monolith',nl:'Monolith'},desc:{intl:'Severe elite slate.',nl:'Strenge elite slate.'}},{id:'theme_eclipse',type:'theme',cost:2750,reqLevel:34,starReq:48,icon:'🌘',theme:'eclipse',label:{intl:'Eclipse',nl:'Eclipse'},desc:{intl:'Cosmic endgame.',nl:'Kosmische endgame.'}},{id:'theme_royal',type:'theme',cost:3650,reqLevel:42,starReq:72,icon:'👑',theme:'royal',label:{intl:'Royal',nl:'Royal'},desc:{intl:'Elegant prestige ivory.',nl:'Elegante prestige-ivory.'}},{id:'badge_star',type:'badge',cost:90,reqLevel:2,starReq:0,icon:'⭐',badge:'⭐',label:{intl:'Star Pin',nl:'Ster-badge'},desc:{intl:'Clean profile badge.',nl:'Strakke profielbadge.'}},{id:'badge_crown',type:'badge',cost:220,reqLevel:7,starReq:0,icon:'👑',badge:'👑',label:{intl:'Crown Badge',nl:'Kroon-badge'},desc:{intl:'Polished crown marker.',nl:'Gepolijste kroonmarkering.'}},{id:'badge_flame',type:'badge',cost:450,reqLevel:12,starReq:6,icon:'🔥',badge:'🔥',label:{intl:'Flame Badge',nl:'Vlam-badge'},desc:{intl:'For hot streaks.',nl:'Voor hete streaks.'}},{id:'badge_dynasty',type:'badge',cost:900,reqLevel:20,starReq:18,icon:'🏛️',badge:'🏛️',label:{intl:'Dynasty Crest',nl:'Dynastie-crest'},desc:{intl:'Heavyweight prestige.',nl:'Zwaargewicht prestige.'}},{id:'badge_imperial',type:'badge',cost:1500,reqLevel:30,starReq:36,icon:'❖',badge:'❖',label:{intl:'Imperial Cipher',nl:'Imperial Cipher'},desc:{intl:'For the deep grind.',nl:'Voor de diepe grind.'}}];
+const ACHIEVEMENTS=[
+{id:'career_first',cat:'Career',icon:'🎓',label:{intl:'Enrolled',nl:'Ingeschreven'},desc:{intl:'Clear your first career level.',nl:'Haal je eerste career-level.'}},
+{id:'perfect_career',cat:'Career',icon:'🌟',label:{intl:'Career Perfect',nl:'Career perfect'},desc:{intl:'Get a perfect Career run.',nl:'Speel een perfect potje in Career.'}},
+{id:'career_pass_10',cat:'Career',icon:'🗻',label:{intl:'Summit Seeker',nl:'Topjager'},desc:{intl:'Clear 10 career levels.',nl:'Haal 10 career-levels.'}},
+{id:'career_pass_25',cat:'Career',icon:'🏔️',label:{intl:'Peak Chaser',nl:'Piekenjager'},desc:{intl:'Clear 25 career levels.',nl:'Haal 25 career-levels.'}},
+{id:'career_pass_40',cat:'Career',icon:'👑',label:{intl:'Roadmap Royalty',nl:'Roadmap-royalty'},desc:{intl:'Clear 40 career levels.',nl:'Haal 40 career-levels.'}},
+{id:'career_pass_48',cat:'Career',icon:'🧿',label:{intl:'BlankD Complete',nl:'BlankD compleet'},desc:{intl:'Clear all 48 career levels.',nl:'Haal alle 48 career-levels.'}},
+{id:'chapter_1_clear',cat:'Career',icon:'🧭',label:{intl:'Found your feet',nl:'Stevig gestart'},desc:{intl:'Finish chapter one.',nl:'Voltooi chapter één.'}},
+{id:'chapter_3_clear',cat:'Career',icon:'⚡',label:{intl:'Pressure Proof',nl:'Drukvast'},desc:{intl:'Finish chapter three.',nl:'Voltooi chapter drie.'}},
+{id:'chapter_6_clear',cat:'Career',icon:'🏆',label:{intl:'Road Complete',nl:'Road compleet'},desc:{intl:'Finish the full roadmap.',nl:'Voltooi de volledige roadmap.'}},
+{id:'chapter_1_master',cat:'Mastery',icon:'🥇',label:{intl:'Foundations Mastered',nl:'Fundamenten gemasterd'},desc:{intl:'3-star every level in chapter one.',nl:'Haal 3 sterren op elk level van chapter 1.'}},
+{id:'chapter_3_master',cat:'Mastery',icon:'🛡️',label:{intl:'Pressure Mastered',nl:'Druk gemasterd'},desc:{intl:'3-star every level in chapter three.',nl:'Haal 3 sterren op elk level van chapter 3.'}},
+{id:'chapter_5_master',cat:'Mastery',icon:'💎',label:{intl:'Perfection Mastered',nl:'Perfectie gemasterd'},desc:{intl:'3-star every level in chapter five.',nl:'Haal 3 sterren op elk level van chapter 5.'}},
+{id:'chapter_6_master',cat:'Mastery',icon:'🪞',label:{intl:'Elite Sweep',nl:'Elite sweep'},desc:{intl:'3-star every level in chapter six.',nl:'Haal 3 sterren op elk level van chapter 6.'}},
+{id:'stars_10',cat:'Mastery',icon:'⭐',label:{intl:'Star Starter',nl:'Sterstarter'},desc:{intl:'Earn 10 total stars.',nl:'Verdien 10 sterren.'}},
+{id:'stars_30',cat:'Mastery',icon:'✨',label:{intl:'Shine Route',nl:'Schitterroute'},desc:{intl:'Earn 30 total stars.',nl:'Verdien 30 sterren.'}},
+{id:'stars_60',cat:'Mastery',icon:'🌌',label:{intl:'Sky Collector',nl:'Luchtverzamelaar'},desc:{intl:'Earn 60 total stars.',nl:'Verdien 60 sterren.'}},
+{id:'stars_100',cat:'Mastery',icon:'💠',label:{intl:'Constellation',nl:'Constellatie'},desc:{intl:'Earn 100 total stars.',nl:'Verdien 100 sterren.'}},
+{id:'stars_120',cat:'Mastery',icon:'🌠',label:{intl:'Star Cartographer',nl:'Sterrenkaartmaker'},desc:{intl:'Earn 120 total stars.',nl:'Verdien 120 sterren.'}},
+{id:'stars_144',cat:'Mastery',icon:'🪐',label:{intl:'Full Crown',nl:'Volle kroon'},desc:{intl:'Earn all 144 career stars.',nl:'Verdien alle 144 career-sterren.'}},
+{id:'correct_100',cat:'Progression',icon:'🧠',label:{intl:'Brain Bank',nl:'Breinbank'},desc:{intl:'Get 100 correct answers.',nl:'Haal 100 goede antwoorden.'}},
+{id:'correct_300',cat:'Progression',icon:'📚',label:{intl:'Blank Builder',nl:'Blank-bouwer'},desc:{intl:'Get 300 correct answers.',nl:'Haal 300 goede antwoorden.'}},
+{id:'correct_750',cat:'Progression',icon:'🧬',label:{intl:'Archive Mind',nl:'Archiefbrein'},desc:{intl:'Get 750 correct answers.',nl:'Haal 750 goede antwoorden.'}},
+{id:'correct_1200',cat:'Progression',icon:'🗂️',label:{intl:'Reference Shelf',nl:'Referentieplank'},desc:{intl:'Get 1,200 correct answers.',nl:'Haal 1.200 goede antwoorden.'}},
+{id:'correct_2000',cat:'Progression',icon:'🏛️',label:{intl:'Living Archive',nl:'Levend archief'},desc:{intl:'Get 2,000 correct answers.',nl:'Haal 2.000 goede antwoorden.'}},
+{id:'profile_10',cat:'Progression',icon:'📈',label:{intl:'Steady Climb',nl:'Stevige klim'},desc:{intl:'Reach profile level 10.',nl:'Bereik profiellevel 10.'}},
+{id:'profile_25',cat:'Progression',icon:'🚀',label:{intl:'Lift Off',nl:'Lift-off'},desc:{intl:'Reach profile level 25.',nl:'Bereik profiellevel 25.'}},
+{id:'profile_40',cat:'Progression',icon:'🏛️',label:{intl:'Inner Circle',nl:'Inner circle'},desc:{intl:'Reach profile level 40.',nl:'Bereik profiellevel 40.'}},
+{id:'profile_50',cat:'Progression',icon:'👁️',label:{intl:'Top Floor',nl:'Bovenste etage'},desc:{intl:'Reach profile level 50.',nl:'Bereik profiellevel 50.'}},
+{id:'games_25',cat:'Progression',icon:'🎮',label:{intl:'Still Warming Up',nl:'Nog warmdraaien'},desc:{intl:'Finish 25 runs.',nl:'Voltooi 25 potjes.'}},
+{id:'games_100',cat:'Progression',icon:'🕹️',label:{intl:'Session Monster',nl:'Sessiemonster'},desc:{intl:'Finish 100 runs.',nl:'Voltooi 100 potjes.'}},
+{id:'score_15000',cat:'Progression',icon:'🎯',label:{intl:'Point Pressure',nl:'Puntendruk'},desc:{intl:'Accumulate 15,000 total score.',nl:'Verzamel 15.000 totale score.'}},
+{id:'score_50000',cat:'Progression',icon:'🏹',label:{intl:'Precision Economy',nl:'Precisie-economie'},desc:{intl:'Accumulate 50,000 total score.',nl:'Verzamel 50.000 totale score.'}},
+{id:'ink_1000',cat:'Collection',icon:'✒️',label:{intl:'Ink Reserve',nl:'Inktreserve'},desc:{intl:'Hold 1,000 Ink.',nl:'Heb 1.000 inkt.'}},
+{id:'ink_3000',cat:'Collection',icon:'💰',label:{intl:'Ink Vault',nl:'Inktkluis'},desc:{intl:'Hold 3,000 Ink.',nl:'Heb 3.000 inkt.'}},
+{id:'ink_6000',cat:'Collection',icon:'🏦',label:{intl:'Ink Treasury',nl:'Inktschatkamer'},desc:{intl:'Hold 6,000 Ink.',nl:'Heb 6.000 inkt.'}},
+{id:'shop_5',cat:'Collection',icon:'🛍️',label:{intl:'Collected Taste',nl:'Verzameld'},desc:{intl:'Own 5 shop items.',nl:'Bezit 5 shop-items.'}},
+{id:'shop_10',cat:'Collection',icon:'🪄',label:{intl:'Prestige Shelf',nl:'Prestige-plank'},desc:{intl:'Own 10 shop items.',nl:'Bezit 10 shop-items.'}},
+{id:'shop_15',cat:'Collection',icon:'🗝️',label:{intl:'Full Wardrobe',nl:'Volle garderobe'},desc:{intl:'Own 15 shop items.',nl:'Bezit 15 shop-items.'}},
+{id:'mode_blitz_first',cat:'Modes',icon:'🔥',label:{intl:'Tempo Test',nl:'Tempotest'},desc:{intl:'Finish a Blitz run.',nl:'Voltooi een Blitz-run.'}},
+{id:'mode_endless_first',cat:'Modes',icon:'♾️',label:{intl:'Long Breath',nl:'Lange adem'},desc:{intl:'Finish an Endless run.',nl:'Voltooi een Endless-run.'}},
+{id:'mode_football_first',cat:'Modes',icon:'⚽',label:{intl:'Club Reader',nl:'Clublezer'},desc:{intl:'Finish a Football run.',nl:'Voltooi een Voetbal-run.'}},
+{id:'mode_trivia_first',cat:'Modes',icon:'🧠',label:{intl:'Quiz Mood',nl:'Quizmood'},desc:{intl:'Finish a Trivia run.',nl:'Voltooi een Trivia-run.'}},
+{id:'all_modes_played',cat:'Modes',icon:'🎛️',label:{intl:'Full Rotation',nl:'Volle rotatie'},desc:{intl:'Finish a run in every mode.',nl:'Voltooi een run in elke modus.'}},
+{id:'streak_5',cat:'Mastery',icon:'🔗',label:{intl:'Five Deep',nl:'Vijf diep'},desc:{intl:'Hit a 5-answer correct streak.',nl:'Haal een streak van 5.'}},
+{id:'streak_10',cat:'Mastery',icon:'⚔️',label:{intl:'Locked In',nl:'Locked in'},desc:{intl:'Hit a 10-answer correct streak.',nl:'Haal een streak van 10.'}},
+{id:'streak_12',cat:'Mastery',icon:'👊',label:{intl:'No Blink',nl:'Geen knippering'},desc:{intl:'Hit a 12-answer correct streak.',nl:'Haal een streak van 12.'}},
+{id:'perfect_runs_10',cat:'Mastery',icon:'🏅',label:{intl:'Clean Habit',nl:'Schone gewoonte'},desc:{intl:'Finish 10 perfect runs in any mode.',nl:'Voltooi 10 perfecte potjes in eender welke modus.'}},
+{id:'perfect_runs_25',cat:'Mastery',icon:'👑',label:{intl:'Impossible Polish',nl:'Onmogelijke polish'},desc:{intl:'Finish 25 perfect runs in any mode.',nl:'Voltooi 25 perfecte potjes in eender welke modus.'}}
+];
+const CAREER_CHAPTERS=[{id:'ch1',name:{intl:'Foundations',nl:'Fundamenten'},subtitle:{intl:'Build rhythm before the clock starts biting.',nl:'Bouw ritme op voordat de klok echt bijt.'},levels:[{id:'ch1-1',no:1,title:{intl:'Warm Hands',nl:'Warme handen'},subtitle:{intl:'A clean opening set.',nl:'Een schone openingsset.'},rounds:10,timer:15,pass:7,pools:[{pool:'quotes',count:10,minDiff:1,maxDiff:1}],rewardXP:90,rewardInk:55},{id:'ch1-2',no:2,title:{intl:'Easy Money',nl:'Lichte buit'},subtitle:{intl:'Same pace, tighter pass line.',nl:'Zelfde tempo, strakkere lijn.'},rounds:10,timer:15,pass:8,pools:[{pool:'quotes',count:10,minDiff:1,maxDiff:1}],rewardXP:96,rewardInk:58},{id:'ch1-3',no:3,title:{intl:'First Stretch',nl:'Eerste rek'},subtitle:{intl:'Medium blanks enter the room.',nl:'Medium blanks komen binnen.'},rounds:10,timer:14,pass:8,pools:[{pool:'quotes',count:7,minDiff:1,maxDiff:1},{pool:'quotes',count:3,minDiff:2,maxDiff:2}],rewardXP:102,rewardInk:62},{id:'ch1-4',no:4,title:{intl:'Clean Ten',nl:'Strakke tien'},subtitle:{intl:'A full 10-round standard.',nl:'Een volle standaardset van tien.'},rounds:10,timer:14,pass:8,pools:[{pool:'quotes',count:8,minDiff:1,maxDiff:2},{pool:'quotes',count:2,minDiff:2,maxDiff:2}],rewardXP:110,rewardInk:64},{id:'ch1-5',no:5,title:{intl:'Read Faster',nl:'Sneller lezen'},subtitle:{intl:'You know the shape now.',nl:'Je kent de vorm nu.'},rounds:10,timer:13,pass:8,pools:[{pool:'quotes',count:10,minDiff:1,maxDiff:2}],rewardXP:116,rewardInk:68},{id:'ch1-6',no:6,title:{intl:'First Edge',nl:'Eerste rand'},subtitle:{intl:'One hard question can show up.',nl:'Er kan een moeilijke vraag vallen.'},rounds:10,timer:13,pass:8,pools:[{pool:'quotes',count:6,minDiff:1,maxDiff:2},{pool:'quotes',count:4,minDiff:2,maxDiff:3}],rewardXP:122,rewardInk:72},{id:'ch1-7',no:7,title:{intl:'No Spare Time',nl:'Geen overschot'},subtitle:{intl:'Pressure arrives softly.',nl:'De druk komt zacht binnen.'},rounds:10,timer:12,pass:8,pools:[{pool:'quotes',count:10,minDiff:1,maxDiff:2}],rewardXP:130,rewardInk:76},{id:'ch1-8',no:8,title:{intl:'Chapter Seal',nl:'Chapter-zegel'},subtitle:{intl:'The first perfect chase.',nl:'De eerste jacht op perfectie.'},rounds:10,timer:12,pass:8,pools:[{pool:'quotes',count:6,minDiff:2,maxDiff:2},{pool:'quotes',count:4,minDiff:2,maxDiff:3}],rewardXP:138,rewardInk:80}]},{id:'ch2',name:{intl:'Tempo',nl:'Tempo'},subtitle:{intl:'Fewer spare seconds. Cleaner reactions.',nl:'Minder reserve. Scherpere reacties.'},levels:[{id:'ch2-1',no:9,title:{intl:'Quick Read',nl:'Snelle blik'},subtitle:{intl:'The timer tightens.',nl:'De timer knijpt.'},rounds:10,timer:11,pass:8,pools:[{pool:'quotes',count:10,minDiff:1,maxDiff:2}],rewardXP:146,rewardInk:84},{id:'ch2-2',no:10,title:{intl:'Ninety Line',nl:'Negentiglijn'},subtitle:{intl:'2-star pacing starts to matter.',nl:'2-sterren-tempo gaat tellen.'},rounds:10,timer:11,pass:8,pools:[{pool:'quotes',count:8,minDiff:2,maxDiff:2},{pool:'quotes',count:2,minDiff:3,maxDiff:3}],rewardXP:154,rewardInk:88},{id:'ch2-3',no:11,title:{intl:'Cut Through',nl:'Doorsteken'},subtitle:{intl:'More medium, less comfort.',nl:'Meer medium, minder comfort.'},rounds:10,timer:10,pass:8,pools:[{pool:'quotes',count:10,minDiff:2,maxDiff:2}],rewardXP:162,rewardInk:92},{id:'ch2-4',no:12,title:{intl:'Mixed Room',nl:'Gemixte ruimte'},subtitle:{intl:'One small trivia slice enters.',nl:'Een kleine trivia-slice komt binnen.'},rounds:10,timer:10,pass:8,pools:[{pool:'quotes',count:7,minDiff:2,maxDiff:2},{pool:'trivia',count:3}],rewardXP:170,rewardInk:96},{id:'ch2-5',no:13,title:{intl:'Crowded Clock',nl:'Drukke klok'},subtitle:{intl:'The time bar starts talking.',nl:'De tijdbalk begint mee te praten.'},rounds:10,timer:10,pass:8,pools:[{pool:'quotes',count:6,minDiff:2,maxDiff:2},{pool:'quotes',count:4,minDiff:2,maxDiff:3}],rewardXP:178,rewardInk:100},{id:'ch2-6',no:14,title:{intl:'Fast Hands',nl:'Snelle handen'},subtitle:{intl:'Another 10 under heat.',nl:'Nog eens tien onder hitte.'},rounds:10,timer:9,pass:8,pools:[{pool:'quotes',count:10,minDiff:2,maxDiff:3}],rewardXP:186,rewardInk:104},{id:'ch2-7',no:15,title:{intl:'Tempo Cross',nl:'Tempo-kruis'},subtitle:{intl:'Quotes with a football detour.',nl:'Quotes met een voetbalomweg.'},rounds:10,timer:9,pass:8,pools:[{pool:'quotes',count:6,minDiff:2,maxDiff:3},{pool:'football',count:4}],rewardXP:196,rewardInk:108},{id:'ch2-8',no:16,title:{intl:'Tempo Seal',nl:'Tempo-zegel'},subtitle:{intl:'A chapter closer that wants polish.',nl:'Een chapter-einde dat afwerking vraagt.'},rounds:10,timer:9,pass:8,pools:[{pool:'quotes',count:5,minDiff:2,maxDiff:3},{pool:'trivia',count:5}],rewardXP:206,rewardInk:112}]},{id:'ch3',name:{intl:'Pressure',nl:'Druk'},subtitle:{intl:'The easy reads leave. Accuracy keeps the door open.',nl:'De makkelijke reads verdwijnen.'},levels:[{id:'ch3-1',no:17,title:{intl:'Thin Margins',nl:'Dunne marges'},subtitle:{intl:'Harder mix, same pass line.',nl:'Moeilijkere mix, zelfde doel.'},rounds:10,timer:9,pass:8,pools:[{pool:'quotes',count:10,minDiff:2,maxDiff:3}],rewardXP:216,rewardInk:116},{id:'ch3-2',no:18,title:{intl:'Sharp Step',nl:'Scherpe stap'},subtitle:{intl:'Less time, more misses if you drift.',nl:'Minder tijd, meer missers.'},rounds:10,timer:8,pass:8,pools:[{pool:'quotes',count:8,minDiff:2,maxDiff:3},{pool:'trivia',count:2}],rewardXP:226,rewardInk:120},{id:'ch3-3',no:19,title:{intl:'Hard Corners',nl:'Harde hoeken'},subtitle:{intl:'Late answers cost more now.',nl:'Late antwoorden kosten meer.'},rounds:10,timer:8,pass:8,pools:[{pool:'quotes',count:6,minDiff:3,maxDiff:3},{pool:'quotes',count:4,minDiff:2,maxDiff:3}],rewardXP:236,rewardInk:125},{id:'ch3-4',no:20,title:{intl:'Blind Spot',nl:'Blinde vlek'},subtitle:{intl:'No hints. Just reading and nerve.',nl:'Geen hints. Alleen lezen.'},rounds:10,timer:8,pass:8,noHint:true,pools:[{pool:'quotes',count:10,minDiff:2,maxDiff:3}],rewardXP:248,rewardInk:130},{id:'ch3-5',no:21,title:{intl:'Second Wind',nl:'Tweede adem'},subtitle:{intl:'Football blanks under quote pressure.',nl:'Voetbalblanks onder druk.'},rounds:10,timer:8,pass:8,pools:[{pool:'quotes',count:5,minDiff:2,maxDiff:3},{pool:'football',count:5}],rewardXP:258,rewardInk:136},{id:'ch3-6',no:22,title:{intl:'High Line',nl:'Hoge lijn'},subtitle:{intl:'You need 9 for clean mastery pace.',nl:'Je hebt 9 nodig.'},rounds:10,timer:8,pass:9,pools:[{pool:'quotes',count:10,minDiff:2,maxDiff:3}],rewardXP:270,rewardInk:142},{id:'ch3-7',no:23,title:{intl:'Quiet Heat',nl:'Stille hitte'},subtitle:{intl:'No reveals either.',nl:'Ook geen letters meer.'},rounds:10,timer:8,pass:9,noHint:true,noReveal:true,pools:[{pool:'quotes',count:8,minDiff:2,maxDiff:3},{pool:'trivia',count:2}],rewardXP:284,rewardInk:148},{id:'ch3-8',no:24,title:{intl:'Pressure Seal',nl:'Druk-zegel'},subtitle:{intl:'A chapter finish with no soft spots.',nl:'Een chapter-finish zonder zachte stukken.'},rounds:10,timer:8,pass:9,pools:[{pool:'quotes',count:6,minDiff:3,maxDiff:3},{pool:'football',count:2},{pool:'trivia',count:2}],rewardXP:298,rewardInk:154}]},{id:'ch4',name:{intl:'Chaos',nl:'Chaos'},subtitle:{intl:'Half-breath levels. Controlled panic.',nl:'Levels met halve adem.'},levels:[{id:'ch4-1',no:25,title:{intl:'Short Fuse',nl:'Korte lont'},subtitle:{intl:'Seven seconds, standard set.',nl:'Zeven seconden.'},rounds:10,timer:7,pass:8,pools:[{pool:'quotes',count:10,minDiff:2,maxDiff:3}],rewardXP:312,rewardInk:160},{id:'ch4-2',no:26,title:{intl:'Split Focus',nl:'Gespleten focus'},subtitle:{intl:'Quotes and trivia collide.',nl:'Quotes en trivia botsen.'},rounds:10,timer:7,pass:8,pools:[{pool:'quotes',count:5,minDiff:2,maxDiff:3},{pool:'trivia',count:5}],rewardXP:324,rewardInk:166},{id:'ch4-3',no:27,title:{intl:'Sharp Noise',nl:'Scherp lawaai'},subtitle:{intl:'No hints at chaos speed.',nl:'Geen hints op chaos-snelheid.'},rounds:10,timer:7,pass:8,noHint:true,pools:[{pool:'quotes',count:10,minDiff:2,maxDiff:3}],rewardXP:336,rewardInk:172},{id:'ch4-4',no:28,title:{intl:'Club Storm',nl:'Clubstorm'},subtitle:{intl:'Football only.',nl:'Alleen voetbal.'},rounds:10,timer:7,pass:8,pools:[{pool:'football',count:10}],rewardXP:348,rewardInk:178},{id:'ch4-5',no:29,title:{intl:'Fact Storm',nl:'Factstorm'},subtitle:{intl:'Trivia only. Read instantly.',nl:'Alleen trivia.'},rounds:10,timer:7,pass:8,pools:[{pool:'trivia',count:10}],rewardXP:360,rewardInk:184},{id:'ch4-6',no:30,title:{intl:'No Spare',nl:'Geen reserve'},subtitle:{intl:'No hints. No reveals. Seven seconds.',nl:'Geen hints. Geen letters.'},rounds:10,timer:7,pass:8,noHint:true,noReveal:true,pools:[{pool:'quotes',count:8,minDiff:3,maxDiff:3},{pool:'trivia',count:2}],rewardXP:374,rewardInk:190},{id:'ch4-7',no:31,title:{intl:'Nine Needed',nl:'Negen nodig'},subtitle:{intl:'Chaos with a mastery line.',nl:'Chaos met een mastery-lijn.'},rounds:10,timer:7,pass:9,pools:[{pool:'quotes',count:6,minDiff:3,maxDiff:3},{pool:'football',count:4}],rewardXP:388,rewardInk:198},{id:'ch4-8',no:32,title:{intl:'Chaos Seal',nl:'Chaos-zegel'},subtitle:{intl:'The chapter ends at full pressure.',nl:'Het chapter eindigt op volle druk.'},rounds:10,timer:6,pass:9,noHint:true,pools:[{pool:'quotes',count:5,minDiff:3,maxDiff:3},{pool:'football',count:3},{pool:'trivia',count:2}],rewardXP:404,rewardInk:206}]},{id:'ch5',name:{intl:'Perfection',nl:'Perfectie'},subtitle:{intl:'Clean runs start calling.',nl:'Schone runs beginnen te roepen.'},levels:[{id:'ch5-1',no:33,title:{intl:'Nine or Better',nl:'Negen of beter'},subtitle:{intl:'Perfection chapter begins at 9.',nl:'Perfectie start direct op 9.'},rounds:10,timer:8,pass:9,pools:[{pool:'quotes',count:10,minDiff:3,maxDiff:3}],rewardXP:420,rewardInk:214},{id:'ch5-2',no:34,title:{intl:'Pure Read',nl:'Pure read'},subtitle:{intl:'No hints, hard quotes only.',nl:'Geen hints, alleen harde quotes.'},rounds:10,timer:8,pass:9,noHint:true,pools:[{pool:'quotes',count:10,minDiff:3,maxDiff:3}],rewardXP:436,rewardInk:222},{id:'ch5-3',no:35,title:{intl:'Perfect Window',nl:'Perfect venster'},subtitle:{intl:'Eleven rounds.',nl:'Elf rondes.'},rounds:11,timer:8,pass:9,pools:[{pool:'quotes',count:7,minDiff:3,maxDiff:3},{pool:'trivia',count:4}],rewardXP:452,rewardInk:230},{id:'ch5-4',no:36,title:{intl:'Cross Precision',nl:'Kruisprecisie'},subtitle:{intl:'Football, trivia and quotes in one lane.',nl:'Alles in één lijn.'},rounds:11,timer:8,pass:9,pools:[{pool:'quotes',count:5,minDiff:3,maxDiff:3},{pool:'football',count:3},{pool:'trivia',count:3}],rewardXP:468,rewardInk:238},{id:'ch5-5',no:37,title:{intl:'Locked Hands',nl:'Vaste handen'},subtitle:{intl:'No assists at all.',nl:'Helemaal geen hulp.'},rounds:10,timer:8,pass:9,noHint:true,noReveal:true,pools:[{pool:'quotes',count:8,minDiff:3,maxDiff:3},{pool:'football',count:2}],rewardXP:486,rewardInk:248},{id:'ch5-6',no:38,title:{intl:'Eleven Clean',nl:'Elf schoon'},subtitle:{intl:'A longer line with late-stage pressure.',nl:'Een langere lijn met late-game druk.'},rounds:11,timer:7,pass:9,noHint:true,pools:[{pool:'quotes',count:11,minDiff:3,maxDiff:3}],rewardXP:504,rewardInk:258},{id:'ch5-7',no:39,title:{intl:'Almost Crown',nl:'Bijna kroon'},subtitle:{intl:'Ten hard reads. Nine needed. Six seconds.',nl:'Tien harde reads.'},rounds:10,timer:6,pass:9,noHint:true,pools:[{pool:'quotes',count:6,minDiff:3,maxDiff:3},{pool:'trivia',count:4}],rewardXP:524,rewardInk:268},{id:'ch5-8',no:40,title:{intl:'Perfection Seal',nl:'Perfectie-zegel'},subtitle:{intl:'Hates drift.',nl:'Straft afdwalen.'},rounds:11,timer:6,pass:10,noHint:true,noReveal:true,pools:[{pool:'quotes',count:7,minDiff:3,maxDiff:3},{pool:'football',count:2},{pool:'trivia',count:2}],rewardXP:546,rewardInk:280}]},{id:'ch6',name:{intl:'Elite',nl:'Elite'},subtitle:{intl:'No spare layers. Just nerve.',nl:'Geen reserve. Alleen zenuwen.'},levels:[{id:'ch6-1',no:41,title:{intl:'Elite Entry',nl:'Elite entree'},subtitle:{intl:'No assists. Hard mix.',nl:'Geen hulp. Harde mix.'},rounds:10,timer:6,pass:9,noHint:true,noReveal:true,pools:[{pool:'quotes',count:6,minDiff:3,maxDiff:3},{pool:'football',count:2},{pool:'trivia',count:2}],rewardXP:568,rewardInk:292},{id:'ch6-2',no:42,title:{intl:'Six Second Glass',nl:'Zes-seconde-glas'},subtitle:{intl:'Every mistake is loud now.',nl:'Elke fout klinkt hard.'},rounds:10,timer:6,pass:9,noHint:true,noReveal:true,pools:[{pool:'quotes',count:10,minDiff:3,maxDiff:3}],rewardXP:590,rewardInk:304},{id:'ch6-3',no:43,title:{intl:'Football Elite',nl:'Voetbal-elite'},subtitle:{intl:'Pure club knowledge under heat.',nl:'Pure clubkennis onder hitte.'},rounds:10,timer:6,pass:9,noHint:true,noReveal:true,pools:[{pool:'football',count:10}],rewardXP:612,rewardInk:316},{id:'ch6-4',no:44,title:{intl:'Trivia Elite',nl:'Trivia-elite'},subtitle:{intl:'Pure fact recall under heat.',nl:'Pure feiten onder hitte.'},rounds:10,timer:6,pass:9,noHint:true,noReveal:true,pools:[{pool:'trivia',count:10}],rewardXP:634,rewardInk:328},{id:'ch6-5',no:45,title:{intl:'Eleven Edge',nl:'Elf op rand'},subtitle:{intl:'Eleven rounds, ten needed.',nl:'Elf rondes, tien nodig.'},rounds:11,timer:6,pass:10,noHint:true,noReveal:true,pools:[{pool:'quotes',count:7,minDiff:3,maxDiff:3},{pool:'football',count:2},{pool:'trivia',count:2}],rewardXP:660,rewardInk:342},{id:'ch6-6',no:46,title:{intl:'No Margin',nl:'Geen marge'},subtitle:{intl:'Ten needed.',nl:'Tien nodig.'},rounds:10,timer:6,pass:10,noHint:true,noReveal:true,pools:[{pool:'quotes',count:10,minDiff:3,maxDiff:3}],rewardXP:688,rewardInk:356},{id:'ch6-7',no:47,title:{intl:'Glass Crown',nl:'Glazen kroon'},subtitle:{intl:'Twelve rounds. Eleven for 2★.',nl:'Twaalf rondes.'},rounds:12,timer:6,pass:10,noHint:true,noReveal:true,pools:[{pool:'quotes',count:8,minDiff:3,maxDiff:3},{pool:'football',count:2},{pool:'trivia',count:2}],rewardXP:718,rewardInk:370},{id:'ch6-8',no:48,title:{intl:'Final Blank',nl:'Laatste blank'},subtitle:{intl:'The full elite finish.',nl:'De volledige elite-finish.'},rounds:12,timer:6,pass:10,noHint:true,noReveal:true,pools:[{pool:'quotes',count:6,minDiff:3,maxDiff:3},{pool:'football',count:3},{pool:'trivia',count:3}],rewardXP:750,rewardInk:385}]}];
+const CAREER_LEVELS=CAREER_CHAPTERS.flatMap((ch,ci)=>ch.levels.map((lv,li)=>({...lv,chapterId:ch.id,chapterIndex:ci,chapterName:ch.name,chapterSubtitle:ch.subtitle}))).map((lv,i)=>({...lv,index:i}));
+const TIME_SCALE=1.3;
+Object.values(MODE_DEFS).forEach(mode=>{mode.timer=Math.ceil(mode.timer*TIME_SCALE);});
+CAREER_CHAPTERS.forEach(ch=>ch.levels.forEach(level=>{level.timer=Math.ceil(level.timer*TIME_SCALE);}));
+CAREER_LEVELS.forEach(level=>{level.timer=Math.ceil(level.timer*TIME_SCALE);});
+
+// ══════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════
+const S={screen:'home',save:null,lang:'intl',currentRun:null,selectedLevelId:null,endCtx:null,toastTimer:null,activeTab:'homePanel',kbInput:'',currentChapterFilter:null};
+
+
+const FX={ctx:null,enabled:true,primed:false,trackTimer:null,trackPhase:0,
+  keysOn:true,keysVol:0.6,
+  feedbackOn:true,feedbackVol:0.7,
+  musicOn:true,musicVol:1.5
+};
+function primeFx(){
+  const Ctx=window.AudioContext||window.webkitAudioContext;
+  if(!Ctx)return;
+  try{FX.ctx=FX.ctx||new Ctx();if(FX.ctx.state==='suspended')FX.ctx.resume();FX.primed=true;}catch(e){}
+}
+function tone(freq=440,duration=.08,type='sine',volume=.03,start=0){
+  primeFx();
+  const ctx=FX.ctx;
+  if(!ctx)return;
+  try{
+    const now=ctx.currentTime+start;
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.type=type;
+    osc.frequency.setValueAtTime(freq,now);
+    gain.gain.setValueAtTime(0.0001,now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0001,volume),now+.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001,now+duration);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now+duration+.02);
+  }catch(e){}
+}
+function toneKey(freq,dur,type,vol,start){if(!FX.keysOn)return;tone(freq,dur,type,vol*FX.keysVol,start);}
+function toneFB(freq,dur,type,vol,start){if(!FX.feedbackOn)return;tone(freq,dur,type,vol*FX.feedbackVol,start);}
+function toneBG(freq,dur,type,vol,start){if(!FX.musicOn)return;tone(freq,dur,type,vol*FX.musicVol,start);}
+function stopBackingTrack(){if(FX.trackTimer){clearInterval(FX.trackTimer);FX.trackTimer=null;}}
+function backingTrackStep(){
+  if(!FX.musicOn||!S.currentRun||S.currentRun.paused||!document.getElementById('gameScreen').classList.contains('show'))return;
+  const phase=FX.trackPhase++%8;
+  const remain=(S.currentRun?.remaining||0)/(S.currentRun?.config?.timer||1);
+  const urgent=remain<.28;
+  const mid=remain<.55;
+  /* deep bass pulse */
+  const baseFreq=urgent?130:mid?146:164;
+  toneBG(baseFreq,.6,'triangle',.018,0);
+  /* rhythmic tick - speeds up under pressure */
+  if(urgent){
+    toneBG(880,.02,'square',.006,0);
+    toneBG(880,.02,'square',.006,.18);
+    toneBG(880,.02,'square',.006,.36);
+    toneBG(880,.02,'square',.005,.54);
+  }else if(mid){
+    toneBG(660,.025,'square',.004,0);
+    toneBG(660,.025,'square',.004,.35);
+  }else{
+    if(phase%2===0) toneBG(550,.03,'square',.003,.2);
+  }
+  /* harmonic layer */
+  const fifth=baseFreq*1.5;
+  toneBG(fifth,.3,'sine',.009,phase%2?.1:.3);
+  /* rising tension tone when urgent */
+  if(urgent){
+    toneBG(baseFreq*2,.15,'sawtooth',.007,.4);
+    toneBG(baseFreq*3,.08,'sine',.004,.55);
+  }else if(mid){
+    toneBG(baseFreq*2,.1,'sine',.005,.45);
+  }
+  /* sub-bass throb when very low */
+  if(remain<.18){
+    toneBG(65,.8,'sine',.014,0);
+    toneBG(baseFreq*4,.05,'triangle',.005,.7);
+  }
+}
+function ensureBackingTrack(){
+  stopBackingTrack();
+  if(!FX.musicOn||!S.currentRun)return;
+  backingTrackStep();
+  FX.trackTimer=setInterval(backingTrackStep,900);
+}
+function setSoundEnabled(enabled){
+  FX.keysOn=!!enabled;
+  FX.feedbackOn=!!enabled;
+  FX.musicOn=!!enabled;
+  S.save.settings.soundOn=!!enabled;
+  S.save.settings.keysOn=!!enabled;
+  S.save.settings.feedbackOn=!!enabled;
+  S.save.settings.musicOn=!!enabled;
+  persist();
+  renderSettings();
+  if(!FX.musicOn)stopBackingTrack();
+  else if(S.currentRun)ensureBackingTrack();
+}
+function playFx(name){
+  switch(name){
+    case 'key': toneKey(440,.028,'triangle',.02); break;
+    case 'backspace': toneKey(280,.04,'triangle',.022); break;
+    case 'submit': toneFB(540,.04,'triangle',.03); toneFB(720,.07,'sine',.025,.03); break;
+    case 'correct': toneFB(660,.06,'triangle',.035); toneFB(830,.09,'sine',.03,.04); toneFB(990,.12,'sine',.02,.08); break;
+    case 'almost': toneFB(460,.06,'triangle',.025); toneFB(540,.08,'sine',.02,.04); break;
+    case 'wrong': toneFB(260,.1,'sawtooth',.03); toneFB(200,.14,'triangle',.025,.04); break;
+    case 'timeout': toneFB(180,.16,'sawtooth',.035); toneFB(140,.2,'triangle',.02,.08); break;
+    case 'perfect': toneFB(700,.05,'triangle',.035); toneFB(930,.07,'triangle',.03,.04); toneFB(1170,.12,'sine',.025,.08); toneFB(1400,.16,'sine',.015,.14); break;
+    case 'next': toneFB(500,.04,'triangle',.022); toneFB(650,.05,'sine',.02,.03); break;
+  }
+}
+function pulseResult(text,kind='good'){
+  const el=document.getElementById('perfectBurst');
+  const card=document.querySelector('.question-card');
+  if(!el)return;
+  el.textContent=text||'';
+  el.classList.remove('show','good','warn','bad');
+  void el.offsetWidth;
+  el.classList.add(kind,'show');
+  if(card){card.classList.remove('perfect-pop'); void card.offsetWidth; card.classList.add('perfect-pop'); setTimeout(()=>card.classList.remove('perfect-pop'),560);}
+  setTimeout(()=>el.classList.remove('show','good','warn','bad'),950);
+}
+function pulsePerfect(text){ pulseResult(text,'good'); }
+function isPerfectRoundAnswer(run,out){
+  if(!run||out.status!=='correct')return false;
+  const cleanAnswer=!run.hintUsed&&!run.revealUsed;
+  const fastAnswer=run.remaining >= run.config.timer*0.45;
+  return cleanAnswer&&fastAnswer;
+}
+
+
+// ══════════════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════════════
+function detectLang(){try{return (navigator.language||'').toLowerCase().startsWith('nl')?'nl':'intl';}catch(e){return 'intl';}}
+function t(key,vars){const pack=I18N[S.lang]||I18N.intl;let v=pack[key];if(v==null)v=I18N.intl[key]??key;if(typeof v!=='string')return v;return v.replace(/\{(\w+)\}/g,(_,k)=>vars&&vars[k]!=null?vars[k]:'');}
+function fmt(n){return new Intl.NumberFormat(S.lang==='nl'?'nl-NL':'en-US').format(Math.round(Number(n)||0));}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function sampleUnique(list,count,usedSet){const pool=shuffle(list.filter(item=>!usedSet.has(qKey(item))));const picked=pool.slice(0,count);picked.forEach(q=>usedSet.add(qKey(q)));if(picked.length<count){const extra=shuffle(list).filter(item=>!picked.includes(item)).slice(0,count-picked.length);return picked.concat(extra);}return picked;}
+function qKey(q){return`${q.c||''}|${q.context||''}|${q.a}`;}
+function normalize(str){return String(str||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/[''`]/g,'').replace(/[^a-z0-9]+/g,' ').trim();}
+function answerOnly(str){return normalize(str).replace(/\s+/g,'');}
+function lev(a,b){const m=a.length,n=b.length;const dp=Array.from({length:m+1},(_,i)=>Array(n+1).fill(0));for(let i=0;i<=m;i++)dp[i][0]=i;for(let j=0;j<=n;j++)dp[0][j]=j;for(let i=1;i<=m;i++){for(let j=1;j<=n;j++){dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);}}return dp[m][n];}
+function xpForLevel(level){let total=0;for(let lv=1;lv<level;lv++){total+=120+Math.floor(lv*22+Math.pow(lv,1.28)*8);}return total;}
+function profileLevelFromXP(xp){let lv=1;while(xp>=xpForLevel(lv+1))lv++;return lv;}
+function levelProgress(xp){const level=profileLevelFromXP(xp);const prev=xpForLevel(level);const next=xpForLevel(level+1);return{level,current:xp-prev,need:next-prev,pct:((xp-prev)/(next-prev))*100};}
+function rankName(level){const names=t('titleRanks');const idx=clamp(Math.floor((level-1)/6),0,names.length-1);return names[idx];}
+function totalStars(save){return Object.values(save.career.bestStars||{}).reduce((a,b)=>a+Number(b||0),0);}
+function totalClears(save){return Object.values(save.career.bestStars||{}).filter(v=>Number(v||0)>=1).length;}
+function owned(id){return (S.save.owned||[]).includes(id);}
+function achUnlocked(id){return (S.save.achievements||[]).includes(id);}
+function currentTarget(save){for(const lv of CAREER_LEVELS){if((save.career.bestStars[lv.id]||0)<1)return lv;}return CAREER_LEVELS[CAREER_LEVELS.length-1];}
+function isUnlocked(save,level){if(level.index===0)return true;const prev=CAREER_LEVELS[level.index-1];return(save.career.bestStars[prev.id]||0)>=1;}
+function chapterLvls(chId){return CAREER_LEVELS.filter(l=>l.chapterId===chId);}
+function chStars(save,chId){return chapterLvls(chId).reduce((a,l)=>a+(save.career.bestStars[l.id]||0),0);}
+function chClears(save,chId){return chapterLvls(chId).filter(l=>(save.career.bestStars[l.id]||0)>=1).length;}
+function chPerfect(save,chId){return chapterLvls(chId).every(l=>(save.career.bestStars[l.id]||0)===3);}
+function getLevelById(id){return CAREER_LEVELS.find(l=>l.id===id);}
+function computeStars(level,correct){if(correct>=level.rounds)return 3;if(correct/level.rounds>=.9)return 2;if(correct>=level.pass)return 1;return 0;}
+function scoreForAnswer(status,remaining,penalties){if(status==='correct')return Math.max(20,100+Math.floor(remaining*6)-penalties);if(status==='almost')return Math.max(8,38-penalties);return 0;}
+function roundOutcome(question,guess){const answer=answerOnly(question.a);const input=answerOnly(guess);if(!input)return{status:'wrong'};if(input===answer)return{status:'correct'};const distance=lev(input,answer);const near=distance<=Math.max(1,Math.floor(answer.length*.18))||(answer.includes(input)&&input.length>=Math.max(2,answer.length-2));if(near)return{status:'almost'};return{status:'wrong'};}
+function buildQuestions(config){const used=new Set();return config.pools.flatMap(spec=>{let source=[];if(spec.pool==='quotes'){const quoteSource=S.lang==='nl'?NL_QUOTE_BANK:QUOTE_BANK;source=quoteSource.filter(q=>{const d=Number(q.d||1);if(spec.minDiff&&d<spec.minDiff)return false;if(spec.maxDiff&&d>spec.maxDiff)return false;return true;});}else if(spec.pool==='football'){source=FOOTBALL_MODE_DATA.slice();}else if(spec.pool==='trivia'){source=TRIVIA_MODE_DATA.slice();}return sampleUnique(source,spec.count,used).map(q=>({...q,pool:spec.pool,prompt:q.c,context:q.context||'',hint:q.h||''}));}).slice(0,config.rounds);}
+function levelDifficulty(level){const diffs=level.pools.map(s=>s.maxDiff||1);const avg=diffs.reduce((a,b)=>a+b,0)/diffs.length;if(avg<1.6)return S.lang==='nl'?'Licht':'Light';if(avg<2.5)return S.lang==='nl'?'Gemengd':'Mixed';return 'Hard';}
+function canBuy(item){const level=profileLevelFromXP(S.save.profileXP);const stars=totalStars(S.save);return !owned(item.id)&&S.save.ink>=item.cost&&level>=item.reqLevel&&stars>=(item.starReq||0);}
+function newlyAvailable(beforeLevel,afterLevel,beforeStars,afterStars){return SHOP_ITEMS.filter(item=>!owned(item.id)&&((beforeLevel<item.reqLevel&&afterLevel>=item.reqLevel)||((item.starReq||0)>0&&beforeStars<item.starReq&&afterStars>=item.starReq)));}
+function currentShopBadgeSig(){const level=profileLevelFromXP(S.save.profileXP);const stars=totalStars(S.save);return SHOP_ITEMS.filter(item=>!owned(item.id)&&level>=item.reqLevel&&stars>=(item.starReq||0)&&S.save.ink>=item.cost).map(item=>item.id).sort().join('|');}
+function getAchievementChecks(save){const sv=save||S.save;const stars=totalStars(sv);const clears=totalClears(sv);const level=profileLevelFromXP(sv.profileXP);const allModesPlayed=['quick','blitz','endless','football','trivia','career'].every(mode=>(sv.stats.modes[mode]||0)>=1);return{career_first:clears>=1,perfect_career:sv.stats.totalCareerPerfectRuns>=1,career_pass_10:clears>=10,career_pass_25:clears>=25,career_pass_40:clears>=40,career_pass_48:clears>=48,chapter_1_clear:chClears(sv,'ch1')===chapterLvls('ch1').length,chapter_3_clear:chClears(sv,'ch3')===chapterLvls('ch3').length,chapter_6_clear:chClears(sv,'ch6')===chapterLvls('ch6').length,chapter_1_master:chPerfect(sv,'ch1'),chapter_3_master:chPerfect(sv,'ch3'),chapter_5_master:chPerfect(sv,'ch5'),chapter_6_master:chPerfect(sv,'ch6'),stars_10:stars>=10,stars_30:stars>=30,stars_60:stars>=60,stars_100:stars>=100,stars_120:stars>=120,stars_144:stars>=144,correct_100:sv.stats.totalCorrect>=100,correct_300:sv.stats.totalCorrect>=300,correct_750:sv.stats.totalCorrect>=750,correct_1200:sv.stats.totalCorrect>=1200,correct_2000:sv.stats.totalCorrect>=2000,profile_10:level>=10,profile_25:level>=25,profile_40:level>=40,profile_50:level>=50,games_25:sv.totalGames>=25,games_100:sv.totalGames>=100,score_15000:sv.stats.totalScore>=15000,score_50000:sv.stats.totalScore>=50000,ink_1000:sv.ink>=1000,ink_3000:sv.ink>=3000,ink_6000:sv.ink>=6000,shop_5:(sv.owned||[]).length>=5,shop_10:(sv.owned||[]).length>=10,shop_15:(sv.owned||[]).length>=15,mode_blitz_first:sv.stats.modes.blitz>=1,mode_endless_first:sv.stats.modes.endless>=1,mode_football_first:sv.stats.modes.football>=1,mode_trivia_first:sv.stats.modes.trivia>=1,all_modes_played:allModesPlayed,streak_5:sv.bestStreak>=5,streak_10:sv.bestStreak>=10,streak_12:sv.bestStreak>=12,perfect_runs_10:sv.stats.totalPerfectRuns>=10,perfect_runs_25:sv.stats.totalPerfectRuns>=25};}
+function currentAchievementBadgeSig(){const checks=getAchievementChecks(S.save);return ACHIEVEMENTS.filter(ach=>checks[ach.id]&&!achUnlocked(ach.id)).map(ach=>ach.id).sort().join('|');}
+function currentModesBadgeSig(){return SHOP_ITEMS.filter(i=>i.type==='mode'&&owned(i.id)&&!S.save.stats.modes[i.mode]).map(i=>i.id).sort().join('|');}
+function markBadgeSeen(type){if(type==='shop')S.save.settings.seenShopSig=currentShopBadgeSig();if(type==='ach')S.save.settings.seenAchSig=currentAchievementBadgeSig();if(type==='modes')S.save.settings.seenModesSig=currentModesBadgeSig();persist();updateBadges();}
+
+// ══════════════════════════════════════════════════
+//  SAVE / LOAD
+// ══════════════════════════════════════════════════
+function defaultSave(){return{schema:9,lang:detectLang(),ink:0,profileXP:0,totalGames:0,bestStreak:0,settings:{theme:'default',badge:'none',seenShopSig:'',seenAchSig:'',seenModesSig:'',soundOn:true,keysOn:true,keysVol:60,feedbackOn:true,feedbackVol:70,musicOn:true,musicVol:150},owned:[],achievements:[],stats:{totalCorrect:0,totalAlmost:0,totalWrong:0,totalRounds:0,totalScore:0,totalPerfectRuns:0,totalCareerPerfectRuns:0,modes:{quick:0,blitz:0,endless:0,football:0,trivia:0,career:0}},career:{bestStars:{},bestCorrect:{},bestPct:{},attempts:{},lastFocus:'ch1-1'}};}
+function readRaw(){try{const v=localStorage.getItem(SAVE_KEY);if(v)return JSON.parse(v);}catch(e){}for(const k of LEGACY_KEYS){try{const v=localStorage.getItem(k);if(v)return JSON.parse(v);}catch(e){}}return null;}
+function migrateSave(raw){const base=defaultSave();if(!raw||typeof raw!=='object')return base;if(raw.schema>=6){const migrated={...base,...raw,schema:9,settings:{...base.settings,...(raw.settings||{})},owned:Array.from(new Set(raw.owned||[])),achievements:Array.isArray(raw.achievements)?raw.achievements.filter(id=>ACHIEVEMENTS.some(a=>a.id===id)):[],stats:{...base.stats,...(raw.stats||{}),modes:{...base.stats.modes,...(raw.stats?.modes||{})}},career:{...base.career,...(raw.career||{}),bestStars:{...(raw.career?.bestStars||{})},bestCorrect:{...(raw.career?.bestCorrect||{})},bestPct:{...(raw.career?.bestPct||{})},attempts:{...(raw.career?.attempts||{})}}};migrated.achievements=(raw.schema>=8?migrated.achievements:[]);return migrated;}const base2=defaultSave();base2.lang=raw.lang||detectLang();base2.ink=Number(raw.ink??raw.coins??0)||0;base2.profileXP=Number(raw.xp||0);base2.totalGames=Number(raw.gp||0);base2.bestStreak=Number(raw.bestWinStreak||raw.bestStreak||0);base2.settings.theme=raw.activeTheme||'default';base2.settings.badge=raw.activeBadge&&raw.activeBadge!=='none'?raw.activeBadge:'none';base2.owned=Array.from(new Set([...(raw.unlocks||[]),...(raw.owned||[])]));base2.achievements=Array.from(new Set(raw.achs||raw.achievements||[]));base2.stats.totalCorrect=Number(raw.totalCorrect||0);base2.stats.totalAlmost=Number(raw.totalAlmost||0);base2.stats.totalScore=Number(raw.totalScore||0);base2.stats.totalPerfectRuns=Number(raw.totalPerfect||0);const unlockedCount=clamp(Number(raw.careerPasses||0),0,CAREER_LEVELS.length);for(let i=0;i<unlockedCount;i++){const lv=CAREER_LEVELS[i];base2.career.bestStars[lv.id]=Math.max(1,Number(base2.career.bestStars[lv.id]||0));base2.career.bestCorrect[lv.id]=Math.max(Number(base2.career.bestCorrect[lv.id]||0),lv.pass);base2.career.bestPct[lv.id]=Math.max(Number(base2.career.bestPct[lv.id]||0),Math.round((lv.pass/lv.rounds)*100));}base2.career.lastFocus=(CAREER_LEVELS[unlockedCount]||CAREER_LEVELS[CAREER_LEVELS.length-1]).id;return base2;}
+function persist(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(S.save));}catch(e){}}
+function loadSave(){return migrateSave(readRaw());}
+
+// ══════════════════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════════════════
+function applyTheme(){document.body.dataset.theme=S.save.settings.theme||'default';}
+
+// ══════════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════════
+function showToast(title,sub){const el=document.getElementById('toast');document.getElementById('toastTitle').textContent=title;document.getElementById('toastSub').textContent=sub||'';el.classList.add('show');clearTimeout(S.toastTimer);S.toastTimer=setTimeout(()=>el.classList.remove('show'),2400);}
+
+// ══════════════════════════════════════════════════
+//  ACHIEVEMENT EVALUATION
+// ══════════════════════════════════════════════════
+function unlockAch(id){if(achUnlocked(id))return false;S.save.achievements.push(id);const meta=ACHIEVEMENTS.find(a=>a.id===id);if(meta)showToast(t('achievementUnlocked'),meta.label[S.lang]);persist();return true;}
+function evaluateAchs(){const checks=getAchievementChecks(S.save);const unlocked=[];for(const ach of ACHIEVEMENTS){if(checks[ach.id]&&unlockAch(ach.id))unlocked.push(ach.id);}return unlocked;}
+
+// ══════════════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════════════
+function switchTab(panelId){S.activeTab=panelId;document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id===panelId));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===panelId));if(panelId==='homePanel')renderHome();if(panelId==='modesPanel'){markBadgeSeen('modes');renderModes();}if(panelId==='shopPanel'){markBadgeSeen('shop');renderShop();}if(panelId==='achPanel'){markBadgeSeen('ach');renderAch();}if(panelId==='langPanel')renderSettings();}
+function updateBadges(){const shopSig=currentShopBadgeSig();const achSig=currentAchievementBadgeSig();const modesSig=currentModesBadgeSig();document.getElementById('shopBadge').classList.toggle('hidden',!shopSig||shopSig===String(S.save.settings.seenShopSig||''));document.getElementById('achBadge').classList.toggle('hidden',!achSig||achSig===String(S.save.settings.seenAchSig||''));document.getElementById('modesBadge').classList.toggle('hidden',!modesSig||modesSig===String(S.save.settings.seenModesSig||''));}
+
+// ══════════════════════════════════════════════════
+//  HOME RENDER
+// ══════════════════════════════════════════════════
+function renderTopBar(){const sv=S.save;const p=levelProgress(sv.profileXP);document.getElementById('topXPVal').textContent=`Lv ${p.level}`;document.getElementById('topInkVal').textContent=fmt(sv.ink);document.getElementById('topStarsVal').textContent=fmt(totalStars(sv));}
+function renderSettings(){document.getElementById('langChoiceIntl').classList.toggle('active',S.lang==='intl');document.getElementById('langChoiceNl').classList.toggle('active',S.lang==='nl');document.querySelector('#langChoiceIntl .lang-choice-v').textContent='Quotes, UI and content in international English.';document.querySelector('#langChoiceNl .lang-choice-v').textContent=S.lang==='nl'?'Alle quote-vragen en interface in het Nederlands.':'All quote questions and the interface in Dutch.';
+/* Audio labels */
+document.getElementById('audioLabelKeys').textContent=S.lang==='nl'?'Toetsenbord':'Keyboard';
+document.getElementById('audioLabelFeedback').textContent=S.lang==='nl'?'Goed / Fout':'Correct / Wrong';
+document.getElementById('audioLabelMusic').textContent=S.lang==='nl'?'Achtergrondmuziek':'Background music';
+/* Audio toggles */
+document.getElementById('audioToggleKeys').classList.toggle('on',FX.keysOn);
+document.getElementById('audioToggleFeedback').classList.toggle('on',FX.feedbackOn);
+document.getElementById('audioToggleMusic').classList.toggle('on',FX.musicOn);
+/* Audio sliders */
+document.getElementById('audioVolKeys').value=Math.round(FX.keysVol*100);
+document.getElementById('audioVolKeysVal').textContent=Math.round(FX.keysVol*100)+'%';
+document.getElementById('audioSliderWrapKeys').classList.toggle('disabled',!FX.keysOn);
+document.getElementById('audioVolFeedback').value=Math.round(FX.feedbackVol*100);
+document.getElementById('audioVolFeedbackVal').textContent=Math.round(FX.feedbackVol*100)+'%';
+document.getElementById('audioSliderWrapFeedback').classList.toggle('disabled',!FX.feedbackOn);
+document.getElementById('audioVolMusic').value=Math.round(FX.musicVol*100);
+document.getElementById('audioVolMusicVal').textContent=Math.round(FX.musicVol*100)+'%';
+document.getElementById('audioSliderWrapMusic').classList.toggle('disabled',!FX.musicOn);
+}
+function setLanguage(lang){if(!['intl','nl'].includes(lang)||S.lang===lang)return;S.lang=lang;S.save.lang=lang;persist();applyI18n();buildKeyboard();renderTopBar();renderHome();renderModes();renderShop();renderAch();renderSettings();if(S.currentRun){renderGameShell();document.getElementById('roundLabel').textContent=`${S.lang==='nl'?'Ronde':'Round'} ${S.currentRun.index+1}/${S.currentRun.questions.length}`;document.getElementById('btnHint').textContent=t('hint');document.getElementById('btnReveal').textContent=t('reveal');syncSubmitButton();}if(S.activeTab==='langPanel')switchTab('langPanel');}
+function renderHome(){const sv=S.save;const p=levelProgress(sv.profileXP);document.getElementById('rankName').textContent=rankName(p.level);document.getElementById('xpBarVal').textContent=`${fmt(p.current)} / ${fmt(p.need)} XP`;document.getElementById('xpFill').style.width=`${clamp(p.pct,0,100)}%`;const target=currentTarget(sv);document.getElementById('focusLabel').textContent=`${t('chapter')} ${target.chapterIndex+1} · ${target.chapterName[S.lang]}`;document.getElementById('focusTitle').textContent=target.title[S.lang];document.getElementById('focusSub').textContent=target.subtitle[S.lang];const meta=document.getElementById('focusMeta');meta.innerHTML='';[t('runRules',{rounds:target.rounds,timer:target.timer}),t('passText',{pass:target.pass,rounds:target.rounds}),t('rewardFmt',{xp:target.rewardXP,ink:target.rewardInk})].forEach(label=>{const s=document.createElement('span');s.className='meta-chip';s.textContent=label;meta.appendChild(s);});if(target.noHint||target.noReveal){const s=document.createElement('span');s.className='meta-chip';s.textContent=t('noAssists');meta.appendChild(s);}const starsEl=document.getElementById('focusStars');starsEl.innerHTML='';const sc=sv.career.bestStars[target.id]||0;for(let i=0;i<3;i++){const sp=document.createElement('span');sp.className='s'+(i<sc?' on':'');sp.textContent='★';starsEl.appendChild(sp);}const unlck=isUnlocked(sv,target);const fb=document.getElementById('focusPlayBtn');fb.textContent=unlck?`▶ ${t('playLevel')} ${target.no}`:`🔒 ${t('locked')}`;fb.className='play-btn'+(unlck?'':' locked');fb.disabled=!unlck;renderChapterNav();renderLevelPath();}
+function renderChapterNav(){const sv=S.save;const nav=document.getElementById('chapterNav');nav.innerHTML='';const allPill=document.createElement('button');allPill.className='ch-pill'+(S.currentChapterFilter===null?' active':'');allPill.textContent=S.lang==='nl'?'Alle':'All';allPill.onclick=()=>{S.currentChapterFilter=null;renderLevelPath();document.querySelectorAll('.ch-pill').forEach(p=>p.classList.remove('active'));allPill.classList.add('active');};nav.appendChild(allPill);CAREER_CHAPTERS.forEach(ch=>{const cleared=chClears(sv,ch.id);const pill=document.createElement('button');pill.className='ch-pill'+(cleared===ch.levels.length?' done':'')+(S.currentChapterFilter===ch.id?' active':'');pill.textContent=`${ch.name[S.lang]} ${cleared>0?`(${cleared}/${ch.levels.length})`:''}`;pill.onclick=()=>{S.currentChapterFilter=ch.id;renderLevelPath();document.querySelectorAll('.ch-pill').forEach(p=>p.classList.remove('active'));pill.classList.add('active');};nav.appendChild(pill);});}
+function renderLevelPath(){const sv=S.save;const path=document.getElementById('levelPath');path.innerHTML='';const target=currentTarget(sv);let levels=CAREER_LEVELS;if(S.currentChapterFilter)levels=CAREER_LEVELS.filter(l=>l.chapterId===S.currentChapterFilter);levels.forEach(level=>{const unlck=isUnlocked(sv,level);const starCount=sv.career.bestStars[level.id]||0;const isCurrent=target.id===level.id;const node=document.createElement('div');node.className='level-node';node.dataset.levelId=level.id;const btnClass='node-btn'+(starCount===3?' perfect':starCount>=1?' done':'')+(isCurrent?' current':'')+(unlck?'':' locked');const infoClass='node-info'+(isCurrent?' current-info':'');node.innerHTML=`<button class="${btnClass}">${unlck?(starCount>=1?'★':level.no):'🔒'}</button><div class="${infoClass}"><div class="node-name">${level.title[S.lang]}</div><div class="node-sub-text">${level.subtitle[S.lang]}</div><div class="node-tags"><span class="nt">${level.rounds}r · ${level.timer}s</span><span class="nt">${level.pass}/${level.rounds}</span>${level.noHint||level.noReveal?'<span class="nt">⛔ Assists</span>':''}</div><div class="node-stars">${[0,1,2].map(i=>`<span class="ns${i<starCount?' on':''}">${i<starCount?'★':'☆'}</span>`).join('')}</div></div>`;if(unlck){node.addEventListener('click',()=>openLevelSheet(level.id));}path.appendChild(node);});if(!S.currentChapterFilter&&levels.length>0){const focus=sv.career.lastFocus||target.id;const focusNode=path.querySelector(`[data-level-id="${focus}"]`);if(focusNode)setTimeout(()=>focusNode.scrollIntoView({block:'center',behavior:'smooth'}),100);}}
+
+// ══════════════════════════════════════════════════
+//  MODES RENDER
+// ══════════════════════════════════════════════════
+function renderModes(){const sv=S.save;const grid=document.getElementById('modesGrid');grid.innerHTML='';const modeList=[{key:'quick',icon:'⚡',color:'var(--accent)'},{key:'blitz',icon:'🔥',color:'var(--bad)'},{key:'endless',icon:'♾️',color:'var(--good)'},{key:'football',icon:'⚽',color:'var(--warn)'},{key:'trivia',icon:'🧠',color:'var(--purple)'}];modeList.forEach(({key,icon})=>{const def=MODE_DEFS[key];const isLocked=def.unlockId&&!owned(def.unlockId);const card=document.createElement('div');card.className='mode-card'+(isLocked?' locked-card':'');const chips=[t('runRules',{rounds:def.rounds,timer:def.timer})];if(def.assists)chips.push(S.lang==='nl'?'Hulp':'Assists');card.innerHTML=`<div class="mode-icon">${icon}</div><div class="mode-body"><div class="mode-name">${t(def.labelKey)}</div><div class="mode-desc">${t(key+'Sub')}</div><div class="mode-chips">${chips.map(c=>`<span class="mc">${c}</span>`).join('')}</div></div><div class="mode-arrow">${isLocked?'🔒':'›'}</div>${isLocked?`<div class="lock-overlay-chip">${SHOP_ITEMS.find(i=>i.id===def.unlockId)?.label[S.lang]||'Shop'}</div>`:''}`;if(!isLocked){card.addEventListener('click',()=>startRun(key));}else{card.addEventListener('click',()=>showToast(t('locked'),S.lang==='nl'?'Beschikbaar in de shop':'Available in the Shop'));}grid.appendChild(card);});}
+
+// ══════════════════════════════════════════════════
+//  SHOP RENDER
+// ══════════════════════════════════════════════════
+function renderShop(){const sv=S.save;document.getElementById('shopInkAmt').textContent=fmt(sv.ink);document.getElementById('shopStarsAmt').textContent=fmt(totalStars(sv));const level=profileLevelFromXP(sv.profileXP);const stars=totalStars(sv);const content=document.getElementById('shopContent');content.innerHTML='';const sections=[{key:'mode',label:t('shopModes'),items:SHOP_ITEMS.filter(i=>i.type==='mode')},{key:'theme',label:t('shopThemes'),items:SHOP_ITEMS.filter(i=>i.type==='theme')},{key:'badge',label:t('shopBadges'),items:SHOP_ITEMS.filter(i=>i.type==='badge')}];sections.forEach(({label,items})=>{const title=document.createElement('div');title.className='shop-section-title';title.textContent=label;content.appendChild(title);items.forEach(item=>{const isOwned=owned(item.id);const isActive=(item.type==='theme'&&sv.settings.theme===item.theme)||(item.type==='badge'&&sv.settings.badge===item.id);const canAfford=canBuy(item);const available=level>=item.reqLevel&&stars>=(item.starReq||0);const li=document.createElement('div');li.className='shop-list-item'+(isOwned?' owned':'');const price=isOwned?'':t('costsInk',{ink:fmt(item.cost)});const starText=item.starReq?` · ${t('requiresStars',{stars:item.starReq})}`:'';const req=t('lockedReq',{level:item.reqLevel,starsText:starText});li.innerHTML=`<div class="sli-icon">${item.icon}</div><div class="sli-body"><div class="sli-name">${item.label[S.lang]}</div><div class="sli-desc">${item.desc[S.lang]}</div>${!available&&!isOwned?`<div class="locked-req">${req}</div>`:(price?`<div class="sli-desc" style="color:var(--gold)">${price}</div>`:'')}</div><div class="sli-action"></div>`;const action=li.querySelector('.sli-action');const btn=document.createElement('button');if(isOwned){if(item.type==='mode'){btn.className='action-btn secondary';btn.textContent=t('play');btn.onclick=()=>startRun(item.mode);}else{btn.className='action-btn '+(isActive?'success':'secondary');btn.textContent=isActive?t('equipped'):t('equip');btn.onclick=()=>{if(item.type==='theme'){sv.settings.theme=item.theme;applyTheme();}if(item.type==='badge')sv.settings.badge=item.id;persist();renderShop();renderTopBar();};}}else if(available&&canAfford){btn.className='action-btn primary';btn.textContent=t('buy');btn.onclick=()=>{sv.ink-=item.cost;sv.owned.push(item.id);if(item.type==='theme'){sv.settings.theme=item.theme;applyTheme();}if(item.type==='badge')sv.settings.badge=item.id;persist();evaluateAchs();renderShop();renderTopBar();updateBadges();const key=item.type==='theme'?'themeUnlocked':item.type==='badge'?'badgeUnlocked':'modeUnlocked';showToast(t(key),item.label[S.lang]);};}else{btn.className='action-btn dim';btn.textContent=isOwned?t('owned'):t('locked');btn.disabled=true;}action.appendChild(btn);content.appendChild(li);});});}
+
+// ══════════════════════════════════════════════════
+//  ACHIEVEMENTS RENDER
+// ══════════════════════════════════════════════════
+function renderAch(){const sv=S.save;const total=ACHIEVEMENTS.length;const unlockedIds=ACHIEVEMENTS.filter(a=>achUnlocked(a.id)).map(a=>a.id);const unl=unlockedIds.length;document.getElementById('achCount').textContent=`${unl}/${total}`;document.getElementById('achFill').style.width=`${(unl/total)*100}%`;const content=document.getElementById('achContent');content.innerHTML='';const groups={};ACHIEVEMENTS.forEach(a=>{(groups[a.cat]||=[]).push(a);});Object.entries(groups).forEach(([cat,list])=>{const catDiv=document.createElement('div');catDiv.className='ach-cat-title';const unlCount=list.filter(a=>achUnlocked(a.id)).length;catDiv.innerHTML=`<span>${cat}</span><span class="ach-cat-count">${unlCount}/${list.length}</span>`;content.appendChild(catDiv);list.forEach(ach=>{const ul=achUnlocked(ach.id);const div=document.createElement('div');div.className='ach-item'+(ul?' unlocked':'');div.innerHTML=`<div class="ach-icon-box">${ach.icon}</div><div class="ach-body"><div class="ach-name">${ach.label[S.lang]}</div><div class="ach-desc">${ach.desc[S.lang]}</div></div><div class="ach-tick">✓</div>`;content.appendChild(div);});});}
+
+// ══════════════════════════════════════════════════
+//  LEVEL SHEET
+// ══════════════════════════════════════════════════
+function openLevelSheet(levelId){const level=getLevelById(levelId);const sv=S.save;S.selectedLevelId=levelId;const unlck=isUnlocked(sv,level);const stars=sv.career.bestStars[levelId]||0;document.getElementById('sheetEyebrow').textContent=`${level.chapterName[S.lang]} · ${t('level')} ${level.no}`;document.getElementById('sheetTitle').textContent=level.title[S.lang];document.getElementById('sheetSub').textContent=level.subtitle[S.lang];const starsRow=document.getElementById('sheetStarsRow');starsRow.innerHTML='';for(let i=0;i<3;i++){const sp=document.createElement('span');sp.textContent='★';sp.style.fontSize='1.5rem';sp.style.opacity=i<stars?'1':'.2';if(i<stars)sp.style.filter='drop-shadow(0 2px 6px var(--gold-glow))';starsRow.appendChild(sp);}const bestC=sv.career.bestCorrect[levelId]||0;const bestP=sv.career.bestPct[levelId]||0;document.getElementById('sheetBest').textContent=bestC?t('bestFmt',{correct:bestC,rounds:level.rounds,percent:bestP}):t('noBestYet');document.getElementById('sheetReward').textContent=t('rewardFmt',{xp:level.rewardXP,ink:level.rewardInk});document.getElementById('sheetPass').textContent=`${level.pass}/${level.rounds}`;document.getElementById('sheetDiff').textContent=levelDifficulty(level);const chips=document.getElementById('sheetRules');chips.innerHTML='';[t('oneStar'),t('twoStars'),t('threeStars'),t('runRules',{rounds:level.rounds,timer:level.timer}),...((level.noHint||level.noReveal)?[t('noAssists')]:[])].forEach(text=>{const chip=document.createElement('span');chip.className='rule-chip';chip.textContent=text;chips.appendChild(chip);});document.getElementById('btnSheetPlay').textContent=unlck?`${t('playLevel')} ${level.no}`:t('locked');document.getElementById('btnSheetPlay').disabled=!unlck;document.getElementById('btnSheetRetry').disabled=!unlck;document.getElementById('levelOverlay').classList.add('show');}
+function closeLevelSheet(){document.getElementById('levelOverlay').classList.remove('show');}
+
+// ══════════════════════════════════════════════════
+//  KEYBOARD
+// ══════════════════════════════════════════════════
+const KB_ROWS=[['q','w','e','r','t','y','u','i','o','p'],['a','s','d','f','g','h','j','k','l'],['z','x','c','v','b','n','m','⌫']];
+function buildKeyboard(){const rowIds=['kbRow1','kbRow2','kbRow3'];KB_ROWS.forEach((row,ri)=>{const rowEl=document.getElementById(rowIds[ri]);rowEl.innerHTML='';row.forEach(key=>{const btn=document.createElement('button');btn.className='k'+(key==='⌫'?' backspace':'');btn.textContent=key;btn.addEventListener('touchstart',e=>{e.preventDefault();handleKey(key);},{passive:false});btn.addEventListener('click',()=>handleKey(key));rowEl.appendChild(btn);});});let spaceRow=document.getElementById('kbSpaceRow');if(!spaceRow){spaceRow=document.createElement('div');spaceRow.className='kb-row space-row';spaceRow.id='kbSpaceRow';document.getElementById('kbSubmit').before(spaceRow);}spaceRow.innerHTML='';const spaceK=document.createElement('button');spaceK.className='k wide spacebar';spaceK.textContent=S.lang==='nl'?'SPATIE':'SPACE';spaceK.addEventListener('touchstart',e=>{e.preventDefault();handleKey(' ');},{passive:false});spaceK.addEventListener('click',()=>handleKey(' '));spaceRow.appendChild(spaceK);const oldSubmit=document.getElementById('kbSubmit');const newSubmit=oldSubmit.cloneNode(true);oldSubmit.replaceWith(newSubmit);newSubmit.addEventListener('click',submitActionFromButton);newSubmit.addEventListener('touchstart',e=>{e.preventDefault();submitActionFromButton();},{passive:false});syncSubmitButton();}
+function handleKey(key){if(!S.currentRun||S.currentRun.answered)return;primeFx();if(key==='⌫'){S.kbInput=S.kbInput.slice(0,-1);playFx('backspace');}else if(S.kbInput.length<24){S.kbInput+=key;playFx('key');}updateInputDisplay();}
+function updateInputDisplay(){const display=document.getElementById('inputText');display.textContent=S.kbInput;}
+function submitKBGuess(){if(!S.currentRun||S.currentRun.answered)return;playFx('submit');finishRound(S.kbInput);}
+function syncSubmitButton(){const btn=document.getElementById('kbSubmit');if(!btn)return;const run=S.currentRun;if(!run){btn.textContent=t('submit');btn.classList.remove('show');return;}btn.textContent=run.answered?(run.index>=run.questions.length-1?(S.lang==='nl'?'Bekijk resultaat':'See results'):(S.lang==='nl'?'Volgende Ronde':'Next Round')):t('submit');btn.classList.add('show');}
+function submitActionFromButton(){if(!S.currentRun)return;primeFx();if(S.currentRun.answered){playFx('next');nextRound();return;}submitKBGuess();}
+
+// ══════════════════════════════════════════════════
+//  GAME
+// ══════════════════════════════════════════════════
+function startRun(modeKey,levelId){const sv=S.save;let config,title,sub,isCareer=modeKey==='career';if(isCareer){config=getLevelById(levelId||currentTarget(sv).id);if(!isUnlocked(sv,config))return;title=`${config.chapterName[S.lang]} · ${t('level')} ${config.no}`;sub=config.title[S.lang];sv.career.lastFocus=config.id;}else{config=MODE_DEFS[modeKey];if(config.unlockId&&!owned(config.unlockId)){showToast(t('locked'),SHOP_ITEMS.find(i=>i.id===config.unlockId)?.label[S.lang]||'');return;}title=t(config.labelKey);sub='';}closeLevelSheet();const questions=buildQuestions(config);S.currentRun={mode:modeKey,config,title,subtitle:sub,index:0,questions,score:0,correct:0,almost:0,wrong:0,streak:0,bestStreak:0,results:[],timer:null,remaining:config.timer,answered:false,hintUsed:false,revealUsed:false,hintPenalty:0,revealPenalty:0,revealedIndices:new Set(),paused:false};S.kbInput='';document.getElementById('gameScreen').classList.add('show');document.getElementById('endScreen').classList.remove('show');renderGameShell();openQuestion();ensureBackingTrack();}
+function renderGameShell(){const run=S.currentRun;document.getElementById('gameModeLabel').textContent=run.mode==='career'?t('careerMode').toUpperCase():t(MODE_DEFS[run.mode].labelKey).toUpperCase();document.getElementById('gameLevelName').textContent=run.mode==='career'?run.config.title[S.lang]:run.title;document.getElementById('gameScore').textContent=fmt(run.score);const track=document.getElementById('roundTrack');track.innerHTML='';run.questions.forEach((_,i)=>{const dot=document.createElement('div');dot.className='rd';if(i===run.index)dot.classList.add('curr');const res=run.results[i]?.status;if(res)dot.classList.add(res);track.appendChild(dot);});document.getElementById('btnHint').textContent=t('hint');document.getElementById('btnHint').disabled=run.config.noHint||run.hintUsed||run.answered;document.getElementById('btnReveal').textContent=t('reveal');document.getElementById('btnReveal').disabled=run.config.noReveal||run.revealUsed||run.answered;document.getElementById('btnNextRound').classList.remove('show');syncSubmitButton();}
+function formatPrompt(q){const prompt=q.prompt||q.c||'';if(prompt.includes('__________')){return prompt.replace('__________',`<span class="q-blank">${'_'.repeat(Math.max(3,String(q.a).length))}</span>`);}return prompt;}
+function renderAnswerStrip(q,revealAll=false,resultStatus=''){const strip=document.getElementById('answerDisplay');strip.innerHTML='';const resultClass=resultStatus==='correct'?' result-good':resultStatus==='almost'?' result-warn':(resultStatus==='wrong'||resultStatus==='timeout')?' result-bad':'';[...String(q.a)].forEach((ch,idx)=>{const cell=document.createElement('div');const nc=normalize(ch);if(ch===' '||!nc){cell.className='ac sp';cell.textContent=' ';}else{const revealed=S.currentRun.revealedIndices.has(idx);cell.className='ac'+(revealed?' revealed':'')+(revealAll?' filled'+resultClass:'');cell.textContent=(revealAll||revealed)?ch.toUpperCase():'•';if(revealAll)cell.style.animationDelay=`${Math.min(idx,10)*34}ms`;else cell.style.animationDelay='';}strip.appendChild(cell);});}
+function openQuestion(){const run=S.currentRun;run.remaining=run.config.timer;run.answered=false;run.hintUsed=false;run.revealUsed=false;run.hintPenalty=0;run.revealPenalty=0;run.revealedIndices=new Set();S.kbInput='';const q=run.questions[run.index];document.getElementById('roundLabel').textContent=`${S.lang==='nl'?'Ronde':'Round'} ${run.index+1}/${run.questions.length}`;document.getElementById('qContext').textContent=q.context||q.h||'';document.getElementById('qText').innerHTML=formatPrompt(q);document.getElementById('hintArea').className='helper-area';document.getElementById('hintArea').textContent='';document.getElementById('feedbackArea').className='helper-area';document.getElementById('feedbackArea').textContent='';document.getElementById('perfectBurst')?.classList.remove('show');updateInputDisplay();renderAnswerStrip(q);renderGameShell();tickTimer();}
+function tickTimer(){clearInterval(S.currentRun.timer);updateTimerUI();S.currentRun.timer=setInterval(()=>{if(S.currentRun.paused)return;S.currentRun.remaining-=0.1;if(S.currentRun.remaining<=0){S.currentRun.remaining=0;updateTimerUI();clearInterval(S.currentRun.timer);if(!S.currentRun.answered)finishRound('','timeout');return;}updateTimerUI();},100);}
+function updateTimerUI(){const run=S.currentRun;if(!run)return;const rem=Math.ceil(run.remaining);const pct=clamp((run.remaining/run.config.timer)*100,0,100);const num=document.getElementById('timerNum');num.textContent=`${rem}s`;num.classList.toggle('warn',pct<=45&&pct>18);num.classList.toggle('bad',pct<=18);const fill=document.getElementById('timerFill');fill.style.width=`${pct}%`;fill.style.background=pct<=18?'linear-gradient(90deg,var(--bad),var(--warn))':pct<=45?'linear-gradient(90deg,var(--warn),var(--accent))':'linear-gradient(90deg,var(--good),var(--accent))';}
+function useHint(){const run=S.currentRun;if(run.hintUsed||run.answered||run.config.noHint)return;run.hintUsed=true;run.hintPenalty=20;const q=run.questions[run.index];const parts=[];if(q.h)parts.push(q.h);parts.push((S.lang==='nl'?'Lengte':'Length')+`: ${String(q.a).replace(/\s/g,'').length}`);document.getElementById('hintArea').className='helper-area show good';document.getElementById('hintArea').textContent=parts.join(' · ');renderGameShell();}
+function revealLetter(){const run=S.currentRun;if(run.revealUsed||run.answered||run.config.noReveal)return;const answer=String(run.questions[run.index].a);const available=[...answer].map((ch,idx)=>({ch,idx})).filter(x=>x.ch!==' '&&normalize(x.ch)&&!run.revealedIndices.has(x.idx));if(!available.length)return;const pick=available[Math.floor(Math.random()*available.length)];run.revealedIndices.add(pick.idx);run.revealUsed=true;run.revealPenalty=15;renderAnswerStrip(run.questions[run.index]);document.getElementById('hintArea').className='helper-area show warn';document.getElementById('hintArea').textContent=S.lang==='nl'?'Eén letter vrijgespeeld.':'One letter revealed.';renderGameShell();}
+function finishRound(rawGuess,forcedStatus){const run=S.currentRun;if(run.answered)return;run.answered=true;clearInterval(run.timer);const q=run.questions[run.index];const out=forcedStatus==='timeout'?{status:'timeout'}:roundOutcome(q,rawGuess);const penalties=run.hintPenalty+run.revealPenalty;const scoreGain=scoreForAnswer(out.status,run.remaining,penalties);run.score+=scoreGain;if(out.status==='correct'){run.correct++;run.streak++;}else if(out.status==='almost'){run.almost++;run.streak=0;}else{run.wrong++;run.streak=0;}run.bestStreak=Math.max(run.bestStreak,run.streak);run.results[run.index]={status:out.status,guess:rawGuess,answer:q.a,scoreGain};document.getElementById('gameScore').textContent=fmt(run.score);renderGameShell();const fb=document.getElementById('feedbackArea');fb.className='helper-area';fb.textContent='';renderAnswerStrip(q,true,out.status);if(out.status==='correct'){playFx('correct');if(isPerfectRoundAnswer(run,out)){pulsePerfect(S.lang==='nl'?'Perfect!':'Perfect!');playFx('perfect');}else{pulseResult((S.lang==='nl'?'Goed':'Correct')+(scoreGain?` · +${scoreGain}`:''),'good');}}else if(out.status==='almost'){playFx('almost');pulseResult((S.lang==='nl'?'Bijna':'Almost')+(scoreGain?` · +${scoreGain}`:''),'warn');}else if(out.status==='timeout'){playFx('timeout');pulseResult(S.lang==='nl'?'Tijd om':'Time up','bad');}else{playFx('wrong');pulseResult(S.lang==='nl'?'Fout':'Wrong','bad');}syncSubmitButton();}
+function nextRound(){const run=S.currentRun;if(run.index>=run.questions.length-1){finishRun();return;}run.index++;S.kbInput='';openQuestion();}
+function finishRun(){stopBackingTrack();clearInterval(S.currentRun.timer);const run=S.currentRun;const beforeLevel=profileLevelFromXP(S.save.profileXP);const beforeStars=totalStars(S.save);const sv=S.save;sv.totalGames+=1;sv.bestStreak=Math.max(sv.bestStreak,run.bestStreak);sv.stats.totalCorrect+=run.correct;sv.stats.totalAlmost+=run.almost;sv.stats.totalWrong+=run.wrong;sv.stats.totalRounds+=run.questions.length;sv.stats.totalScore+=run.score;if(run.correct===run.questions.length)sv.stats.totalPerfectRuns+=1;sv.stats.modes[run.mode]=(sv.stats.modes[run.mode]||0)+1;let starsEarned=0,passed=false,xpGain=0,inkGain=0,nextUnlocked=null;if(run.mode==='career'){const level=run.config;starsEarned=computeStars(level,run.correct);passed=starsEarned>=1;const priorBest=sv.career.bestStars[level.id]||0;if(starsEarned>priorBest)sv.career.bestStars[level.id]=starsEarned;sv.career.bestCorrect[level.id]=Math.max(sv.career.bestCorrect[level.id]||0,run.correct);sv.career.bestPct[level.id]=Math.max(sv.career.bestPct[level.id]||0,Math.round((run.correct/level.rounds)*100));sv.career.attempts[level.id]=(sv.career.attempts[level.id]||0)+1;if(run.correct===run.questions.length)sv.stats.totalCareerPerfectRuns+=1;const performance=run.correct/level.rounds;const baseXP=level.rewardXP;const baseInk=level.rewardInk;xpGain=Math.round(baseXP*(passed?(0.72+performance*0.48):(0.28+performance*0.22)));inkGain=Math.round(baseInk*(passed?(0.72+performance*0.4):(0.25+performance*0.2)));if(starsEarned===3){xpGain+=26;inkGain+=18;}if(passed&&priorBest<1){const next=CAREER_LEVELS[level.index+1];if(next)nextUnlocked=next;sv.career.lastFocus=next?next.id:level.id;}else{sv.career.lastFocus=level.id;}}else{const mode=MODE_DEFS[run.mode];const perf=run.correct/mode.rounds;xpGain=Math.round((mode.rounds*8+run.correct*12+run.almost*4)*(0.7+perf*0.5));inkGain=Math.round((mode.rounds*4+run.correct*7+run.almost*2)*(0.7+perf*0.35));if(run.mode==='endless'){xpGain+=30;inkGain+=18;}if(run.mode==='blitz'){xpGain+=10;inkGain+=6;}}sv.profileXP+=xpGain;sv.ink+=inkGain;const afterLevel=profileLevelFromXP(sv.profileXP);const afterStars=totalStars(sv);const achievements=evaluateAchs();const newShopItems=newlyAvailable(beforeLevel,afterLevel,beforeStars,afterStars);persist();S.endCtx={run,starsEarned,passed,xpGain,inkGain,nextUnlocked,achievements,newShopItems};renderEndScreen();document.getElementById('gameScreen').classList.remove('show');document.getElementById('endScreen').classList.add('show');}
+function spawnParticles(container,count){container.innerHTML='';for(let i=0;i<count;i++){const dot=document.createElement('div');dot.className='particle';dot.style.left=`${15+Math.random()*70}%`;dot.style.bottom=`${10+Math.random()*18}%`;dot.style.background=['var(--gold)','var(--accent)','var(--purple)'][i%3];dot.style.width=dot.style.height=`${6+Math.random()*6}px`;dot.style.setProperty('--px',`${Math.round(-40+Math.random()*80)}px`);dot.style.animationDelay=`${Math.random()*150}ms`;container.appendChild(dot);}}
+function renderEndScreen(){const ctx=S.endCtx;const{run,starsEarned,passed,xpGain,inkGain,nextUnlocked,achievements,newShopItems}=ctx;document.getElementById('endModeLabel').textContent=run.mode==='career'?t('careerMode'):t(MODE_DEFS[run.mode].labelKey);if(run.mode==='career'){document.getElementById('endEyebrow').textContent=`${run.config.chapterName[S.lang]} · ${t('level')} ${run.config.no}`;document.getElementById('endTitle').textContent=passed?(starsEarned===3?(S.lang==='nl'?'Perfect potje':'Perfect run'):starsEarned===2?(S.lang==='nl'?'Sterke clear':'Strong clear'):(S.lang==='nl'?'Level gehaald':'Level cleared')):(S.lang==='nl'?'Net niet':'Not quite');document.getElementById('endSub').textContent=passed?(starsEarned===3?(S.lang==='nl'?'Perfect. Alles klikte.':'Perfect. Everything clicked.'):starsEarned===2?t('almostPerfect'):t('successFeels')):t('failureStillCounts');const starsEl=document.getElementById('endStars');starsEl.innerHTML='';for(let i=0;i<3;i++){const sp=document.createElement('div');sp.className='es';sp.textContent='★';if(i<starsEarned)setTimeout(()=>{sp.classList.add('on');},i*200);starsEl.appendChild(sp);}if(starsEarned>=2)spawnParticles(document.getElementById('endParticles'),starsEarned===3?20:12);}else{document.getElementById('endEyebrow').textContent=t(MODE_DEFS[run.mode].labelKey);document.getElementById('endTitle').textContent=run.correct===run.questions.length?(S.lang==='nl'?'Schoon potje':'Clean run'):run.correct>=Math.ceil(run.questions.length*.7)?(S.lang==='nl'?'Sterke run':'Strong run'):(S.lang==='nl'?'Nog een keer':'Run it back');document.getElementById('endSub').textContent=S.lang==='nl'?'XP en inkt zijn binnen.':'XP and Ink banked.';document.getElementById('endStars').innerHTML='';}document.getElementById('endCorrect').textContent=`${run.correct}/${run.questions.length}`;document.getElementById('endXP').textContent=`+${fmt(xpGain)}`;document.getElementById('endInk').textContent=`+${fmt(inkGain)}`;const stack=document.getElementById('unlockStack');stack.innerHTML='';const cards=[];if(run.mode==='career'&&nextUnlocked)cards.push({icon:'🗺️',k:t('rewardUnlocked'),v:t('levelUnlocked'),t:nextUnlocked.title[S.lang]});achievements.forEach(id=>{const m=ACHIEVEMENTS.find(a=>a.id===id);if(m)cards.push({icon:m.icon,k:t('achievementUnlocked'),v:m.label[S.lang],t:m.desc[S.lang]});});newShopItems.forEach(item=>cards.push({icon:item.icon,k:t('available'),v:item.label[S.lang],t:item.desc[S.lang]}));if(!cards.length)cards.push({icon:'✦',k:t('earned'),v:run.mode==='career'?t('starsExplain'):t('earned'),t:S.lang==='nl'?'Goed gespeeld.':'Well played.'});cards.forEach(card=>{const div=document.createElement('div');div.className='unlock-card';div.innerHTML=`<div class="uc-icon">${card.icon}</div><div class="uc-body"><div class="uc-k">${card.k}</div><div class="uc-v">${card.v}</div><div class="uc-t">${card.t}</div></div>`;stack.appendChild(div);});if(run.mode==='career'){document.getElementById('btnEndPrimary').textContent=passed&&nextUnlocked?`${t('nextLevel')} →`:`${t('retry')} →`;document.getElementById('btnEndSecondary').textContent=t('continueMap');document.getElementById('btnEndTertiary').textContent=t('map');}else{document.getElementById('btnEndPrimary').textContent=t(MODE_DEFS[run.mode].labelKey)+' →';document.getElementById('btnEndSecondary').textContent=t('backHome');document.getElementById('btnEndTertiary').textContent=t('shopTitle');}renderTopBar();}
+function pauseGame(){if(!S.currentRun)return;S.currentRun.paused=true;stopBackingTrack();document.getElementById('pauseOverlay').classList.add('show');}
+function resumeGame(){if(!S.currentRun)return;S.currentRun.paused=false;document.getElementById('pauseOverlay').classList.remove('show');ensureBackingTrack();}
+function restartGame(){if(!S.currentRun)return;const mode=S.currentRun.mode;const lvlId=mode==='career'?S.currentRun.config.id:null;document.getElementById('pauseOverlay').classList.remove('show');startRun(mode,lvlId);}
+function quitGame(){stopBackingTrack();clearInterval(S.currentRun?.timer);document.getElementById('pauseOverlay').classList.remove('show');document.getElementById('gameScreen').classList.remove('show');S.currentRun=null;switchTab('homePanel');renderHome();}
+
+// ══════════════════════════════════════════════════
+//  I18N STATIC
+// ══════════════════════════════════════════════════
+function applyI18n(){document.querySelectorAll('[data-i18n]').forEach(el=>{el.innerHTML=t(el.dataset.i18n);});}
+
+// ══════════════════════════════════════════════════
+//  EVENTS
+// ══════════════════════════════════════════════════
+function bindEvents(){// Tabs
+['pointerdown','touchstart','keydown'].forEach(evt=>document.addEventListener(evt,primeFx,{once:true,passive:true}));
+document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>switchTab(btn.dataset.tab)));
+// Lang
+document.getElementById('langChoiceIntl').addEventListener('click',()=>setLanguage('intl'));
+document.getElementById('langChoiceNl').addEventListener('click',()=>setLanguage('nl'));
+/* Audio toggle buttons */
+document.getElementById('audioToggleKeys').addEventListener('click',()=>{FX.keysOn=!FX.keysOn;S.save.settings.keysOn=FX.keysOn;persist();renderSettings();});
+document.getElementById('audioToggleFeedback').addEventListener('click',()=>{FX.feedbackOn=!FX.feedbackOn;S.save.settings.feedbackOn=FX.feedbackOn;persist();renderSettings();});
+document.getElementById('audioToggleMusic').addEventListener('click',()=>{FX.musicOn=!FX.musicOn;S.save.settings.musicOn=FX.musicOn;persist();renderSettings();if(!FX.musicOn)stopBackingTrack();else if(S.currentRun)ensureBackingTrack();});
+/* Audio volume sliders */
+document.getElementById('audioVolKeys').addEventListener('input',e=>{FX.keysVol=Number(e.target.value)/100;S.save.settings.keysVol=Number(e.target.value);document.getElementById('audioVolKeysVal').textContent=e.target.value+'%';persist();});
+document.getElementById('audioVolFeedback').addEventListener('input',e=>{FX.feedbackVol=Number(e.target.value)/100;S.save.settings.feedbackVol=Number(e.target.value);document.getElementById('audioVolFeedbackVal').textContent=e.target.value+'%';persist();});
+document.getElementById('audioVolMusic').addEventListener('input',e=>{FX.musicVol=Number(e.target.value)/100;S.save.settings.musicVol=Number(e.target.value);document.getElementById('audioVolMusicVal').textContent=e.target.value+'%';persist();});
+// Focus play btn
+document.getElementById('focusPlayBtn').addEventListener('click',()=>{const target=currentTarget(S.save);if(isUnlocked(S.save,target))startRun('career',target.id);});
+// Level sheet
+document.getElementById('btnCloseLevelSheet').addEventListener('click',closeLevelSheet);document.getElementById('levelOverlay').addEventListener('click',e=>{if(e.target.id==='levelOverlay')closeLevelSheet();});document.getElementById('btnSheetPlay').addEventListener('click',()=>startRun('career',S.selectedLevelId));document.getElementById('btnSheetRetry').addEventListener('click',()=>startRun('career',S.selectedLevelId));
+// Game
+document.getElementById('btnPauseGame').addEventListener('click',pauseGame);document.getElementById('btnHint').addEventListener('click',useHint);document.getElementById('btnReveal').addEventListener('click',revealLetter);document.getElementById('btnNextRound').addEventListener('click',nextRound);
+// Pause
+document.getElementById('btnClosePause').addEventListener('click',resumeGame);document.getElementById('btnResumeGame').addEventListener('click',resumeGame);document.getElementById('btnRestartGame').addEventListener('click',restartGame);document.getElementById('btnQuitGame').addEventListener('click',quitGame);
+// End
+document.getElementById('btnEndHome').addEventListener('click',()=>{document.getElementById('endScreen').classList.remove('show');switchTab('homePanel');renderHome();});
+document.getElementById('btnEndPrimary').addEventListener('click',()=>{const ctx=S.endCtx;if(!ctx)return;if(ctx.run.mode==='career'){if(ctx.passed&&ctx.nextUnlocked)startRun('career',ctx.nextUnlocked.id);else startRun('career',ctx.run.config.id);}else{startRun(ctx.run.mode);}});
+document.getElementById('btnEndSecondary').addEventListener('click',()=>{document.getElementById('endScreen').classList.remove('show');if(S.endCtx?.run.mode==='career'){switchTab('homePanel');renderHome();}else{switchTab('homePanel');renderHome();}});
+document.getElementById('btnEndTertiary').addEventListener('click',()=>{document.getElementById('endScreen').classList.remove('show');if(S.endCtx?.run.mode==='career'){switchTab('homePanel');renderHome();}else switchTab('shopPanel');});
+// Visibility
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&S.currentRun&&!S.currentRun.paused)S.currentRun.paused=true;});}
+
+function playIntro(){
+  const splash=document.getElementById('introSplash');
+  if(!splash)return;
+  document.body.classList.add('intro-lock');
+  setTimeout(()=>splash.classList.add('hide'),2500);
+  setTimeout(()=>{
+    splash.remove();
+    document.body.classList.remove('intro-lock');
+    switchTab('homePanel');
+  },3200);
+}
+
+// ══════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════
+function init(){S.save=loadSave();persist();S.lang=S.save.lang||detectLang();
+/* Load per-channel audio settings */
+const ss=S.save.settings;
+FX.keysOn=ss.keysOn!==false;
+FX.keysVol=(ss.keysVol!=null?ss.keysVol:60)/100;
+FX.feedbackOn=ss.feedbackOn!==false;
+FX.feedbackVol=(ss.feedbackVol!=null?ss.feedbackVol:70)/100;
+FX.musicOn=ss.musicOn!==false;
+FX.musicVol=(ss.musicVol!=null?ss.musicVol:150)/100;
+applyTheme();applyI18n();buildKeyboard();bindEvents();renderTopBar();renderHome();renderSettings();updateBadges();switchTab('homePanel');playIntro();}
+init();
+</script>
+</body>
+</html>
